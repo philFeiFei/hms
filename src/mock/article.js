@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List = []
-const count = 100
+const count = 10
 
 const baseContent = '<p>我是测试数据我是测试数据</p><p><img src="https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943"></p>'
 const image_uri = 'https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3'
@@ -11,6 +11,7 @@ for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     timestamp: +Mock.Random.date('T'),
+    // timestamp: Mock.Random.datetime(),//这个前面就不需要加'+'
     author: '@first',
     reviewer: '@first',
     title: '@title(5, 10)',
@@ -29,9 +30,9 @@ for (let i = 0; i < count; i++) {
 }
 
 export default {
-  //查询complex table --phil
+  // 查询complex table --phil
   getList: config => {
-    console.log("进入mock api 查询complex table。config=", config);
+    console.log('进入mock api 查询complex table。config=', config)
     const { importance, type, title, page = 1, limit = 20, sort } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
@@ -63,9 +64,17 @@ export default {
       }
     }
   },
-  createArticle: () => ({
-    data: 'success'
-  }),
+  createArticle: config => {
+    console.log('进入mock api createArticle。config=', config)
+
+    List.unshift(JSON.parse(config.body))// 真实的加入的List中，前台页面不用手工虚拟的象征性的加了。。
+    console.log('List', List)
+    var result = {
+      code: 1, // 定义默认：0：失败，1：成功； 失败是返回error信息。
+      error: '您传入的信息不正确，不能成功创建该文章，谢谢，请检查！！！'
+    }
+    return result
+  },
   updateArticle: () => ({
     data: 'success'
   })

@@ -62,7 +62,9 @@ export default {
     theme: '换肤',
     clipboardDemo: 'Clipboard',
     i18n: '国际化',
-    externalLink: '外链'
+    externalLink: '外链',
+    userinfoManage: '用户信息管理',
+    hairMoveManage: '假发流转管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -126,7 +128,11 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    ddrq: '订单日期',
+    ddbh: '订单编号',
+    sh: '色号',
+    fhr: '发货人'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
