@@ -3,7 +3,9 @@ import loginAPI from './login'
 import articleAPI from './article'
 import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
-import hairpieceMoveAPI from './hairpieceMove'
+import hairpieceMoveManageAPI from './hairpieceMoveManage'
+import hairpieceMultiManageAPI from './hairpieceMultiManage'
+import userManageAPI from './userManage'
 
 // 修复在使用 MockJS 情况下，设置 withCredentials = true，且未被拦截的跨域请求丢失 Cookies 的问题
 // https://github.com/nuysoft/Mock/issues/300
@@ -37,7 +39,20 @@ Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
 // 账单相关
 Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
-// 假发相关
-Mock.mock(/\/hairpieceMove\/query/, 'get', hairpieceMoveAPI.getList)// 假发流转查询
+// hairpieceMove相关
+Mock.mock(/\/hairpieceMove\/query/, 'post', hairpieceMoveManageAPI.getList)// 假发流转查询
+Mock.mock(/\/hairpieceMove\/update/, 'post', hairpieceMoveManageAPI.update)// 假发流转查询
+Mock.mock(/\/hairpieceMove\/querySpecialDetail/, 'post', hairpieceMoveManageAPI.querySpecialDetail)// 假发流转查询
+
+// hairpieceMultiManage相关
+Mock.mock(/\/hairpieceMultiManage\/query/, 'post', hairpieceMultiManageAPI.getList)// 假发批次查询
+Mock.mock(/\/hairpieceMultiManage\/create/, 'post', hairpieceMultiManageAPI.create)// 假发批次增加
+Mock.mock(/\/hairpieceMultiManage\/delete/, 'post', hairpieceMultiManageAPI.delete)// 假发批次删除
+Mock.mock(/\/hairpieceMultiManage\/generateQRCode/, 'post', hairpieceMultiManageAPI.generateQRCode)// 假发批次产生二维码
+
+Mock.mock(/\/userManage\/query/, 'post', userManageAPI.getList)
+Mock.mock(/\/userManage\/create/, 'post', userManageAPI.create)
+Mock.mock(/\/userManage\/update/, 'post', userManageAPI.update)
+Mock.mock(/\/userManage\/delete/, 'post', userManageAPI.delete)
 
 export default Mock

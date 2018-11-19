@@ -10,7 +10,7 @@ import Layout from '@/views/layout/Layout'
 // import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
-import userinfoManagerouter from './modules/userinfoManage'
+import crudTestrouter from './modules/crudTest'
 // import nestedRouter from './modules/nested'
 
 /** note: Submenu only appear when children.length>=1
@@ -143,7 +143,7 @@ export const asyncRouterMap = [
     ]
   }, */
 
-  /* {
+  {
     path: '/icon',
     component: Layout,
     children: [
@@ -154,14 +154,14 @@ export const asyncRouterMap = [
         meta: { title: 'icons', icon: 'icon', noCache: true }
       }
     ]
-  }, */
+  },
 
   /** When your routing table is too long, you can split it into small modules**/
   // componentsRouter,
   // chartsRouter,
   // nestedRouter,
   // tableRouter,
-  userinfoManagerouter,
+  crudTestrouter,
 
   /* {
     path: '/example',
@@ -348,18 +348,96 @@ export const asyncRouterMap = [
 
   // hms
   {
-    path: '/hairpieceMove',
+    path: '/hairpieceMoveManage',
     component: Layout,
-    redirect: '/hairpieceMove/index',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
+    name: 'hairpieceMoveManage',
+    redirect: 'noredirect',
+    meta: {
+      title: 'hairpieceMoveManage',
+      icon: 'hair'
+    },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/hairpieceMove/index'),
-        name: 'hairMoveManage',
-        meta: { title: 'hairMoveManage', icon: 'table' }
+        path: 'ordinaryHairMoveManage',
+        component: () => import('@/views/hairpieceMoveManage/ordinaryHairMoveManage'),
+        name: 'ordinaryHairMoveManage',
+        meta: { title: 'ordinaryHairMoveManage' }
+      },
+      {
+        path: 'specialHairMoveManage',
+        component: () => import('@/views/hairpieceMoveManage/specialHairMoveManage'),
+        name: 'specialHairMoveManage',
+        meta: { title: 'specialHairMoveManage' }
       }
     ]
   },
+  {
+    path: '/hairpieceMultiManage',
+    component: Layout,
+    name: 'hairpieceMultiManage',
+    redirect: 'noredirect',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
+    meta: {
+      title: 'hairpieceMultiManage',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'ordinaryMulti',
+        component: () => import('@/views/hairpieceMultiManage/ordinaryMulti'),
+        name: 'ordinaryHairMultiManage',
+        meta: { title: 'ordinaryHairMultiManage' }
+      },
+      {
+        path: 'specialMulti',
+        component: () => import('@/views/hairpieceMultiManage/specialMulti'),
+        name: 'specialHairMultiManage',
+        meta: { title: 'specialHairMultiManage' }
+      }
+    ]
+  },
+  {
+    path: '/userManage',
+    component: Layout,
+    children: [
+      {
+        path: 'userManage',
+        component: () => import('@/views/userManage/userManage'),
+        name: 'userManage',
+        meta: { title: 'userManage', icon: 'user' }
+      },
+    ]
+  },
+  /* {
+    path: '/charts',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'Charts',
+    meta: {
+      title: 'charts',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'keyboard',
+        component: () => import('@/views/charts/keyboard'),
+        name: 'KeyboardChart',
+        meta: { title: 'keyboardChart', noCache: true }
+      },
+      {
+        path: 'line',
+        component: () => import('@/views/charts/line'),
+        name: 'LineChart',
+        meta: { title: 'lineChart', noCache: true }
+      },
+      {
+        path: 'mixchart',
+        component: () => import('@/views/charts/mixChart'),
+        name: 'MixChart',
+        meta: { title: 'mixChart', noCache: true }
+      }
+    ]
+  }, */
+
 
   { path: '*', redirect: '/404', hidden: true }
 ]

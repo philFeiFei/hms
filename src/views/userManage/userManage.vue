@@ -1,9 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input :placeholder="$t('table.userName')" v-model="listQuery.userName" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
       <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
@@ -14,27 +13,51 @@
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
       <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" width="150px" align="center">
+      <el-table-column :label="$t('table.userName')" width="130px">
         <template slot-scope="scope">
-          <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="150px">
+      <el-table-column :label="$t('table.password')" width="150px">
         <template slot-scope="scope">
-          <span>{{ scope.row.ddbh }}</span>
+          <span>{{ scope.row.password }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.sh')" min-width="150px">
+
+      <el-table-column :label="$t('table.roleId')" width="120px">
         <template slot-scope="scope">
-          <span>{{ scope.row.sh }}</span>
+          <span>{{ scope.row.roleId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.fhr')" min-width="150px">
+
+      <el-table-column :label="$t('table.sfzhm')" width="140px">
         <template slot-scope="scope">
-          <span>{{ scope.row.fhr }}</span>
+          <span>{{ scope.row.sfzhm }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.xm')" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.xm }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.csrq')" width="120px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.csrq | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('table.xb')" width="60px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.xb }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('table.jtzz')" min-width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.jtzz }}</span>
         </template>
       </el-table-column>
 
@@ -46,7 +69,7 @@
 </template>
 
 <script>
-import { queryHairpiece } from '@/api/hairpieceMove'
+import { queryUser } from '@/api/userManage'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
@@ -64,21 +87,24 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        fhr: undefined,
-        ddbh: undefined,
-        sh: undefined,
-        sort: '+id'
+        userName: undefined,
+        xm: '',
+        sfzhm: undefined,
+        sort: '+userId'
       },
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      sortOptions: [{ label: 'ID Ascending', key: '+userId' }, { label: 'ID Descending', key: '-userId' }],
       temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        userId: undefined,
+        userName: '',
+        password: '',
+        roleId: undefined,
+        xm: '',
+        sjh: '',
+        xb: '',
+        csrq: '',
+        sfzhm: undefined,
+        jtzz: '',
+        yxbz: '1',
       }
 
     }
@@ -93,7 +119,6 @@ export default {
       }
       return this.list.filter((item, index) => index < limitC * pageC && index >= limitC * (pageC - 1))
     }
-    //把table中数据源改为’list‘，重新加上$emit('pagiation')事件，还原恢复
   },
   created() {
     this.getList()
@@ -101,7 +126,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      queryHairpiece(this.listQuery).then(response => {
+      queryUser(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -117,15 +142,15 @@ export default {
 
     sortChange(data) {
       const { prop, order } = data
-      if (prop === 'id') {
+      if (prop === 'userId') {
         this.sortByID(order)
       }
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery.sort = '+userId'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery.sort = '-userId'
       }
       this.handleFilter()
     }

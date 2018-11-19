@@ -64,7 +64,13 @@ export default {
     i18n: '国际化',
     externalLink: '外链',
     userinfoManage: '用户信息管理',
-    hairMoveManage: '假发流转管理'
+    hairpieceMoveManage: '假发流转管理',
+    ordinaryHairMoveManage: '普单假发流转管理',
+    specialHairMoveManage: '特单假发流转管理',
+    hairpieceMultiManage: '订单批量管理',
+    ordinaryHairMultiManage: '普单批量管理',
+    specialHairMultiManage: '特单批量管理',
+    userManage: '用户管理',
   },
   navbar: {
     logOut: '退出登录',

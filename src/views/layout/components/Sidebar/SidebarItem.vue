@@ -15,13 +15,7 @@
       </template>
 
       <template v-for="child in item.children" v-if="!child.hidden">
-        <sidebar-item
-          v-if="child.children&&child.children.length>0"
-          :is-nest="true"
-          :item="child"
-          :key="child.path"
-          :base-path="resolvePath(child.path)"
-          class="nest-menu" />
+        <sidebar-item v-if="child.children&&child.children.length>0" :is-nest="true" :item="child" :key="child.path" :base-path="resolvePath(child.path)" class="nest-menu" />
 
         <app-link v-else :to="resolvePath(child.path)" :key="child.name">
           <el-menu-item :index="resolvePath(child.path)">
@@ -85,7 +79,7 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return true
       }
 

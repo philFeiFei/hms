@@ -49,9 +49,26 @@ export default {
     //const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))//这种只把请求页返给前台
     const pageList = mockList //这种全部返回前台，前台处理分页请求
 
-    return {
+    var result = {
+      _success: true,
       total: mockList.length,
       items: pageList
     }
+    return result
+  },
+
+  update: config => {
+    var result = {
+      _success: true,
+    }
+    return result
+  },
+  querySpecialDetail: config => {
+    var result = {
+      _success: false,
+      code: 406,//403表示认证失败；
+      _message: '没有查询到特单详细信息的图片信息，请检查！',
+    }
+    return result
   }
 }
