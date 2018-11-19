@@ -32,7 +32,6 @@ for (let i = 0; i < count; i++) {
 export default {
   // 查询complex table --phil
   getList: config => {
-    console.log('进入mock api 查询complex table。config=', config)
     const { importance, type, title, page = 1, limit = 20, sort } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
@@ -50,7 +49,10 @@ export default {
 
     return {
       total: mockList.length,
-      items: pageList
+      items: pageList,
+      _success: true,
+      code: null,
+      _message: ''
     }
   },
   getPv: () => ({
@@ -65,17 +67,32 @@ export default {
     }
   },
   createArticle: config => {
-    console.log('进入mock api createArticle。config=', config)
 
     List.unshift(JSON.parse(config.body))// 真实的加入的List中，前台页面不用手工虚拟的象征性的加了。。
-    console.log('List', List)
     var result = {
-      code: 1, // 定义默认：0：失败，1：成功； 失败是返回error信息。
-      error: '您传入的信息不正确，不能成功创建该文章，谢谢，请检查！！！'
+      _success: true,
+      code: null,
+      _message: ''
     }
     return result
   },
-  updateArticle: () => ({
-    data: 'success'
-  })
+  updateArticle: config => {
+
+    //处理修改逻辑，尽量模拟一下了。。。
+    var temp = JSON.parse(config.body)
+
+    for (const v of List) {
+      if (v.id === temp.id) {
+        const index = List.indexOf(v)
+        List.splice(index, 1, temp)//从index位置，删除1个，并用temp代替。temp可选项
+        break
+      }
+    }
+    var result = {
+      _success: true,
+      code: 406,//403表示认证失败；
+      _message: '订单日期传入格式不准确，请检查！！！',
+    }
+    return result
+  }
 }

@@ -350,7 +350,7 @@ export const asyncRouterMap = [
   {
     path: '/hairpieceMove',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/hairpieceMove/index',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
     children: [
       {
         path: 'index',

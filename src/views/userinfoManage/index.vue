@@ -200,7 +200,6 @@ export default {
     }
   },
   created() {
-    console.log('complex table vue created的时候，执行查询')
     this.getList()
   },
   methods: {
@@ -268,24 +267,16 @@ export default {
           this.temp.author = 'vue-element-admin'
           createArticle(this.temp).then((response) => {
             var code = response.data.code
-            if (code === 1) {
-              // this.list.unshift(this.temp)//--这里去掉，因为真实后台会增加或者mockjs中我已经修改为增加这个this.temp了。
-              this.dialogFormVisible = false
-              this.$notify({
-                title: '成功',
-                message: '创建成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.handleFilter()
-            } else {
-              this.$message.error(response.data.error)
-            }
-          }).catch((response) => {
-            this.$message.error(response.data.error)
+            // this.list.unshift(this.temp)//--这里去掉，因为真实后台会增加或者mockjs中我已经修改为增加这个this.temp了。
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.handleFilter()
           })
-        } else { // 填写信息不正确等情况
-          this.$message.error('存在输入校验错误!')
         }
       })
     },
@@ -304,20 +295,21 @@ export default {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+            /*  for (const v of this.list) {
+               if (v.id === this.temp.id) {
+                 const index = this.list.indexOf(v)
+                 this.list.splice(index, 1, this.temp)
+                 break
+               }
+             } */
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '更新成功',
+              message: '修改成功',
               type: 'success',
               duration: 2000
             })
+            this.handleFilter()//调用查询
           })
         }
       })

@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List = []
-const count = 20
+const count = 200
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
@@ -32,7 +32,6 @@ for (let i = 0; i < count; i++) {
 export default {
   // 查询complex table --phil
   getList: config => {
-    console.log('进入mock api airpiece table。config=', config)
     const { fhr, ddbh, sh, page = 1, limit = 20, sort } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
@@ -47,7 +46,8 @@ export default {
       mockList = mockList.reverse()
     }
 
-    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+    //const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))//这种只把请求页返给前台
+    const pageList = mockList //这种全部返回前台，前台处理分页请求
 
     return {
       total: mockList.length,
