@@ -22,3 +22,12 @@ export function deleteHairPici(data) {
     params: data
   })
 }
+
+export function getDetail4QRCode(data) {
+  return request({
+    url: '/hairpieceMultiManage/getDetail4QRCode',
+    method: 'post',
+    params: data
+  })
+}
+

@@ -138,7 +138,17 @@ export default {
     ddrq: '订单日期',
     ddbh: '订单编号',
     sh: '色号',
-    fhr: '发货人'
+    fhr: '发货人',
+    userName: '用户名',
+    xm: '姓名',
+    password: '密码',
+    roleId: '角色',
+    sfzhm: '身份证号码',
+    xm: '姓名',
+    csrq: '出生日期',
+    xb: '性别',
+    jtzz: '家庭住址',
+    query: '查询'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

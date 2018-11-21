@@ -1,8 +1,13 @@
 /**
  * Created by jiachenpan on 16/11/18.
+ * updated by phil 2018-11-21---add parseCode method
  */
 
+import store from '@/store'
 export function parseTime(time, cFormat) {
+  if (time == null || time == undefined || time == 0) {
+    return null;
+  }
   if (arguments.length === 0) {
     return null
   }
@@ -26,7 +31,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -129,11 +134,11 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"') +
-      '"}'
+    decodeURIComponent(search)
+      .replace(/"/g, '\\"')
+      .replace(/&/g, '","')
+      .replace(/=/g, '":"') +
+    '"}'
   )
 }
 
@@ -230,7 +235,7 @@ export function getTime(type) {
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
@@ -247,7 +252,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function (...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -288,4 +293,32 @@ export function uniqueArr(arr) {
 
 export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
+}
+
+export function parseCode(codeKey, codeName) {//如果通过页面filter过来的话，当前的值作为第一个参数自动传过来。
+  const code = store.getters && store.getters.code && store.getters.code[codeName]
+  if (code == null || code == undefined) {
+    return null;
+  }
+  for (let c of code) {
+    if (c.key === codeKey) {
+      return c.value;
+    }
+  }
+}
+
+export function parseArrCode(codeKey, codeName) {//如果通过页面filter过来的话，当前的值作为第一个参数自动传过来。
+  const code = store.getters && store.getters.code && store.getters.code[codeName]
+  if (code == null || code == undefined) {
+    return null;
+  }
+  var codeStr = ""
+  for (let i = 0; i < codeKey.length; i++) {
+    for (let c of code) {
+      if (c.key === codeKey[i]) {
+        codeStr = codeStr + c.value + ";"
+      }
+    }
+  }
+  return codeStr;
 }

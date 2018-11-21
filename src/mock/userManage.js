@@ -16,17 +16,19 @@ for (let i = 0; i < count; i++) {
     csrq: r.datetime(),
     sfzhm: r.natural(13061003239, 18663795374),
     jtzz: r.county(true),
-    'roleId|1': [1, 2, 3, 4, 5, 6, 7, 8],
-    'yxbz|1': [0, 1]
+    roleId: [0, 1],
+    yxbz: 1
   }))
 }
 export default {
   getList: config => {
-    const { userName, xm, page = 1, limit = 10, sort } = param2Obj(config.url)
+    const { userName, xm, xb, page = 1, limit = 10, sort } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
       if (userName && item.userName.indexOf(userName) < 0) return false
       if (xm && item.xm.indexOf(xm) < 0) return false
+      if (xb && item.xb != xb) return false
+      if (item.yxbz != 1) return false
       return true
     })
 
@@ -71,9 +73,9 @@ export default {
     return result
   },
   delete: config => {
-    var temp = JSON.parse(config.body)
+    var userid = JSON.parse(config.body)
     for (const v of List) {
-      if (v.userId === temp.userId) {
+      if (v.userId === userid) {
         v.yxbz = 0
         break
       }

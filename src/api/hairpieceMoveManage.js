@@ -15,3 +15,11 @@ export function updateHairpiece(data) {
   })
 }
 
+export function querySpecialDetail(data) {
+  return request({
+    url: '/hairpieceMove/querySpecialDetail',
+    method: 'post',
+    params: data //default update ddbh
+  })
+}
+

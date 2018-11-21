@@ -3,15 +3,14 @@
     <div class="filter-container">
       <el-input :placeholder="$t('table.userName')" v-model="listQuery.userName" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
+      <el-select v-model="listQuery.xb" :placeholder="$t('table.xb')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.xb" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
-
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="100">
+      <el-table-column :label="$t('table.id')" prop="userId" sortable="custom" align="center" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>
         </template>
@@ -26,13 +25,11 @@
           <span>{{ scope.row.password }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column :label="$t('table.roleId')" width="120px">
+      <el-table-column :label="$t('table.roleId')" width="180px">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleId }}</span>
+          <span>{{ scope.row.roleId | parseArrCode('role')}}</span>
         </template>
       </el-table-column>
-
       <el-table-column :label="$t('table.sfzhm')" width="140px">
         <template slot-scope="scope">
           <span>{{ scope.row.sfzhm }}</span>
@@ -48,30 +45,70 @@
           <span>{{ scope.row.csrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column :label="$t('table.xb')" width="60px">
+      <el-table-column :label="$t('table.xb')" width="100px">
         <template slot-scope="scope">
-          <span>{{ scope.row.xb }}</span>
+          <span>{{ scope.row.xb | parseCode('xb') }}</span>
         </template>
       </el-table-column>
-
       <el-table-column :label="$t('table.jtzz')" min-width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.jtzz }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row,'deleted')">{{ $t('table.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
-
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" />
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
+      <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
+        <el-form-item :label="$t('table.userName')" prop="userName">
+          <el-input v-model="temp.userName" />
+        </el-form-item>
+        <el-form-item :label="$t('table.password')" prop="password">
+          <el-input v-model="temp.password" />
+        </el-form-item>
+        <el-form-item :label="$t('table.roleId')" prop="roleId">
+          <el-select v-model="temp.roleId" class="filter-item" placeholder="Please select" multiple>
+            <el-option v-for="item in code.role" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('table.xm')" prop="xm">
+          <el-input v-model="temp.xm" />
+        </el-form-item>
+        <el-form-item :label="$t('table.sfzhm')" prop="sfzhm">
+          <el-input v-model="temp.sfzhm" />
+        </el-form-item>
+        <el-form-item :label="$t('table.csrq')" prop="timestamp">
+          <el-date-picker v-model="temp.csrq" type="datetime" placeholder="Please pick a date" />
+        </el-form-item>
+        <el-form-item :label="$t('table.xb')">
+          <el-select v-model="temp.xb" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.xb" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('table.jtzz')" prop="jtzz">
+          <el-input v-model="temp.jtzz" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { queryUser } from '@/api/userManage'
+import { queryUser, deleteUser, createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // Waves directive
-import { parseTime } from '@/utils'
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
 
 export default {
@@ -90,22 +127,33 @@ export default {
         userName: undefined,
         xm: '',
         sfzhm: undefined,
-        sort: '+userId'
+        sort: '+userId',
+        xb: undefined,
       },
-      sortOptions: [{ label: 'ID Ascending', key: '+userId' }, { label: 'ID Descending', key: '-userId' }],
       temp: {
         userId: undefined,
         userName: '',
         password: '',
-        roleId: undefined,
+        roleId: [],
         xm: '',
         sjh: '',
-        xb: '',
+        xb: undefined,
         csrq: '',
         sfzhm: undefined,
         jtzz: '',
-        yxbz: '1',
-      }
+      },
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: '修改用户信息',
+        create: '新增用户信息'
+      },
+      rules: {
+        userName: [{ required: true, message: '用户名必须填写', trigger: 'change' }],
+        password: [{ required: true, message: '密码必须填写', trigger: 'change' }],
+        xm: [{ required: true, message: '姓名必须填写', trigger: 'blur' }],
+        roleId: [{ required: true, message: '角色必须选择', trigger: 'change' }]
+      },
 
     }
   },
@@ -118,7 +166,10 @@ export default {
         return null;
       }
       return this.list.filter((item, index) => index < limitC * pageC && index >= limitC * (pageC - 1))
-    }
+    },
+    ...mapGetters([
+      'code',
+    ]),
   },
   created() {
     this.getList()
@@ -153,7 +204,86 @@ export default {
         this.listQuery.sort = '-userId'
       }
       this.handleFilter()
-    }
+    },
+    resetTemp() {
+      this.temp = {
+        userName: '',
+        password: '',
+        roleId: [],
+        xm: '',
+        sjh: '',
+        xb: undefined,
+        csrq: '',
+        sfzhm: undefined,
+        jtzz: '',
+        yxbz: 1
+      }
+    },
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.userId = parseInt(Math.random() * 100) + 1024 // mock a id
+          createUser(this.temp).then((response) => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.handleFilter()
+          })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      var csrq = this.temp.csrq;
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          //console.log("csrq-saveupdate", tempData.csrq)
+          tempData.csrq = +new Date(tempData.csrq) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateUser(tempData).then(() => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.handleFilter()
+          })
+        }
+      })
+    },
+    handleDelete(row) {
+      deleteUser(row.userId).then(() => {
+        this.dialogFormVisible = false
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.handleFilter()
+      })
+    },
 
   }
 }

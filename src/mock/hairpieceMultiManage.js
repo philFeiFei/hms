@@ -62,7 +62,7 @@ export default {
     }
     return result
   },
-  generateQRCode: config => {
+  getDetail4QRCode: config => {
     var result = {
       _success: false,
       code: 406,//403表示认证失败；
