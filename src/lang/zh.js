@@ -82,6 +82,7 @@ export default {
   },
   login: {
     title: '系统登录',
+    title_hair: '假发管理系统（试运行）',
     logIn: '登录',
     username: '账号',
     password: '密码',

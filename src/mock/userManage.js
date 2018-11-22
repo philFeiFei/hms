@@ -16,7 +16,7 @@ for (let i = 0; i < count; i++) {
     csrq: r.datetime(),
     sfzhm: r.natural(13061003239, 18663795374),
     jtzz: r.county(true),
-    roleId: [0, 1],
+    roleId: [1],
     yxbz: 1
   }))
 }
