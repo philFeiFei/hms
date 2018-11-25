@@ -8,10 +8,11 @@ export function queryHairPici(query) {
 }
 
 export function createHairPici(data) {
+  console.log("data-api multi", data);
   return request({
     url: '/hairpieceMultiManage/create',
     method: 'post',
-    params: data
+    data//这里不能传入params。。。想传入对象，就这样。。
   })
 }
 
@@ -19,7 +20,7 @@ export function deleteHairPici(data) {
   return request({
     url: '/hairpieceMultiManage/delete',//set yxbz = 0
     method: 'post',
-    params: data
+    data
   })
 }
 
@@ -27,7 +28,7 @@ export function getDetail4QRCode(data) {
   return request({
     url: '/hairpieceMultiManage/getDetail4QRCode',
     method: 'post',
-    params: data
+    data
   })
 }
 

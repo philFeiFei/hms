@@ -2,6 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" />
+      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" />
       <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
@@ -12,9 +14,9 @@
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="100">
+      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.jfid }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.ddrq')" width="150px" align="center">
@@ -68,11 +70,12 @@ export default {
         fhr: undefined,
         ddbh: undefined,
         sh: undefined,
-        sort: '+id'
+        sort: '+jfid',
+        sftd: 1
       },
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      sortOptions: [{ label: 'ID Ascending', key: '+jfid' }, { label: 'ID Descending', key: '-jfid' }],
       temp: {
-        id: undefined,
+        jfid: undefined,
         importance: 1,
         remark: '',
         timestamp: new Date(),
@@ -117,15 +120,15 @@ export default {
 
     sortChange(data) {
       const { prop, order } = data
-      if (prop === 'id') {
+      if (prop === 'jfid') {
         this.sortByID(order)
       }
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery.sort = '+jfid'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery.sort = '-jfid'
       }
       this.handleFilter()
     }

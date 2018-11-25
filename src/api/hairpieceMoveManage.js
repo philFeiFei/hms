@@ -11,7 +11,7 @@ export function updateHairpiece(data) {
   return request({
     url: '/hairpieceMove/update',
     method: 'post',
-    params: data //default update ddbh
+    data //default update ddbh
   })
 }
 
@@ -19,7 +19,7 @@ export function querySpecialDetail(data) {
   return request({
     url: '/hairpieceMove/querySpecialDetail',
     method: 'post',
-    params: data //default update ddbh
+    data //default update ddbh
   })
 }
 

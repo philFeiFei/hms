@@ -1,12 +1,12 @@
 import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
-const List = []
+const List4User = []
 const count = 20
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
-  List.push(Mock.mock({
+  List4User.push(Mock.mock({
     userId: '@increment',
     userName: r.last(),
     password: r.natural(12323232, 72323232),
@@ -22,9 +22,9 @@ for (let i = 0; i < count; i++) {
 }
 export default {
   getList: config => {
-    const { userName, xm, xb, page = 1, limit = 10, sort } = param2Obj(config.url)
+    const { userName, xm, xb, page = 1, limit = 10, sort } = param2Obj(config.url)//如果以对象传入的话，就用config.body接收即可。
 
-    let mockList = List.filter(item => {
+    let mockList = List4User.filter(item => {
       if (userName && item.userName.indexOf(userName) < 0) return false
       if (xm && item.xm.indexOf(xm) < 0) return false
       if (xb && item.xb != xb) return false
@@ -47,7 +47,10 @@ export default {
   },
 
   create: config => {
-    List.unshift(JSON.parse(config.body))
+    console.log("config-user-mock", config);
+    var obj = JSON.parse(config.body);
+    obj.userId = parseInt(Math.random() * 100) + 1024
+    List4User.unshift(obj)
     var result = {
       _success: true,
       code: null,
@@ -58,10 +61,10 @@ export default {
 
   update: config => {
     var temp = JSON.parse(config.body)
-    for (const v of List) {
+    for (const v of List4User) {
       if (v.userId === temp.userId) {
-        const index = List.indexOf(v)
-        List.splice(index, 1, temp)
+        const index = List4User.indexOf(v)
+        List4User.splice(index, 1, temp)
         break
       }
     }
@@ -74,7 +77,7 @@ export default {
   },
   delete: config => {
     var userid = JSON.parse(config.body)
-    for (const v of List) {
+    for (const v of List4User) {
       if (v.userId === userid) {
         v.yxbz = 0
         break

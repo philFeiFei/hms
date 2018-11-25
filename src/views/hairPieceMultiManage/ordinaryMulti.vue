@@ -2,53 +2,117 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" />
+      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" />
 
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.id')" prop="id" sortable="custom" align="center" width="100">
+      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable="custom" align="center" min-width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.pcid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" width="150px" align="center">
+      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="150px">
+      <el-table-column :label="$t('table.ddbh')" min-width="120px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.sh')" min-width="150px">
+      <el-table-column :label="$t('table.wdks')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sh }}</span>
+          <span>{{ scope.row.wdks | parseCode('wdks') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.fhr')" min-width="150px">
+      <el-table-column :label="$t('table.wdcc')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.fhr }}</span>
+          <span>{{ scope.row.wdcc | parseCode('wdcc') }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column :label="$t('table.sh')" min-width="130px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sh | parseCode('sh') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.fc')" min-width="130px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.fc | parseCode('fc') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.sl')" min-width="100px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sl }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" min-width="300" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
+          </el-button>
+          <el-button size="mini" type="primary" @click="generateQRCode(scope.row)">{{ $t('table.scewm') }}
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
-
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" />
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
+      <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
+        <el-form-item :label="$t('table.ddrq')" prop="timestamp">
+          <el-date-picker v-model="temp.ddrq" type="datetime" placeholder="Please pick a date" />
+        </el-form-item>
+        <el-form-item :label="$t('table.ddbh')" prop="ddbh">
+          <el-input v-model="temp.ddbh" />
+        </el-form-item>
+
+        <el-form-item :label="$t('table.wdks')" prop="wdks">
+          <el-select v-model="temp.wdks" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.wdks" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="$t('table.wdcc')" prop="wdcc">
+          <el-select v-model="temp.wdcc" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.wdcc" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="$t('table.sh')" prop="sh">
+          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.sh" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="$t('table.fc')" prop="fc">
+          <el-select v-model="temp.fc" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.fc" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item :label="$t('table.sl')" prop="sl">
+          <el-input v-model="temp.sl" />
+        </el-form-item>
+
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
 
 <script>
-import { queryHairpiece } from '@/api/hairpieceMoveManage'
+import { queryHairPici, deleteHairPici, getDetail4QRCode, createHairPici } from '@/api/hairpieceMultiManage'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
 
 export default {
@@ -64,22 +128,39 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        fhr: undefined,
         ddbh: undefined,
         sh: undefined,
-        sort: '+id'
+        sort: '+pcid',
+        sftd: 0
       },
-      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
+      textMap: {
+        update: '修改批量订单',
+        create: '新增批量订单'
+      },
+      dialogFormVisible: false,
+      dialogStatus: '',
       temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
-      }
+        pcid: undefined,
+        ddrq: undefined,
+        ddbh: null,
+        wdks: null,
+        wdcc: null,
+        sh: null,
+        fc: null,
+        sl: 4,
+        yxbz: 1,
+        sftd: 0,
+        tdurl: null
+      },
+      rules: {
+        ddrq: [{ required: true, message: '订单日期必须填写', trigger: 'change' }],
+        ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
+        wdks: [{ required: true, message: '网底款式必须填写', trigger: 'change' }],
+        wdcc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
+        sh: [{ required: true, message: '色号必须选择', trigger: 'change' }],
+        fc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
+        sl: [{ required: true, message: '数量必须选择', trigger: 'change' }],
+      },
 
     }
   },
@@ -92,8 +173,10 @@ export default {
         return null;
       }
       return this.list.filter((item, index) => index < limitC * pageC && index >= limitC * (pageC - 1))
-    }
-    //把table中数据源改为’list‘，重新加上$emit('pagiation')事件，还原恢复
+    },
+    ...mapGetters([
+      'code',
+    ]),
   },
   created() {
     this.getList()
@@ -101,7 +184,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      queryHairpiece(this.listQuery).then(response => {
+      queryHairPici(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -117,19 +200,105 @@ export default {
 
     sortChange(data) {
       const { prop, order } = data
-      if (prop === 'id') {
+      if (prop === 'pcid') {
         this.sortByID(order)
       }
     },
     sortByID(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery.sort = '+pcid'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery.sort = '-pcid'
       }
       this.handleFilter()
-    }
+    },
+    resetTemp() {
+      this.temp = {
+        pcid: undefined,
+        ddrq: undefined,
+        ddbh: null,
+        wdks: null,
+        wdcc: null,
+        sh: null,
+        fc: null,
+        sl: 4,
+        yxbz: 1,
+        sftd: 0,
+        tdurl: null
+      }
+    },
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createHairPici(this.temp).then((response) => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.handleFilter()
+          })
+        }
+      })
+    },
+    handleDelete(row) {
+
+
+      this.$confirm('确定要删除该用户吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        //---------operate start---------
+        deleteHairPici(row.pcid).then(() => {
+          this.dialogFormVisible = false
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.handleFilter()
+        })
+        //---------operate end---------
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      })
+
+
+    },
+
+    generateQRCode(row) {
+      getDetail4QRCode(row.pcid).then(() => {
+        this.$notify({
+          title: '成功',
+          message: '成功生成二维码',
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
 
   }
 }
 </script>
+<style scoped>
+.fixed-width .el-button--mini {
+  padding: 7px 7px;
+  width: 75px;
+}
+</style>
+

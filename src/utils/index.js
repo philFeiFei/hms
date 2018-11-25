@@ -298,7 +298,7 @@ export function isExternal(path) {
 export function parseCode(codeKey, codeName) {//如果通过页面filter过来的话，当前的值作为第一个参数自动传过来。
   const code = store.getters && store.getters.code && store.getters.code[codeName]
   if (code == null || code == undefined) {
-    return null;
+    return codeKey;
   }
   for (let c of code) {
     if (c.key === codeKey) {
@@ -310,7 +310,7 @@ export function parseCode(codeKey, codeName) {//如果通过页面filter过来�
 export function parseArrCode(codeKey, codeName) {//如果通过页面filter过来的话，当前的值作为第一个参数自动传过来。
   const code = store.getters && store.getters.code && store.getters.code[codeName]
   if (code == null || code == undefined) {
-    return null;
+    return codeKey;
   }
   var codeStr = ""
   for (let i = 0; i < codeKey.length; i++) {

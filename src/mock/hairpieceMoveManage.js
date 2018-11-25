@@ -1,48 +1,57 @@
 import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
-const List = []
-const count = 200
+const List4Move = []
+const count = 16
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
-  List.push(Mock.mock({
-    id: '@increment',
-    ddrq: +r.date('T'),
+  List4Move.push(Mock.mock({
+    jfid: '@increment',
+    ddrq: r.datetime(),
     ddbh: 'K' + r.natural(629001, 629003),
-    'sh': r.natural(1, 9) + r.character('upper') + '-' + r.natural(1, 9),
-    sl: 1,
-    fhrq: r.datetime(),
-    fhr: '丹东' + '-' + r.cname(),
-    ks: 'Q66*8',
-    gz: r.datetime(),
-    gzr: r.cname(),
-    zj: r.datetime(),
-    zjr: r.cname(),
-    dj: r.datetime(),
-    djr: r.cname(),
-    zx: r.datetime(),
-    zxr: r.cname(),
-    zxyz: r.datetime(),
-    zxyzr: r.cname(),
-    fh: r.cname(),
-    lhsj: r.datetime()
+    wdks: r.natural(1, 6),
+    wdcc: r.natural(1, 5),
+    sh: r.natural(1, 5),
+    fc: r.natural(1, 5),
+
+    lhr: r.natural(0, 5),
+    lhsj: r.datetime(),
+
+    gzsj: r.datetime(),
+    gzr: r.natural(0, 5),
+    zjsj: r.datetime(),
+    zjr: r.natural(0, 5),
+    djsj: r.datetime(),
+    djr: r.natural(0, 5),
+    zxsj: r.datetime(),
+    zxr: r.natural(0, 5),
+    cpzjsj: r.datetime(),
+    cpzjr: r.natural(0, 5),
+    fhsj: r.datetime(),
+    fhr: r.natural(0, 5),
+
+    'sftd|1': [0, 1],
+    yxbz: 1
   }))
 }
 export default {
   // 查询complex table --phil
   getList: config => {
-    const { fhr, ddbh, sh, page = 1, limit = 20, sort } = param2Obj(config.url)
+    const { ddqsrq, ddzzrq, fhr, ddbh, sftd, sh, sort } = param2Obj(config.url)
 
-    let mockList = List.filter(item => {
-      // if (importance && item.importance !== +importance) return false
+    let mockList = List4Move.filter(item => {
+      if (ddqsrq && item.ddrq < ddqsrq) return false
+      if (ddzzrq && item.ddrq > ddzzrq) return false
       if (fhr && item.fhr.indexOf(fhr) < 0) return false
       if (ddbh && item.ddbh.indexOf(ddbh) < 0) return false
       if (sh && item.sh.indexOf(sh) < 0) return false
+      if (sftd && item.sftd != sftd) return false
+      if (item.yxbz != 1) return false
       return true
     })
 
-    if (sort === '-id') {
+    if (sort === '-jfid') {
       mockList = mockList.reverse()
     }
 
@@ -58,16 +67,34 @@ export default {
   },
 
   update: config => {
+    console.log("config", config);
+    var temp = JSON.parse(config.body)
+    console.log("temp-update", temp);
+    for (const v of List4Move) {
+      if (v.jfid === temp.jfid) {
+        const index = List4Move.indexOf(v)
+        List4Move.splice(index, 1, temp)
+        break
+      }
+    }
     var result = {
       _success: true,
+      code: 406,
+      _message: '修改假发信息传入不准确，请检查！！！',
     }
     return result
   },
   querySpecialDetail: config => {
+    let success = true;
+    var jfid = JSON.parse(config.body)
+    if (jfid == null || jfid == undefined) {
+      success = false
+    }
     var result = {
-      _success: false,
-      code: 406,//403表示认证失败；
+      _success: success,
       _message: '没有查询到特单详细信息的图片信息，请检查！',
+      src: 'F:\外面项目\德州禹城假发管理系统\QQ图片20181112101901.jpg',
+      code: 406,
     }
     return result
   }

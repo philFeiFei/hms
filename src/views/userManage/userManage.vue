@@ -71,7 +71,7 @@
           <el-input v-model="temp.userName" />
         </el-form-item>
         <el-form-item :label="$t('table.password')" prop="password">
-          <el-input v-model="temp.password" />
+          <el-input v-model="temp.password" type="password" />
         </el-form-item>
         <el-form-item :label="$t('table.roleId')" prop="roleId">
           <el-select v-model="temp.roleId" class="filter-item" placeholder="Please select" multiple>
@@ -176,7 +176,7 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = true
+      this.litsLoading = true
       queryUser(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -207,6 +207,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
+        userId: undefined,
         userName: '',
         password: '',
         roleId: [],
@@ -230,7 +231,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.userId = parseInt(Math.random() * 100) + 1024 // mock a id
           createUser(this.temp).then((response) => {
             this.dialogFormVisible = false
             this.$notify({
@@ -273,15 +273,29 @@ export default {
       })
     },
     handleDelete(row) {
-      deleteUser(row.userId).then(() => {
-        this.dialogFormVisible = false
-        this.$notify({
-          title: '成功',
-          message: '删除成功',
-          type: 'success',
-          duration: 2000
+      this.$confirm('确定要删除该用户吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        //---------operate start---------
+        deleteUser(row.userId).then(() => {
+          this.dialogFormVisible = false
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.handleFilter()
         })
-        this.handleFilter()
+      }
+        //---------operate end---------
+      ).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       })
     },
 
