@@ -104,6 +104,13 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
+    <el-dialog v-loading="listLoading" title="二维码" :visible.sync="dialogQRFormVisible" width='700'>
+      <canvas v-for="item in itemsOfQR" :key="item.id" :id="item.id"></canvas>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogQRFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="printQRCode()">打印</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -114,6 +121,7 @@ import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
+import QRCode from 'qrcode'
 
 export default {
   name: 'ComplexTable',
@@ -138,6 +146,7 @@ export default {
         create: '新增批量订单'
       },
       dialogFormVisible: false,
+      dialogQRFormVisible: false,
       dialogStatus: '',
       temp: {
         pcid: undefined,
@@ -161,6 +170,34 @@ export default {
         fc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
         sl: [{ required: true, message: '数量必须选择', trigger: 'change' }],
       },
+      /* itemsOfQR: [
+        {
+          id: 'canvas1',
+          text: '234234',
+          desc: 'Hob99-23-33*-aa'
+        },
+        {
+          id: 'canvas2',
+          text: '22222222',
+          desc: 'Hobaa-23-33*-dd'
+        },
+        {
+          id: 'canvas3',
+          text: '44444444444',
+          desc: 'Hob2-23-33*-cc'
+        },
+        {
+          id: 'canvas4',
+          text: '7777ghgfhfg',
+          desc: 'Hobrr-23-33*-bb'
+        },
+        {
+          id: 'canvas5',
+          text: '234234',
+          desc: 'Hobggg-2-33*-aa'
+        },
+      ] */
+      itemsOfQR: []
 
     }
   },
@@ -190,7 +227,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.0 * 1000)
+        }, 0.5 * 1000)
       })
     },
     handleFilter() {
@@ -251,8 +288,52 @@ export default {
         }
       })
     },
-    handleDelete(row) {
+    generateQRCode(row) {
+      this.dialogQRFormVisible = true
+      getDetail4QRCode(row.pcid).then((response) => {
+        //---------生成二维码------------start
+        /*   var canvas = document.getElementById('canvas')
+          QRCode.toCanvas(canvas, '23423423', function (error) {
+            if (error) console.error(error)
+            console.log('success!');
+          }) */
+        this.listLoading = true
+        this.itemsOfQR = response.data.result.itemsOfQR
+        setTimeout(() => {
+          this.listLoading = false
 
+          //一秒之后dom加载完毕，进度关闭，展示二维码.不等一会，canvas qritem.id取不到
+          console.log("itemsOfQR", this.itemsOfQR);
+          this.itemsOfQR.forEach(qritem => {
+            var canvas = document.getElementById(qritem.id);
+            console.log("canvas", canvas)
+            QRCode.toCanvas(canvas, qritem.text, function (error) {
+              if (error) console.error(error)
+              var ctx = canvas.getContext("2d");
+              ctx.font = "12px Georgia";
+              ctx.fillText(`k-h3-${qritem.text}`, 30, 112);
+              ctx.font = "30px Verdana";
+              console.log(`${qritem}生成成功`);
+            })
+          });
+
+          this.$notify({
+            title: '成功',
+            message: '二维码生成成功',
+            type: 'success',
+            duration: 2000
+          })
+        }, 1 * 1000)
+        //---------生成二维码------------end
+
+      })
+    },
+    printQRCode() {
+
+      window.print();
+
+    },
+    handleDelete(row) {
 
       this.$confirm('确定要删除该批次的订单吗?', '提示', {
         confirmButtonText: '确定',
@@ -281,17 +362,6 @@ export default {
 
     },
 
-    generateQRCode(row) {
-      getDetail4QRCode(row.pcid).then(() => {
-        this.$notify({
-          title: '成功',
-          message: '成功生成二维码',
-          type: 'success',
-          duration: 2000
-        })
-      })
-    },
-
   }
 }
 </script>
@@ -299,6 +369,12 @@ export default {
 .fixed-width .el-button--mini {
   padding: 7px 7px;
   width: 75px;
+}
+canvas {
+  border: 1px solid rebeccapurple;
+  height: 150px !important;
+  width: 150px !important;
+  margin-right: 13px;
 }
 </style>
 

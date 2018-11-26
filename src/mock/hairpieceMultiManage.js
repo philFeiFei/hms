@@ -86,11 +86,71 @@ export default {
     return result
   },
   getDetail4QRCode: config => {
-    var result = {
-      _success: false,
+    var obj = {
+      _success: true,
       code: 406,
       _message: '获取二维码信息失败，请检查！',
+
     }
-    return result
+    //随机构造二维码数量
+    var itemsOfQR = [];
+    for (let i = 0; i < 17; i++) {
+      itemsOfQR.push(Mock.mock({
+        id: '@increment',
+        text: 'K' + r.natural(129001, 629003),
+        desc: r.word(3, 5) + r.natural(129001, 629003)
+
+      }))
+    }
+    var result = {
+      itemsOfQR
+    }
+
+    /*  var result = {
+       itemsOfQR: [
+         {
+           id: 'canvas1',
+           text: '234234',
+           desc: 'Hob99-23-33*-aa'
+         },
+         {
+           id: 'canvas2',
+           text: '22222222',
+           desc: 'Hobaa-23-33*-dd'
+         },
+         {
+           id: 'canvas3',
+           text: '44444444444',
+           desc: 'Hob2-23-33*-cc'
+         },
+         {
+           id: 'canvas4',
+           text: '7777ghgfhfg',
+           desc: 'Hobrr-23-33*-bb'
+         },
+         {
+           id: 'canvas5',
+           text: '234234',
+           desc: 'Hobggg-2-33*-aa'
+         },
+         {
+           id: 'canvas6',
+           text: '44444444444',
+           desc: 'Hob2-23-33*-cc'
+         },
+         {
+           id: 'canvas7',
+           text: '7777ghgfhfg',
+           desc: 'Hobrr-23-33*-bb'
+         },
+         {
+           id: 'canvas8',
+           text: '234234',
+           desc: 'Hobggg-2-33*-aa'
+         },
+       ]
+     } */
+    obj.result = result
+    return obj
   }
 }
