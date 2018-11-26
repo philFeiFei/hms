@@ -44,12 +44,16 @@ export default {
     //const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))//这种只把请求页返给前台
     const pageList = mockList //这种全部返回前台，前台处理分页请求
 
-    var result = {
+    var obj = {
       _success: true,
+    };
+
+    var result = {
       total: mockList.length,
       items: pageList
     }
-    return result
+    obj.result = result
+    return obj
   },
 
   create: config => {

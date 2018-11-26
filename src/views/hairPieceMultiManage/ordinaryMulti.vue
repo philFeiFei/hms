@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" />
-      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
@@ -63,8 +63,8 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
       <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.ddrq')" prop="timestamp">
-          <el-date-picker v-model="temp.ddrq" type="datetime" placeholder="Please pick a date" />
+        <el-form-item :label="$t('table.ddrq')" prop="ddrq">
+          <el-date-picker v-model="temp.ddrq" type="date" placeholder="Please pick a date" />
         </el-form-item>
         <el-form-item :label="$t('table.ddbh')" prop="ddbh">
           <el-input v-model="temp.ddbh" />
@@ -95,7 +95,7 @@
         </el-form-item>
 
         <el-form-item :label="$t('table.sl')" prop="sl">
-          <el-input v-model="temp.sl" />
+          <el-input-number v-model="temp.sl" label="描述文字"></el-input-number>
         </el-form-item>
 
       </el-form>
@@ -185,8 +185,8 @@ export default {
     getList() {
       this.listLoading = true
       queryHairPici(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.result.items
+        this.total = response.data.result.total
 
         setTimeout(() => {
           this.listLoading = false
@@ -254,7 +254,7 @@ export default {
     handleDelete(row) {
 
 
-      this.$confirm('确定要删除该用户吗?', '提示', {
+      this.$confirm('确定要删除该批次的订单吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

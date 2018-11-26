@@ -1,50 +1,51 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" />
-      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" />
-      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" />
+      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" />
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75">
+      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" width="100px" align="center">
+      <el-table-column :label="$t('table.ddrq')" width="100px" align="center" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="95px">
+      <el-table-column :label="$t('table.ddbh')" min-width="95px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.wdks')" width="125px">
+      <el-table-column :label="$t('table.wdks')" width="125px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.wdks | parseCode('wdks') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.wdcc')" width="95px">
+      <el-table-column :label="$t('table.wdcc')" width="95px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.wdcc | parseCode('wdcc') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.sh')" min-width="75px">
+      <el-table-column :label="$t('table.sh')" min-width="75px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.sh | parseCode('sh') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.fc')" width="75px">
+      <el-table-column :label="$t('table.fc')" width="75px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.fc | parseCode('fc') }}</span>
         </template>
@@ -54,7 +55,7 @@
           <span>{{ scope.row.lhsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.lhr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.lhr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.lhr | parseCode('user') }}</span>
         </template>
@@ -65,7 +66,7 @@
           <span>{{ scope.row.gzsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.gzr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.gzr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.gzr | parseCode('user') }}</span>
         </template>
@@ -76,7 +77,7 @@
           <span>{{ scope.row.zjsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.zjr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.zjr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.zjr | parseCode('user') }}</span>
         </template>
@@ -87,7 +88,7 @@
           <span>{{ scope.row.djsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.djr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.djr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.djr | parseCode('user') }}</span>
         </template>
@@ -98,7 +99,7 @@
           <span>{{ scope.row.zxsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.zxr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.zxr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.zxr | parseCode('user') }}</span>
         </template>
@@ -109,7 +110,7 @@
           <span>{{ scope.row.cpzjsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.cpzjr')" min-width="95px">
+      <el-table-column v-if="showReviewer" :label="$t('table.cpzjr')" min-width="95px">
         <template slot-scope="scope">
           <span>{{ scope.row.cpzjr | parseCode('user') }}</span>
         </template>
@@ -119,12 +120,12 @@
           <span>{{ scope.row.fhsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.fhr')" min-width="90px">
+      <el-table-column v-if="showReviewer" :label="$t('table.fhr')" min-width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" width="130" class-name="small-padding fixed-width" fixed='right'>
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
           </el-button>
@@ -162,14 +163,16 @@ export default {
   data() {
     return {
       tableKey: 0,
+      showReviewer: false,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
         fhr: undefined,
+        ddqsrq: null,
+        ddzzrq: null,
         ddbh: undefined,
         sh: undefined,
         sort: '+jfid',
@@ -208,14 +211,19 @@ export default {
     ]),
   },
   created() {
-    this.getList()
+    //this.getList()//此查询结果集可能过多，不易直接查询。
   },
   methods: {
     getList() {
+      //check some limit
+      if (this.listQuery.ddqsrq == null && this.listQuery.ddbh == null) {
+        this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
+      }
+      console.log("this.listQuery", this.listQuery)
       this.listLoading = true
       queryHairpiece(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.result.items
+        this.total = response.data.result.total
 
         setTimeout(() => {
           this.listLoading = false

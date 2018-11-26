@@ -1,11 +1,10 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <pan-thumb :image="avatar" style="float: left"> Your roles:
-        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
-      </pan-thumb>
       <div class="info-container">
         <span class="display_name">欢迎【{{ name }}】登录系统</span>
+        <!-- <span class="display_name">角色：</span>
+        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span> -->
       </div>
     </div>
   </div>
@@ -44,7 +43,6 @@ export default {
 .dashboard-editor-container {
   background-color: #e3e3e3;
   min-height: 100vh;
-  padding: 50px 60px 0px;
   .pan-info-roles {
     font-size: 12px;
     font-weight: 700;
@@ -53,14 +51,13 @@ export default {
   }
   .info-container {
     position: relative;
-    margin-left: 190px;
+    margin-left: 30px;
     height: 150px;
-    line-height: 200px;
+    line-height: 100px;
     .display_name {
-      font-size: 48px;
+      font-size: 30px;
       line-height: 48px;
-      color: #212121;
-      position: absolute;
+      color: firebrick;
       top: 25px;
     }
   }
