@@ -6,9 +6,11 @@ export function loginByUsername(username, password) {
     password
   }
   return request({
-    url: '/login/login',
+    //url: '/login/login',
+    url: '/authen/getToken',
     method: 'post',
-    data
+    //data
+    params: data
   })
 }
 

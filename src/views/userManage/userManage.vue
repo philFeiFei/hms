@@ -178,8 +178,8 @@ export default {
     getList() {
       this.litsLoading = true
       queryUser(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
+        this.list = response.data.result.items
+        this.total = response.data.result.total
 
         setTimeout(() => {
           this.listLoading = false
@@ -289,9 +289,8 @@ export default {
           })
           this.handleFilter()
         })
-      }
         //---------operate end---------
-      ).catch(() => {
+      }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除'

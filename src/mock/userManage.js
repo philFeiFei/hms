@@ -37,13 +37,15 @@ export default {
     }
 
     const pageList = mockList
-
-    var result = {
+    var obj = {
       _success: true,
+    };
+    var result = {
       total: mockList.length,
       items: pageList
     }
-    return result
+    obj.result = result
+    return obj
   },
 
   create: config => {
