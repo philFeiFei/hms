@@ -94,10 +94,10 @@ export default {
     }
     //随机构造二维码数量
     var itemsOfQR = [];
-    for (let i = 0; i < 17; i++) {
+    for (let i = 0; i < 110; i++) {
       itemsOfQR.push(Mock.mock({
         id: '@increment',
-        text: 'K' + r.natural(129001, 629003),
+        text: 'K68686#1B20-' + r.natural(1, 100),
         desc: r.word(3, 5) + r.natural(129001, 629003)
 
       }))

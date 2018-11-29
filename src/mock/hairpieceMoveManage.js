@@ -43,9 +43,9 @@ export default {
     let mockList = List4Move.filter(item => {
       if (ddqsrq && item.ddrq < ddqsrq) return false
       if (ddzzrq && item.ddrq > ddzzrq) return false
-      if (fhr && item.fhr.indexOf(fhr) < 0) return false
+      if (fhr && item.fhr != fhr) return false
       if (ddbh && item.ddbh.indexOf(ddbh) < 0) return false
-      if (sh && item.sh.indexOf(sh) < 0) return false
+      if (sh && item.sh != sh) return false
       if (sftd && item.sftd != sftd) return false
       if (item.yxbz != 1) return false
       return true

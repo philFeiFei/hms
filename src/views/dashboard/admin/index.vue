@@ -6,6 +6,10 @@
         <!-- <span class="display_name">角色：</span>
         <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span> -->
       </div>
+      <h3>系统相关信息</h3>
+      <p>阿里云服务器:2vCPU 4GB (I/O优化) <span :class="{lastDaysClass:alertLastDays}">{{jzrq}}到期</span>
+        <span v-if="alertLastDays" :class="{lastDaysClass:alertLastDays}">据到期还有{{lastDays}}天，请提前续费！！！</span>
+      </p>
     </div>
   </div>
 </template>
@@ -20,7 +24,9 @@ export default {
   components: { PanThumb, GithubCorner },
   data() {
     return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
+      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3',
+      jzrq: '2019-11-27',
+      lastDays: null,
     }
   },
   computed: {
@@ -28,7 +34,21 @@ export default {
       'name',
       'avatar',
       'roles'
-    ])
+    ]),
+    alertLastDays() {
+      var endDate1 = new Date(this.jzrq);
+      var nowDate1 = new Date();
+
+      var days = (endDate1.getTime() - nowDate1.getTime()) / 86400000;
+      var lDays = Math.floor(days)
+      this.lastDays = lDays
+      if (lDays < 3111) {
+        return true
+      } else {
+        return false
+      }
+
+    }
   }
 }
 </script>
@@ -51,8 +71,8 @@ export default {
   }
   .info-container {
     position: relative;
-    margin-left: 30px;
-    height: 150px;
+    margin-left: 15px;
+    height: 450px;
     line-height: 100px;
     .display_name {
       font-size: 30px;
@@ -61,5 +81,14 @@ export default {
       top: 25px;
     }
   }
+}
+span.lastDaysClass {
+  color: red;
+  font-weight: bold;
+  font-size: 21px;
+}
+h3,
+p {
+  margin: 15px;
 }
 </style>

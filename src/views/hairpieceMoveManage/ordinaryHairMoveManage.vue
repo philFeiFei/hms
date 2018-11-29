@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" />
-      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker value='2018/05/02' value-format="yyyy/MM/dd" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
       <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
       <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" />
       <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" />

@@ -104,11 +104,15 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog v-loading="listLoading" title="二维码" :visible.sync="dialogQRFormVisible" width='700'>
-      <canvas v-for="item in itemsOfQR" :key="item.id" :id="item.id"></canvas>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogQRFormVisible = false">{{ $t('table.cancel') }}</el-button>
-        <el-button type="primary" @click="printQRCode()">打印</el-button>
+    <el-dialog v-loading="listLoading" title="二维码" :visible.sync="dialogQRFormVisible" width='500'>
+      <div class="btnheader">
+        <el-button type="primary" @click="printQRCode()">导出二维码 </el-button>
+      </div>
+      <div id="printcontent">
+        <div v-for="item in itemsOfQR" :key="item.id" class="itemdiv">
+          <canvas :id="item.id"></canvas>
+          <!-- <span class="desc">{{item.text}}#1B20-31</span> -->
+        </div>
       </div>
     </el-dialog>
 
@@ -122,6 +126,8 @@ import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
 import QRCode from 'qrcode'
+import jspdf from 'jspdf'
+import html2canvas from 'html2canvas'
 
 export default {
   name: 'ComplexTable',
@@ -170,33 +176,6 @@ export default {
         fc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
         sl: [{ required: true, message: '数量必须选择', trigger: 'change' }],
       },
-      /* itemsOfQR: [
-        {
-          id: 'canvas1',
-          text: '234234',
-          desc: 'Hob99-23-33*-aa'
-        },
-        {
-          id: 'canvas2',
-          text: '22222222',
-          desc: 'Hobaa-23-33*-dd'
-        },
-        {
-          id: 'canvas3',
-          text: '44444444444',
-          desc: 'Hob2-23-33*-cc'
-        },
-        {
-          id: 'canvas4',
-          text: '7777ghgfhfg',
-          desc: 'Hobrr-23-33*-bb'
-        },
-        {
-          id: 'canvas5',
-          text: '234234',
-          desc: 'Hobggg-2-33*-aa'
-        },
-      ] */
       itemsOfQR: []
 
     }
@@ -292,11 +271,6 @@ export default {
       this.dialogQRFormVisible = true
       getDetail4QRCode(row.pcid).then((response) => {
         //---------生成二维码------------start
-        /*   var canvas = document.getElementById('canvas')
-          QRCode.toCanvas(canvas, '23423423', function (error) {
-            if (error) console.error(error)
-            console.log('success!');
-          }) */
         this.listLoading = true
         this.itemsOfQR = response.data.result.itemsOfQR
         setTimeout(() => {
@@ -307,12 +281,11 @@ export default {
           this.itemsOfQR.forEach(qritem => {
             var canvas = document.getElementById(qritem.id);
             console.log("canvas", canvas)
-            QRCode.toCanvas(canvas, qritem.text, function (error) {
+            QRCode.toCanvas(canvas, qritem.id + 'A', function (error) {
               if (error) console.error(error)
               var ctx = canvas.getContext("2d");
-              ctx.font = "12px Georgia";
-              ctx.fillText(`k-h3-${qritem.text}`, 30, 112);
-              ctx.font = "30px Verdana";
+              ctx.fillText(`${qritem.text}`, 20, 112);
+              ctx.font = "18px Verdana";
               console.log(`${qritem}生成成功`);
             })
           });
@@ -329,9 +302,38 @@ export default {
       })
     },
     printQRCode() {
+      let _this = this
+      html2canvas(document.querySelector("#printcontent")).then(canvas => {
+        //document.body.appendChild(canvas)
+        //竖向打印，打印六行，每一个二维码高143*6 +六个间隙高度20*6=978
+        //看看总高度有几个978，每次从第n竖向位置加载canvas到第n个pdf页面
+        let contentWidth = canvas.width
+        let contentHeight = canvas.height
+        let pageHeight = contentWidth / 592.28 * 841.89 - 26.89
+        let leftHeight = contentHeight
+        let position = 0
+        let imgWidth = 595.28
+        let imgHeight = 592.28 / contentWidth * contentHeight
+        console.log("imgHeight", imgHeight)
 
-      window.print();
+        let pageData = canvas.toDataURL('image/jpeg', 1.0)
 
+        let PDF = new jspdf('', 'pt', 'a4')
+
+        if (leftHeight < pageHeight) {
+          PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
+        } else {
+          while (leftHeight > 0) {
+            PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+            leftHeight -= pageHeight
+            position -= (841.89)
+            if (leftHeight > 0) {
+              PDF.addPage()
+            }
+          }
+        }
+        PDF.save('asd.pdf')
+      });
     },
     handleDelete(row) {
 
@@ -358,10 +360,7 @@ export default {
           message: '已取消删除'
         });
       })
-
-
     },
-
   }
 }
 </script>
@@ -371,10 +370,35 @@ export default {
   width: 75px;
 }
 canvas {
-  border: 1px solid rebeccapurple;
-  height: 150px !important;
-  width: 150px !important;
-  margin-right: 13px;
+  height: 118.27px !important;
+  width: 118.27px !important;
+}
+.itemdiv {
+  display: inline-block;
+  border-bottom: 0px solid #dcdcdc;
+  height: 120.27px !important;
+  width: 120.27px !important;
+  margin-right: -5px;
+  margin-top: -0.25px; /*调整这个，适应每页有几行，正好*/
+}
+.desc {
+  position: relative;
+  top: -22px;
+  left: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.el-dialog__body {
+  padding: 0px 20px;
+}
+.btnheader {
+  text-align: right;
+  margin-bottom: 10px;
+  padding-right: 10%;
+}
+div#printcontent {
+  width: 595.28px;
+  margin-left: 20%;
 }
 </style>
 
