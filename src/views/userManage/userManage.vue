@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('table.userName')" v-model="listQuery.userName" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input :placeholder="$t('table.username')" v-model="listQuery.username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-select v-model="listQuery.xb" :placeholder="$t('table.xb')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in code.xb" :key="item.key" :label="item.value" :value="item.key" />
+        <el-option v-for="item in code.XB" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
@@ -15,16 +15,16 @@
           <span>{{ scope.row.userId }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.userName')" width="130px">
+      <el-table-column :label="$t('table.username')" width="130px">
         <template slot-scope="scope">
-          <span>{{ scope.row.userName }}</span>
+          <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.password')" width="150px">
+      <!--  <el-table-column :label="$t('table.password')" width="150px">
         <template slot-scope="scope">
           <span>{{ scope.row.password }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column :label="$t('table.roleId')" width="180px">
         <template slot-scope="scope">
           <span>{{ scope.row.roleId | parseArrCode('role')}}</span>
@@ -40,6 +40,11 @@
           <span>{{ scope.row.xm }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="手机号" width="150px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sjh }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('table.csrq')" width="120px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.csrq | parseTime('{y}-{m}-{d}') }}</span>
@@ -47,7 +52,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.xb')" width="100px">
         <template slot-scope="scope">
-          <span>{{ scope.row.xb | parseCode('xb') }}</span>
+          <span>{{ scope.row.xb | parseCode('XB') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.jtzz')" min-width="150px">
@@ -67,12 +72,12 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
       <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.userName')" prop="userName">
-          <el-input v-model="temp.userName" />
+        <el-form-item :label="$t('table.username')" prop="username">
+          <el-input v-model="temp.username" />
         </el-form-item>
-        <el-form-item :label="$t('table.password')" prop="password">
+        <!-- <el-form-item :label="$t('table.password')" prop="password">
           <el-input v-model="temp.password" type="password" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="$t('table.roleId')" prop="roleId">
           <el-select v-model="temp.roleId" class="filter-item" placeholder="Please select" multiple>
             <el-option v-for="item in code.role" :key="item.key" :label="item.value" :value="item.key" />
@@ -80,6 +85,9 @@
         </el-form-item>
         <el-form-item :label="$t('table.xm')" prop="xm">
           <el-input v-model="temp.xm" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="sjh">
+          <el-input v-model="temp.sjh" />
         </el-form-item>
         <el-form-item :label="$t('table.sfzhm')" prop="sfzhm">
           <el-input v-model="temp.sfzhm" />
@@ -89,7 +97,7 @@
         </el-form-item>
         <el-form-item :label="$t('table.xb')">
           <el-select v-model="temp.xb" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.xb" :key="item.key" :label="item.value" :value="item.key" />
+            <el-option v-for="item in code.XB" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('table.jtzz')" prop="jtzz">
@@ -124,7 +132,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        userName: undefined,
+        username: undefined,
         xm: '',
         sfzhm: undefined,
         sort: '+userId',
@@ -132,8 +140,7 @@ export default {
       },
       temp: {
         userId: undefined,
-        userName: '',
-        password: '',
+        username: '',
         roleId: [],
         xm: '',
         sjh: '',
@@ -149,9 +156,9 @@ export default {
         create: '新增用户信息'
       },
       rules: {
-        userName: [{ required: true, message: '用户名必须填写', trigger: 'change' }],
-        password: [{ required: true, message: '密码必须填写', trigger: 'change' }],
+        username: [{ required: true, message: '用户名必须填写', trigger: 'change' }],
         xm: [{ required: true, message: '姓名必须填写', trigger: 'blur' }],
+        sjh: [{ required: true, message: '手机号必须填写', trigger: 'blur' }],
         roleId: [{ required: true, message: '角色必须选择', trigger: 'change' }]
       },
 
@@ -178,8 +185,8 @@ export default {
     getList() {
       this.litsLoading = true
       queryUser(this.listQuery).then(response => {
-        this.list = response.data.result.items
-        this.total = response.data.result.total
+        this.list = response.data.result.userlist
+        this.total = this.list.length
 
         setTimeout(() => {
           this.listLoading = false
@@ -208,8 +215,7 @@ export default {
     resetTemp() {
       this.temp = {
         userId: undefined,
-        userName: '',
-        password: '',
+        username: '',
         roleId: [],
         xm: '',
         sjh: '',
@@ -279,7 +285,7 @@ export default {
         type: 'warning'
       }).then(() => {
         //---------operate start---------
-        deleteUser(row.userId).then(() => {
+        deleteUser(row).then(() => {
           this.dialogFormVisible = false
           this.$notify({
             title: '成功',

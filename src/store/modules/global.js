@@ -2,6 +2,8 @@ import { getConfigFromServer } from '@/api/global'
 const global = {
   state: {
     code: {},
+    jzrq: '2019-11-27',    //阿里云截止日期
+    lastDaysToAlert: 3000   //还剩多少天提示用户阿里云到期
 
   },
   mutations: {
@@ -13,8 +15,8 @@ const global = {
     GetConfigFromServer({ commit }) {
       return new Promise((resolve, reject) => {
         getConfigFromServer().then(response => {
-          const data = response.data
-          commit('SET_CODE', data.code)//暂时先获取后台的code配置
+          const codelist = response.data.result.codelist
+          commit('SET_CODE', codelist)//暂时先获取后台的code配置
           resolve()
         }).catch(error => {
           reject(error)

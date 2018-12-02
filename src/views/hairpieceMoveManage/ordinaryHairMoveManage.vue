@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" />
-      <el-date-picker value='2018/05/02' value-format="yyyy/MM/dd" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
       <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
       <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" />
       <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" />
@@ -12,9 +12,14 @@
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed>
+      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed v-if="false">
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="序号" prop="xh" sortable="custom" align="center" width="75" fixed>
+        <template slot-scope="scope">
+          <span>{{ scope.row.xh }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.ddrq')" width="100px" align="center" fixed>
@@ -220,10 +225,20 @@ export default {
         this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
       }
       console.log("this.listQuery", this.listQuery)
+      if (this.listQuery.ddqsrq) {
+        var ddqsrq = this.listQuery.ddqsrq;
+        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
+        this.listQuery.ddqsrq = ddqsrqs;
+      }
+      if (this.listQuery.ddzzrq) {
+        var ddzzrq = this.listQuery.ddzzrq;
+        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
+        this.listQuery.ddzzrq = ddzzrqs;
+      }
       this.listLoading = true
       queryHairpiece(this.listQuery).then(response => {
-        this.list = response.data.result.items
-        this.total = response.data.result.total
+        this.list = response.data.result.jfinfolist
+        this.total = this.list.length
 
         setTimeout(() => {
           this.listLoading = false
@@ -260,9 +275,13 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          console.log("tempData", tempData);
-          updateHairpiece(tempData).then(() => {
+          var jfid = this.temp.jfid
+          var ddbh = this.temp.ddbh
+          var obj = {
+            jfid: jfid,
+            ddbh: ddbh
+          }
+          updateHairpiece(obj).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

@@ -27,22 +27,22 @@
       </el-table-column>
       <el-table-column :label="$t('table.wdks')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.wdks | parseCode('wdks') }}</span>
+          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.wdcc')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.wdcc | parseCode('wdcc') }}</span>
+          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.sh')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sh | parseCode('sh') }}</span>
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.fc')" min-width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.fc | parseCode('fc') }}</span>
+          <span>{{ scope.row.fc | parseCode('FC') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.sl')" min-width="100px" align="center">
@@ -72,25 +72,25 @@
 
         <el-form-item :label="$t('table.wdks')" prop="wdks">
           <el-select v-model="temp.wdks" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.wdks" :key="item.key" :label="item.value" :value="item.key" />
+            <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('table.wdcc')" prop="wdcc">
           <el-select v-model="temp.wdcc" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.wdcc" :key="item.key" :label="item.value" :value="item.key" />
+            <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('table.sh')" prop="sh">
           <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.sh" :key="item.key" :label="item.value" :value="item.key" />
+            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('table.fc')" prop="fc">
           <el-select v-model="temp.fc" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.fc" :key="item.key" :label="item.value" :value="item.key" />
+            <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
@@ -109,8 +109,8 @@
         <el-button type="primary" @click="printQRCode()">导出二维码 </el-button>
       </div>
       <div id="printcontent">
-        <div v-for="item in itemsOfQR" :key="item.id" class="itemdiv">
-          <canvas :id="item.id"></canvas>
+        <div v-for="item in itemsOfQR" :key="item.jfid" class="itemdiv">
+          <canvas :id="item.jfid"></canvas>
           <!-- <span class="desc">{{item.text}}#1B20-31</span> -->
         </div>
       </div>
@@ -142,7 +142,9 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        ddbh: undefined,
+        ddbh: null,
+        ddqsrq: null,
+        ddzzrq: null,
         sh: undefined,
         sort: '+pcid',
         sftd: 0
@@ -200,9 +202,10 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      console.log("this.listQuery", this.listQuery)
       queryHairPici(this.listQuery).then(response => {
-        this.list = response.data.result.items
-        this.total = response.data.result.total
+        this.list = response.data.result.jfpclist
+        this.total = this.list.length
 
         setTimeout(() => {
           this.listLoading = false
@@ -253,6 +256,9 @@ export default {
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
+        var ddrq = this.temp.ddrq;
+        var ddrqs = parseTime(ddrq, '{y}-{m}-{d}')
+        this.temp.ddrq = ddrqs;
         if (valid) {
           createHairPici(this.temp).then((response) => {
             this.dialogFormVisible = false
@@ -269,22 +275,22 @@ export default {
     },
     generateQRCode(row) {
       this.dialogQRFormVisible = true
-      getDetail4QRCode(row.pcid).then((response) => {
+      getDetail4QRCode(row).then((response) => {
         //---------生成二维码------------start
         this.listLoading = true
-        this.itemsOfQR = response.data.result.itemsOfQR
+        this.itemsOfQR = response.data.result.jfpcdetail
         setTimeout(() => {
           this.listLoading = false
 
           //一秒之后dom加载完毕，进度关闭，展示二维码.不等一会，canvas qritem.id取不到
           console.log("itemsOfQR", this.itemsOfQR);
           this.itemsOfQR.forEach(qritem => {
-            var canvas = document.getElementById(qritem.id);
+            var canvas = document.getElementById(qritem.jfid);
             console.log("canvas", canvas)
-            QRCode.toCanvas(canvas, qritem.id + 'A', function (error) {
+            QRCode.toCanvas(canvas, qritem.jfid, function (error) {
               if (error) console.error(error)
               var ctx = canvas.getContext("2d");
-              ctx.fillText(`${qritem.text}`, 20, 112);
+              ctx.fillText(`${qritem.ddbh}${qritem.sh}-${qritem.xh}`, 20, 112);
               ctx.font = "18px Verdana";
               console.log(`${qritem}生成成功`);
             })
@@ -343,7 +349,7 @@ export default {
         type: 'warning'
       }).then(() => {
         //---------operate start---------
-        deleteHairPici(row.pcid).then(() => {
+        deleteHairPici(row).then(() => {
           this.dialogFormVisible = false
           this.$notify({
             title: '成功',

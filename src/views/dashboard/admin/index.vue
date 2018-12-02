@@ -2,9 +2,8 @@
   <div class="dashboard-editor-container">
     <div class=" clearfix">
       <div class="info-container">
-        <span class="display_name">欢迎【{{ name }}】登录系统</span>
-        <!-- <span class="display_name">角色：</span>
-        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span> -->
+        <span class="display_name">欢迎【{{ name }}】登录系统,您的角色是</span>
+        <span v-for="item in roles" :key="item" class="display_name">【{{ item | parseArrCode('role') }}】</span>
       </div>
       <h3>系统相关信息</h3>
       <p>阿里云服务器:2vCPU 4GB (I/O优化) <span :class="{lastDaysClass:alertLastDays}">{{jzrq}}到期</span>
@@ -25,7 +24,6 @@ export default {
   data() {
     return {
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3',
-      jzrq: '2019-11-27',
       lastDays: null,
     }
   },
@@ -33,7 +31,9 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'roles'
+      'roles',
+      'jzrq',
+      'lastDaysToAlert'
     ]),
     alertLastDays() {
       var endDate1 = new Date(this.jzrq);
@@ -42,7 +42,7 @@ export default {
       var days = (endDate1.getTime() - nowDate1.getTime()) / 86400000;
       var lDays = Math.floor(days)
       this.lastDays = lDays
-      if (lDays < 3111) {
+      if (lDays < this.lastDaysToAlert) {
         return true
       } else {
         return false
@@ -77,8 +77,8 @@ export default {
     .display_name {
       font-size: 30px;
       line-height: 48px;
-      color: firebrick;
       top: 25px;
+      color: lightslategrey;
     }
   }
 }
@@ -90,5 +90,7 @@ span.lastDaysClass {
 h3,
 p {
   margin: 15px;
+  font-weight: 500;
+  color: lightslategrey;
 }
 </style>

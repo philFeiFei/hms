@@ -313,12 +313,16 @@ export function parseArrCode(codeKey, codeName) {//如果通过页面filter过�
     return codeKey;
   }
   var codeStr = ""
-  for (let i = 0; i < codeKey.length; i++) {
+  var codeKeyLength = codeKey.length
+  for (let i = 0; i < codeKeyLength; i++) {
     for (let c of code) {
       if (c.key === codeKey[i]) {
         codeStr = codeStr + c.value + ";"
       }
     }
+  }
+  if (codeKeyLength == 1) {
+    codeStr = codeStr.substr(0, codeStr.length - 1);
   }
   return codeStr;
 }

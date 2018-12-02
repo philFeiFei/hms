@@ -139,7 +139,7 @@ export default {
     ddrq: '订单日期',
     ddbh: '订单编号',
     sh: '色号',
-    userName: '用户名',
+    username: '用户名',
     xm: '姓名',
     password: '密码',
     roleId: '角色',

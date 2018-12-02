@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 export function queryHairpiece(query) {
+  console.log("query", query);
   return request({
     url: '/hairpieceMove/query',
     method: 'post',
@@ -11,7 +12,7 @@ export function updateHairpiece(data) {
   return request({
     url: '/hairpieceMove/update',
     method: 'post',
-    data //default update ddbh
+    params: data //default update ddbh
   })
 }
 

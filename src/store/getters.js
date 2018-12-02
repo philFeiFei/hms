@@ -16,5 +16,7 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs,
   code: state => state.global.code,
+  jzrq: state => state.global.jzrq,
+  lastDaysToAlert: state => state.global.lastDaysToAlert,
 }
 export default getters

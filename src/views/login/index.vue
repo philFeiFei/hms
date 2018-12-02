@@ -65,10 +65,15 @@ export default {
       } else {
         callback()
       }
+      if (value.length > 0) {
+        callback(new Error('请输入用户名'))
+      } else {
+        callback()
+      }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+      if (value.length < 5) {
+        callback(new Error('密码不能小于5位'))
       } else {
         callback()
       }
@@ -76,7 +81,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '1111111'
+        password: '888888'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

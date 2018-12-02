@@ -20,7 +20,7 @@ export function deleteHairPici(data) {
   return request({
     url: '/hairpieceMultiManage/delete',//set yxbz = 0
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -28,7 +28,7 @@ export function getDetail4QRCode(data) {
   return request({
     url: '/hairpieceMultiManage/getDetail4QRCode',
     method: 'post',
-    data
+    params: data
   })
 }
 

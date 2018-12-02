@@ -51,9 +51,8 @@ const user = {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data
           console.log("data", data);
-          //commit('SET_TOKEN', data.token)
-          commit('SET_TOKEN', data.result)
-          setToken(data.result)
+          commit('SET_TOKEN', data.result.token)
+          setToken(data.result.token)
           resolve()
         }).catch(error => {
           reject(error)
@@ -104,14 +103,10 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          removeToken()
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
+        resolve()
       })
     },
 

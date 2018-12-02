@@ -8,6 +8,7 @@ var r = Mock.Random
 for (let i = 0; i < count; i++) {
   List4Move.push(Mock.mock({
     jfid: '@increment',
+    xh: '@increment',
     ddrq: r.datetime(),
     ddbh: 'K' + r.natural(629001, 629003),
     wdks: r.natural(1, 6),
