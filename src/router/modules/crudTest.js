@@ -5,7 +5,7 @@ const crudTestrouter = {
   component: Layout,
   redirect: 'noredirect',
   meta: {
-    roles: ['admin']
+    roles: ['1']
   },
   children: [
     {
@@ -15,7 +15,7 @@ const crudTestrouter = {
       name: 'crudTest',
       meta: {
         title: 'crudTest', icon: 'table',
-        roles: ['admin'],
+        roles: ['1'],
       }
     }
   ]

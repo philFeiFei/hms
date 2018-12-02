@@ -209,7 +209,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.5 * 1000)
+        }, 0 * 1000)
       })
     },
     handleFilter() {

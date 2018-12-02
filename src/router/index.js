@@ -69,7 +69,7 @@ export const asyncRouterMap = [
     path: '/icon',
     component: Layout,
     meta: {
-      roles: ['admin']
+      roles: ['1']
     },
     children: [
       {
@@ -84,30 +84,6 @@ export const asyncRouterMap = [
   crudTestrouter,
 
   // hms
-  {
-    path: '/hairpieceMoveManage',
-    component: Layout,
-    name: 'hairpieceMoveManage',
-    redirect: 'noredirect',
-    meta: {
-      title: 'hairpieceMoveManage',
-      icon: 'hair'
-    },
-    children: [
-      {
-        path: 'ordinaryHairMoveManage',
-        component: () => import('@/views/hairpieceMoveManage/ordinaryHairMoveManage'),
-        name: 'ordinaryHairMoveManage',
-        meta: { title: 'ordinaryHairMoveManage' }
-      },
-      {
-        path: 'specialHairMoveManage',
-        component: () => import('@/views/hairpieceMoveManage/specialHairMoveManage'),
-        name: 'specialHairMoveManage',
-        meta: { title: 'specialHairMoveManage' }
-      }
-    ]
-  },
   {
     path: '/hairpieceMultiManage',
     component: Layout,
@@ -132,6 +108,31 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/hairpieceMoveManage',
+    component: Layout,
+    name: 'hairpieceMoveManage',
+    redirect: 'noredirect',
+    meta: {
+      title: 'hairpieceMoveManage',
+      icon: 'hair'
+    },
+    children: [
+      {
+        path: 'ordinaryHairMoveManage',
+        component: () => import('@/views/hairpieceMoveManage/ordinaryHairMoveManage'),
+        name: 'ordinaryHairMoveManage',
+        meta: { title: 'ordinaryHairMoveManage' }
+      },
+      {
+        path: 'specialHairMoveManage',
+        component: () => import('@/views/hairpieceMoveManage/specialHairMoveManage'),
+        name: 'specialHairMoveManage',
+        meta: { title: 'specialHairMoveManage' }
+      }
+    ]
+  },
+
   {
     path: '/userManage',
     component: Layout,

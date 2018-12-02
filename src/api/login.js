@@ -5,6 +5,7 @@ export function loginByUsername(username, password) {
     username,
     password
   }
+  console.log("进入loginByUserName api");
   return request({
     //url: '/login/login',
     url: '/authen/getToken',
@@ -22,6 +23,7 @@ export function logout() {
 }
 
 export function getUserInfo(token) {
+  console.log("getUserInfo api");
   return request({
     url: '/user/info',
     method: 'post',

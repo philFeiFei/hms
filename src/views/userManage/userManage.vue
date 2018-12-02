@@ -93,7 +93,7 @@
           <el-input v-model="temp.sfzhm" />
         </el-form-item>
         <el-form-item :label="$t('table.csrq')" prop="timestamp">
-          <el-date-picker v-model="temp.csrq" type="datetime" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.csrq" type="date" placeholder="Please pick a date" />
         </el-form-item>
         <el-form-item :label="$t('table.xb')">
           <el-select v-model="temp.xb" class="filter-item" placeholder="Please select">

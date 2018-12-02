@@ -21,11 +21,16 @@ export default {
   loginByUsername: config => {
     //const { username } = JSON.parse(config.body)
     const { username } = param2Obj(config.url)
-    var obj = {};
-    obj.result = userMap[username].token
+    var obj = {
+      result: {
+        token: ''
+      }
+    };
+    obj.result.token = userMap[username].token
     return obj;
   },
   getUserInfo: config => {
+    console.log("jinru getUserinfo mock")
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
       var obj = {};

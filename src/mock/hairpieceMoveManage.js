@@ -64,7 +64,7 @@ export default {
     };
     var result = {
       total: mockList.length,
-      items: pageList
+      jfinfolist: pageList
     }
     obj.result = result
     return obj
@@ -72,12 +72,10 @@ export default {
 
   update: config => {
     console.log("config", config);
-    var temp = JSON.parse(config.body)
-    console.log("temp-update", temp);
+    const { jfid, ddbh } = param2Obj(config.url)
     for (const v of List4Move) {
-      if (v.jfid === temp.jfid) {
-        const index = List4Move.indexOf(v)
-        List4Move.splice(index, 1, temp)
+      if (v.jfid == jfid) {
+        v.ddbh = ddbh
         break
       }
     }

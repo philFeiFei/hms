@@ -42,7 +42,7 @@ export default {
     };
     var result = {
       total: mockList.length,
-      items: pageList
+      userlist: pageList
     }
     obj.result = result
     return obj
@@ -78,9 +78,12 @@ export default {
     return result
   },
   delete: config => {
-    var userid = JSON.parse(config.body)
+    console.log(" param2Obj(config.url)", param2Obj(config.url))
+    console.log("List4User", List4User)
+    const obj = param2Obj(config.url)
+    var userid = obj.userId
     for (const v of List4User) {
-      if (v.userId === userid) {
+      if (v.userId == userid) {
         v.yxbz = 0
         break
       }

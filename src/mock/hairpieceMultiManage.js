@@ -50,7 +50,7 @@ export default {
 
     var result = {
       total: mockList.length,
-      items: pageList
+      jfpclist: pageList
     }
     obj.result = result
     return obj
@@ -70,10 +70,10 @@ export default {
   },
 
   delete: config => {
-    var pcid = JSON.parse(config.body)
+    const { pcid } = param2Obj(config.url)
     console.log("pcid", pcid);
     for (const v of List4Multi) {
-      if (v.pcid === pcid) {
+      if (v.pcid == pcid) {
         v.yxbz = 0
         break
       }
@@ -96,14 +96,15 @@ export default {
     var itemsOfQR = [];
     for (let i = 0; i < 110; i++) {
       itemsOfQR.push(Mock.mock({
-        id: '@increment',
-        text: 'K68686#1B20-' + r.natural(1, 100),
-        desc: r.word(3, 5) + r.natural(129001, 629003)
+        jfid: 'K@increment',
+        ddbh: `k${r.natural(12900, 62900)}`,
+        sh: r.natural(129, 629),
+        xh: r.natural(1, 100)
 
       }))
     }
     var result = {
-      itemsOfQR
+      jfpcdetail: itemsOfQR
     }
 
     /*  var result = {

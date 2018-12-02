@@ -4,8 +4,12 @@
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" />
       <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
       <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
-      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" />
-      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" />
+      <el-select v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
 
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
@@ -34,25 +38,25 @@
       </el-table-column>
       <el-table-column :label="$t('table.wdks')" width="125px" fixed>
         <template slot-scope="scope">
-          <span>{{ scope.row.wdks | parseCode('wdks') }}</span>
+          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('table.wdcc')" width="95px" fixed>
         <template slot-scope="scope">
-          <span>{{ scope.row.wdcc | parseCode('wdcc') }}</span>
+          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('table.sh')" min-width="75px" fixed>
         <template slot-scope="scope">
-          <span>{{ scope.row.sh | parseCode('sh') }}</span>
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('table.fc')" width="75px" fixed>
         <template slot-scope="scope">
-          <span>{{ scope.row.fc | parseCode('fc') }}</span>
+          <span>{{ scope.row.fc | parseCode('FC') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.lhsj')" width="110px" align="center">

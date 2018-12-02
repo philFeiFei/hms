@@ -2,7 +2,7 @@
 export default {
   query: () => {
     const code = {
-      xb: [
+      XB: [
         { key: 0, value: '男' },
         { key: 1, value: '女' },
         { key: 9, value: '不正常' },
@@ -17,7 +17,7 @@ export default {
         { key: 6, value: '成品质检' },
         { key: 7, value: '发货' },
       ],
-      wdks: [
+      WDKS: [
         { key: 1, value: 'SKIN' },
         { key: 2, value: 'THIN SKIN' },
         { key: 3, value: 'BOND' },
@@ -25,21 +25,21 @@ export default {
         { key: 5, value: 'AUSTRALIA' },
         { key: 6, value: 'TP11' },
       ],
-      wdcc: [
+      WDCC: [
         { key: 1, value: '4"×4"' },
         { key: 2, value: '4"×6"' },
         { key: 3, value: '6"×8"' },
         { key: 4, value: '15×20cm' },
         { key: 5, value: '20×25cm' },
       ],
-      sh: [
+      SH: [
         { key: 1, value: '#1' },
         { key: 2, value: '#1B30' },
         { key: 3, value: '#1B65Y' },
         { key: 4, value: '#310' },
         { key: 5, value: '#365Y' },
       ],
-      fc: [
+      FC: [
         { key: 1, value: '4"' },
         { key: 2, value: '12"' },
         { key: 3, value: '14"' },
@@ -56,10 +56,13 @@ export default {
       ]
     }
     var result = {
-      _success: true,
-      code: code,
+      codelist: code,
     }
-    return result
+    var obj = {
+      _success: true,
+    }
+    obj.result = result;
+    return obj
   }
 
 }
