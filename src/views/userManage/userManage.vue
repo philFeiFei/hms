@@ -128,7 +128,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -179,18 +179,20 @@ export default {
     ]),
   },
   created() {
-    this.getList()
+    //this.getList()
   },
   methods: {
     getList() {
       this.litsLoading = true
       queryUser(this.listQuery).then(response => {
-        this.list = response.data.result.userlist
-        this.total = this.list.length
+        if (response.data.result && response.data.result.userlist) {
+          this.list = response.data.result.userlist
+          this.total = this.list.length
+        }
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.0 * 1000)
+        }, 1 * 1000)
       })
     },
     handleFilter() {

@@ -8,8 +8,8 @@ export default {
         { key: 9, value: '不正常' },
       ],
       role: [
-        { key: 0, value: '超级管理员' },
-        { key: 1, value: '领活' },
+        { key: '1', value: '超级管理员' },
+        { key: '0', value: '领活' },
         { key: 2, value: '钩针' },
         { key: 3, value: '质检' },
         { key: 4, value: '底胶' },

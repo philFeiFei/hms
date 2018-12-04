@@ -18,7 +18,7 @@ for (let i = 0; i < count; i++) {
     sl: 0,
     yxbz: 1,
     'sftd|1': [0, 1],
-    tdurl: 'c:/aaa/bbb/ccc.jpg',
+    tdurl: 'http://47.104.29.255/hms/td1.jpg',
 
   }))
 }
@@ -107,50 +107,16 @@ export default {
       jfpcdetail: itemsOfQR
     }
 
-    /*  var result = {
-       itemsOfQR: [
-         {
-           id: 'canvas1',
-           text: '234234',
-           desc: 'Hob99-23-33*-aa'
-         },
-         {
-           id: 'canvas2',
-           text: '22222222',
-           desc: 'Hobaa-23-33*-dd'
-         },
-         {
-           id: 'canvas3',
-           text: '44444444444',
-           desc: 'Hob2-23-33*-cc'
-         },
-         {
-           id: 'canvas4',
-           text: '7777ghgfhfg',
-           desc: 'Hobrr-23-33*-bb'
-         },
-         {
-           id: 'canvas5',
-           text: '234234',
-           desc: 'Hobggg-2-33*-aa'
-         },
-         {
-           id: 'canvas6',
-           text: '44444444444',
-           desc: 'Hob2-23-33*-cc'
-         },
-         {
-           id: 'canvas7',
-           text: '7777ghgfhfg',
-           desc: 'Hobrr-23-33*-bb'
-         },
-         {
-           id: 'canvas8',
-           text: '234234',
-           desc: 'Hobggg-2-33*-aa'
-         },
-       ]
-     } */
+    obj.result = result
+    return obj
+  },
+  uploadTdPic: config => {
+    var tdurl = 'http://47.104.29.255/hms/td.jpg'
+    var obj = {
+    }
+    var result = {
+      tdurl: tdurl
+    }
     obj.result = result
     return obj
   }

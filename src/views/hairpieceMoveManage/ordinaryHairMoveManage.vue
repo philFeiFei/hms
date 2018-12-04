@@ -11,7 +11,7 @@
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
     </div>
 
@@ -31,30 +31,28 @@
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="95px" fixed>
+      <el-table-column :label="$t('table.ddbh')" width="120px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.wdks')" width="125px" fixed>
+      <el-table-column :label="$t('table.sh')" width="130px" fixed>
+        <template slot-scope="scope">
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.wdks')" width="130px">
         <template slot-scope="scope">
           <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column :label="$t('table.wdcc')" width="95px" fixed>
+      <el-table-column :label="$t('table.wdcc')" width="110px">
         <template slot-scope="scope">
           <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.sh')" min-width="75px" fixed>
-        <template slot-scope="scope">
-          <span>{{ scope.row.sh | parseCode('SH') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="$t('table.fc')" width="75px" fixed>
+      <el-table-column :label="$t('table.fc')" width="75px">
         <template slot-scope="scope">
           <span>{{ scope.row.fc | parseCode('FC') }}</span>
         </template>
@@ -134,7 +132,7 @@
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="130" class-name="small-padding fixed-width" fixed='right'>
+      <el-table-column :label="$t('table.actions')" align="center" min-width="80" class-name="small-padding fixed-width" fixed='right'>
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
           </el-button>
@@ -201,8 +199,7 @@ export default {
       },
       rules: {
         ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
-      }
-
+      },
     }
   },
   computed: {
@@ -246,7 +243,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.0 * 1000)
+        }, 0 * 1000)
       })
     },
     handleFilter() {

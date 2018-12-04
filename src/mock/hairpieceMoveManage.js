@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List4Move = []
-const count = 16
+const count = 11461
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {

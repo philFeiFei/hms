@@ -37,7 +37,7 @@ service.interceptors.response.use(
     if (_success === false) {
       var code = response.data.code
       if (code == 403) {
-        MessageBox.confirm('超时，用户认证失败，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        MessageBox.confirm('用户认证失败，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
@@ -45,24 +45,41 @@ service.interceptors.response.use(
           store.dispatch('FedLogOut').then(() => {
             location.reload() // 为了重新实例化vue-router对象 避免bug
           })
+        }).catch(() => {
+          Message({
+            message: "系统超时并继续留在了页面",
+            duration: 5 * 1000
+          })
         })
-
+      } else if (code == 401) {
+        MessageBox.confirm('系统超时，可以取消继续留在该页面，或者重新登录', '确定登出', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('FedLogOut').then(() => {
+            location.reload() // 为了重新实例化vue-router对象 避免bug
+          })
+        }).catch(() => {
+          Message({
+            message: "用户选择继续留在了页面",
+            duration: 5 * 1000
+          })
+        })
       } else {//其它code类型错误。
         var _message = response.data._message
         Message({
           message: _message,
           type: 'error',
           duration: 5 * 1000
-        }).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload() // 为了重新实例化vue-router对象 避免bug
-          })
         })
       }
-      return new Promise(() => { }) //这里无需设置promise err了，只是通过promise控制结束就可以。
-      //return Promise.reject(_message)
+      return Promise.reject('error')//这个能截断前台的请求，终止操作。
+    } else {
+
+      return response
     }
-    return response
+
   },
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态

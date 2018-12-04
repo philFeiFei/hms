@@ -56,6 +56,8 @@
           </el-button>
           <el-button size="mini" type="primary" @click="generateQRCode(scope.row)">{{ $t('table.scewm') }}
           </el-button>
+          <el-button v-if="istd" size="mini" type="primary" @click="orderPicDetail(scope.row)">附加信息
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -115,6 +117,17 @@
         </div>
       </div>
     </el-dialog>
+    <el-dialog v-loading="listLoading" title="订单附加信息" :visible.sync="dialogPicFormVisible">
+
+      <el-upload class="upload-demo" :data="picModel" :file-list="fileList" :on-success="onSuccess" :action="uploadURL" multiple>
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">注意:只能上传jpg/png文件,上传的图片将会覆盖当前的</div>
+      </el-upload>
+      <div id="piccontent">
+        <img width="100%" :src="picModel.imgUrl" alt="">
+      </div>
+      <div style="clear:both;height:100%"></div>
+    </el-dialog>
 
   </div>
 </template>
@@ -135,10 +148,11 @@ export default {
   directives: { waves },
   data() {
     return {
+      uploadURL: process.env.BASE_API + '/hairpieceMultiManage/UploadInVue',
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -149,12 +163,19 @@ export default {
         sort: '+pcid',
         sftd: 0
       },
+      istd: false,
       textMap: {
         update: '修改批量订单',
         create: '新增批量订单'
       },
       dialogFormVisible: false,
       dialogQRFormVisible: false,
+      dialogPicFormVisible: false,
+      picModel: {
+        imgUrl: '',
+        pcid: null,
+      },
+      fileList: [],
       dialogStatus: '',
       temp: {
         pcid: undefined,
@@ -197,7 +218,7 @@ export default {
     ]),
   },
   created() {
-    this.getList()
+    //this.getList()
   },
   methods: {
     getList() {
@@ -272,6 +293,17 @@ export default {
           })
         }
       })
+    },
+    orderPicDetail(row) {
+      this.fileList = []
+      this.dialogPicFormVisible = true
+      this.picModel.imgUrl = row.tdurl
+      this.picModel.pcid = row.pcid
+    },
+    onSuccess(response, file, fileList) {
+      console.log("response", response);
+      this.picModel.imgUrl = response.result.tdurl
+      this.handleFilter()
     },
     generateQRCode(row) {
       this.dialogQRFormVisible = true
@@ -398,13 +430,20 @@ canvas {
   padding: 0px 20px;
 }
 .btnheader {
-  text-align: right;
+  /* text-align: right; */
   margin-bottom: 10px;
   padding-right: 10%;
 }
 div#printcontent {
   width: 595.28px;
-  margin-left: 20%;
+  /* margin-left: 20%; */
+}
+#piccontent {
+  width: 75%;
+  float: left;
+}
+.el-upload__tip {
+  color: red;
 }
 </style>
 

@@ -39,6 +39,8 @@ export default {
     const pageList = mockList
     var obj = {
       _success: true,
+      code: '401',
+      _message: 'token超时了,亲，我看看能否跳转至登录页面呢。'
     };
     var result = {
       total: mockList.length,

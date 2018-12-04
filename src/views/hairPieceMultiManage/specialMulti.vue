@@ -56,6 +56,8 @@
           </el-button>
           <el-button size="mini" type="primary" @click="generateQRCode(scope.row)">{{ $t('table.scewm') }}
           </el-button>
+          <el-button v-if="istd" size="mini" type="primary" @click="orderPicDetail(scope.row)">附加信息
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,13 +99,6 @@
         <el-form-item :label="$t('table.sl')" prop="sl">
           <el-input-number v-model="temp.sl" label="描述文字"></el-input-number>
         </el-form-item>
-        <el-form-item label="上传特单" prop="fileList1">
-          <el-upload class="upload-demo" drag action="123" :before-upload="beforeAvatarUpload" multiple :file-list="fileList1">
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg格式，且不超过4MB</div>
-          </el-upload>
-        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -111,7 +106,6 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
-
     <el-dialog v-loading="listLoading" title="二维码" :visible.sync="dialogQRFormVisible" width='500'>
       <div class="btnheader">
         <el-button type="primary" @click="printQRCode()">导出二维码 </el-button>
@@ -122,6 +116,17 @@
           <!-- <span class="desc">{{item.text}}#1B20-31</span> -->
         </div>
       </div>
+    </el-dialog>
+    <el-dialog v-loading="listLoading" title="订单附加信息" :visible.sync="dialogPicFormVisible">
+
+      <el-upload class="upload-demo" :data="picModel" :file-list="fileList" :on-success="onSuccess" :action="uploadURL" multiple>
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">注意:只能上传jpg/png文件,上传的图片将会覆盖当前的</div>
+      </el-upload>
+      <div id="piccontent">
+        <img width="100%" :src="picModel.imgUrl" alt="">
+      </div>
+      <div style="clear:both;height:100%"></div>
     </el-dialog>
 
   </div>
@@ -143,10 +148,11 @@ export default {
   directives: { waves },
   data() {
     return {
+      uploadURL: process.env.BASE_API + '/hairpieceMultiManage/UploadInVue',
       tableKey: 0,
       list: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         page: 1,
         limit: 20,
@@ -157,12 +163,19 @@ export default {
         sort: '+pcid',
         sftd: 1
       },
+      istd: true,
       textMap: {
         update: '修改批量订单',
         create: '新增批量订单'
       },
       dialogFormVisible: false,
       dialogQRFormVisible: false,
+      dialogPicFormVisible: false,
+      picModel: {
+        imgUrl: '',
+        pcid: null,
+      },
+      fileList: [],
       dialogStatus: '',
       temp: {
         pcid: undefined,
@@ -205,7 +218,7 @@ export default {
     ]),
   },
   created() {
-    this.getList()
+    //this.getList()
   },
   methods: {
     getList() {
@@ -217,7 +230,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.5 * 1000)
+        }, 0 * 1000)
       })
     },
     handleFilter() {
@@ -254,52 +267,6 @@ export default {
         tdurl: null
       }
     },
-
-    beforeAvatarUpload(file) {
-      console.log("file type", file.type);
-      const isJPG = file.type === 'image/jpeg';
-      const isLt4M = file.size / 1024 / 1024 < 4;
-
-      if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG 格式!');
-        return false;//不自动上传
-      }
-      if (!isLt4M) {
-        this.$message.error('上传图片大小不能超过 4MB!');
-        return false;//不自动上传
-      }
-      //file加入form中一块提交
-      this.fileList.push(file);
-      console.log("file", file)
-      console.log("this.fileList", this.fileList)
-      return false;//不自动上传
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.tdpics = this.fileList
-          this.temp.tdpics1 = this.fileList1
-          createHairPici(this.temp).then((response) => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.handleFilter()
-          })
-        }
-      })
-    },
-    getTdPic(row) {
-      this.$notify({
-        title: '失败',
-        message: '获取特单图片失败',
-        type: 'error',
-        duration: 2000
-      })
-    },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -326,6 +293,17 @@ export default {
           })
         }
       })
+    },
+    orderPicDetail(row) {
+      this.fileList = []
+      this.dialogPicFormVisible = true
+      this.picModel.imgUrl = row.tdurl
+      this.picModel.pcid = row.pcid
+    },
+    onSuccess(response, file, fileList) {
+      console.log("response", response);
+      this.picModel.imgUrl = response.result.tdurl
+      this.handleFilter()
     },
     generateQRCode(row) {
       this.dialogQRFormVisible = true
@@ -459,6 +437,13 @@ canvas {
 div#printcontent {
   width: 595.28px;
   margin-left: 20%;
+}
+#piccontent {
+  width: 75%;
+  float: left;
+}
+.el-upload__tip {
+  color: red;
 }
 </style>
 

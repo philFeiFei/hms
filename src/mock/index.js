@@ -51,6 +51,7 @@ Mock.mock(/\/hairpieceMultiManage\/query/, 'post', hairpieceMultiManageAPI.getLi
 Mock.mock(/\/hairpieceMultiManage\/create/, 'post', hairpieceMultiManageAPI.create)// 假发批次增加
 Mock.mock(/\/hairpieceMultiManage\/delete/, 'post', hairpieceMultiManageAPI.delete)// 假发批次删除
 Mock.mock(/\/hairpieceMultiManage\/getDetail4QRCode/, 'post', hairpieceMultiManageAPI.getDetail4QRCode)// 假发批次产生二维码
+Mock.mock(/\/hairpieceMultiManage\/UploadInVue/, 'post', hairpieceMultiManageAPI.uploadTdPic)// 截取上传特单请求
 
 Mock.mock(/\/userManage\/query/, 'post', userManageAPI.getList)
 Mock.mock(/\/userManage\/create/, 'post', userManageAPI.create)

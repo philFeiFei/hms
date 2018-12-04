@@ -3,7 +3,7 @@ const global = {
   state: {
     code: {},
     jzrq: '2019-11-27',    //阿里云截止日期
-    lastDaysToAlert: 3000   //还剩多少天提示用户阿里云到期
+    lastDaysToAlert: 30   //还剩多少天提示用户阿里云到期
 
   },
   mutations: {
