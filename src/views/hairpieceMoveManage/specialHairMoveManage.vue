@@ -2,19 +2,28 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" />
-      <el-date-picker value='2018/05/02' value-format="yyyy/MM/dd" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
       <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
-      <el-input :placeholder="$t('table.sh')" v-model="listQuery.sh" style="width: 200px;" class="filter-item" />
-      <el-input :placeholder="$t('table.fhr')" v-model="listQuery.fhr" style="width: 200px;" class="filter-item" />
+      <el-select v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed>
+      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed v-if="false">
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="序号" prop="xh" sortable="custom" align="center" width="75" fixed>
+        <template slot-scope="scope">
+          <span>{{ scope.row.xh }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.ddrq')" width="100px" align="center" fixed>
@@ -22,32 +31,30 @@
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="95px" fixed>
+      <el-table-column :label="$t('table.ddbh')" width="120px" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.wdks')" width="125px" fixed>
+      <el-table-column :label="$t('table.sh')" width="130px" fixed>
         <template slot-scope="scope">
-          <span>{{ scope.row.wdks | parseCode('wdks') }}</span>
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.wdks')" width="130px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.wdcc')" width="110px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.wdcc')" width="95px" fixed>
+      <el-table-column :label="$t('table.fc')" width="75px">
         <template slot-scope="scope">
-          <span>{{ scope.row.wdcc | parseCode('wdcc') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="$t('table.sh')" min-width="75px" fixed>
-        <template slot-scope="scope">
-          <span>{{ scope.row.sh | parseCode('sh') }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="$t('table.fc')" width="75px" fixed>
-        <template slot-scope="scope">
-          <span>{{ scope.row.fc | parseCode('fc') }}</span>
+          <span>{{ scope.row.fc | parseCode('FC') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.lhsj')" width="110px" align="center">
@@ -125,7 +132,7 @@
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="130" class-name="small-padding fixed-width" fixed='right'>
+      <el-table-column :label="$t('table.actions')" align="center" min-width="80" class-name="small-padding fixed-width" fixed='right'>
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
           </el-button>
@@ -192,8 +199,7 @@ export default {
       },
       rules: {
         ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
-      }
-
+      },
     }
   },
   computed: {
@@ -220,14 +226,26 @@ export default {
         this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
       }
       console.log("this.listQuery", this.listQuery)
+      if (this.listQuery.ddqsrq) {
+        var ddqsrq = this.listQuery.ddqsrq;
+        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
+        this.listQuery.ddqsrq = ddqsrqs;
+      }
+      if (this.listQuery.ddzzrq) {
+        var ddzzrq = this.listQuery.ddzzrq;
+        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
+        this.listQuery.ddzzrq = ddzzrqs;
+      }
       this.listLoading = true
       queryHairpiece(this.listQuery).then(response => {
-        this.list = response.data.result.items
-        this.total = response.data.result.total
+        if (response.data.result && response.data.result.jfinfolist) {
+          this.list = response.data.result.jfinfolist
+          this.total = this.list.length
+        }
 
         setTimeout(() => {
           this.listLoading = false
-        }, 0.0 * 1000)
+        }, 0 * 1000)
       })
     },
     handleFilter() {
@@ -260,9 +278,13 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          console.log("tempData", tempData);
-          updateHairpiece(tempData).then(() => {
+          var jfid = this.temp.jfid
+          var ddbh = this.temp.ddbh
+          var obj = {
+            jfid: jfid,
+            ddbh: ddbh
+          }
+          updateHairpiece(obj).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',

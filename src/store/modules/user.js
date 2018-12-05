@@ -1,5 +1,6 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { loginByUsername, logout, getUserInfo, refreshToken } from '@/api/login'
+import { getToken, setToken, removeToken, getTokenStartTime, setTokenStartTime } from '@/utils/auth'
+import axios from 'axios'
 
 const user = {
   state: {
@@ -7,6 +8,8 @@ const user = {
     status: '',
     code: '',
     token: getToken(),
+    tokenStartTime: getTokenStartTime(),
+    isRefreshingToken: false,
     name: '',
     avatar: '',
     introduction: '',
@@ -40,6 +43,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_TOKENStartTime: (state, tokenStartTime) => {
+      state.tokenStartTime = tokenStartTime
+    },
+    SET_RefreshingToken: (state, refreshingToken) => {
+      state.isRefreshingToken = refreshingToken
     }
   },
 
@@ -52,13 +61,33 @@ const user = {
           const data = response.data
           console.log("data", data);
           commit('SET_TOKEN', data.result.token)
+          commit('SET_TOKENStartTime', new Date())
           setToken(data.result.token)
+          setTokenStartTime(new Date())
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
+    /*  RefreshToken({ commit }) {
+       const service = axios.create({
+         baseURL: process.env.BASE_API, // api 的 base_url
+         //timeout: 5000 // request timeout
+         timeout: 50000 // request timeout
+       })
+       service.post({
+         url: '/authen/refreshtoken',
+         config
+       }).then(response => {
+         const data = response.data
+         console.log("newToken", data);
+         commit('SET_TOKEN', data.result.token)
+         commit('SET_TOKENStartTime', new Date().getTime())
+         setToken(data.result.token)
+         return Promise.resolve(response.data)
+       })
+     }, */
 
     // 获取用户信息
     GetUserInfo({ commit, state }) {

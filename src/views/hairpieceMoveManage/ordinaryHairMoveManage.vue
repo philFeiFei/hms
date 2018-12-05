@@ -223,28 +223,41 @@ export default {
     getList() {
       //check some limit
       if (this.listQuery.ddqsrq == null && this.listQuery.ddbh == null) {
-        this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
-      }
-      console.log("this.listQuery", this.listQuery)
-      if (this.listQuery.ddqsrq) {
-        var ddqsrq = this.listQuery.ddqsrq;
-        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
-        this.listQuery.ddqsrq = ddqsrqs;
-      }
-      if (this.listQuery.ddzzrq) {
-        var ddzzrq = this.listQuery.ddzzrq;
-        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
-        this.listQuery.ddzzrq = ddzzrqs;
-      }
-      this.listLoading = true
-      queryHairpiece(this.listQuery).then(response => {
-        this.list = response.data.result.jfinfolist
-        this.total = this.list.length
+        //this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
+        this.$confirm('订单编号与订单起始日期都为空，数据量大，查询耗时较长！, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (this.listQuery.ddqsrq) {
+            var ddqsrq = this.listQuery.ddqsrq;
+            var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
+            this.listQuery.ddqsrq = ddqsrqs;
+          }
+          if (this.listQuery.ddzzrq) {
+            var ddzzrq = this.listQuery.ddzzrq;
+            var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
+            this.listQuery.ddzzrq = ddzzrqs;
+          }
+          this.listLoading = true
+          queryHairpiece(this.listQuery).then(response => {
+            if (response.data.result && response.data.result.jfinfolist) {
+              this.list = response.data.result.jfinfolist
+              this.total = this.list.length
+            }
 
-        setTimeout(() => {
-          this.listLoading = false
-        }, 0 * 1000)
-      })
+            setTimeout(() => {
+              this.listLoading = false
+            }, 0 * 1000)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消查询'
+          });
+        });
+      }
+
     },
     handleFilter() {
       this.listQuery.page = 1

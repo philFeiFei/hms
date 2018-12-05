@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, setToken, getTokenStartTime, setTokenStartTime } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -10,20 +10,94 @@ const service = axios.create({
   timeout: 50000 // request timeout
 })
 
+/*被挂起的请求数组*/
+let refreshSubscribers = []
+/*push所有请求到数组中*/
+function subscribeTokenRefresh(cb) {
+  refreshSubscribers.push(cb)
+}
+/*刷新请求（refreshSubscribers数组中的请求得到新的token之后会自执行，用新的token去请求数据）*/
+function onRrefreshed(token) {
+  refreshSubscribers.map(cb => cb(token))
+}
+function refreshToken() {
+  return axios({
+    url: '/api/authen/refreshtoken', //这里是原生的axios请求，加上工程名 api。//或者改为service.post方法，后期。。
+    method: 'post',
+    data: {
+      token: getToken(),
+    },
+    headers: { 'X-Token': getToken() }
+  }).then(res => {
+    return Promise.resolve(res.data)
+  })
+
+}
 // request interceptor
 service.interceptors.request.use(
   config => {
+    console.log("config", config)
+    console.log("store.getters.token", store.getters.token)
     // Do something before request is sent
     if (store.getters.token) {
-      // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
       config.headers['X-Token'] = getToken()
-      console.log("getToken()", getToken());
+      //phil 2018年12月5日 加入token校验，未超时的话就刷新，但是是一定时间之后刷新。例如20-30分钟之间请求一次。
+      //判断起始时间为 tokenstartToCheck 20分钟   超时时间为 tokenOverTime 30分钟  存在store global中
+      //每次刷新获取token之后，更新token的起始时间戳  tokenStartTime  存在global中
+      var tokenstartToCheck = store.getters.tokenstartToCheck
+      var tokenOverTime = store.getters.tokenOverTime
+      console.log("开始计算")
+      var oData = new Date(getTokenStartTime()) //token起始时间,也是存在cookie中的，防止用户跳过登录直接进来的情况。
+      let nDta = new Date();
+      let stamp = nDta - oData;
+      let minutes = parseInt(stamp / 1000 / 60);
+      console.log(nDta, oData, minutes);
+      if (minutes > tokenstartToCheck && minutes < tokenOverTime) {
+        var oldToken = store.getters.token
+        if (!store.getters.isRefreshingToken) {
+          console.log("enter refresh token 在request中")
+          store.commit('SET_RefreshingToken', true);
+          console.log("store commit了SET_RefreshingToken")
+
+          refreshToken().then(response => {//refreshToken方法用传统的axios调用。
+            store.commit('SET_RefreshingToken', false);
+            const data = response
+            console.log("newToken", data);
+            store.commit('SET_TOKEN', data.result.token)
+            store.commit('SET_TOKENStartTime', new Date())
+            console.log("更新完了token旧与新token", oldToken, data.result.token)
+            setToken(data.result.token)
+            setTokenStartTime(new Date())
+            onRrefreshed(getToken())
+            /*执行onRefreshed函数后清空数组中保存的请求*/
+            refreshSubscribers = []
+          }).catch(() => {
+            Message({
+              message: "由于长时间未操作未获取服务器认证，请重新登录系统！",
+              duration: 20 * 1000
+            })
+          })
+        }
+        console.log("跳过再次refreshtoken");
+        /*把请求(token)=>{....}都push到一个数组中*/
+        let retry = new Promise((resolve, reject) => {
+          /*(token) => {...}这个函数就是回调函数*/
+          subscribeTokenRefresh((token) => {
+            config.headers['X-Token'] = getToken()
+            /*将请求挂起*/
+            console.log("挂起config")
+            resolve(config)
+          })
+        })
+        return retry
+      }
+      console.log("最后的return config")
+      // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
     }
     return config
   },
   error => {
     // Do something with request error
-    console.log(error) // for debug
     Promise.reject(error)
   }
 )
@@ -74,7 +148,8 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
       }
-      return Promise.reject('error')//这个能截断前台的请求，终止操作。
+      //return Promise.reject('error')//这个能截断前台的请求，终止操作。
+      return response
     } else {
 
       return response

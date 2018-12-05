@@ -14,6 +14,20 @@ export function loginByUsername(username, password) {
     params: data
   })
 }
+/* export function refreshToken() {
+  const data = {
+  }
+  console.log("进入refreshToken() api");
+  return request({
+    //url: '/login/login',
+    url: '/authen/refreshtoken',
+    method: 'post',
+    //data
+    params: data
+  })
+} */
+
+
 
 export function logout() {
   return request({

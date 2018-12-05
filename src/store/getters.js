@@ -18,5 +18,9 @@ const getters = {
   code: state => state.global.code,
   jzrq: state => state.global.jzrq,
   lastDaysToAlert: state => state.global.lastDaysToAlert,
+  tokenstartToCheck: state => state.global.tokenstartToCheck,
+  tokenOverTime: state => state.global.tokenOverTime,
+  tokenStartTime: state => state.user.tokenStartTime,
+  isRefreshingToken: state => state.user.isRefreshingToken,
 }
 export default getters

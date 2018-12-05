@@ -29,12 +29,28 @@ export default {
     obj.result.token = userMap[username].token
     return obj;
   },
+  refreshtoken: config => {
+    //const { username } = JSON.parse(config.body)
+    console.log("进入refreshtoken mock")
+    var obj = {
+      result: {
+        token: ''
+      }
+    };
+    obj.result.token = 'admin'
+    return obj;
+  },
   getUserInfo: config => {
     console.log("jinru getUserinfo mock")
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
-      var obj = {};
-      var result = {};
+      var obj = {
+        _success: true,
+        _message: "认证身份过期!",
+        code: "401"
+      };
+      var result = {
+      };
       obj.result = result;
       result.roleinfo = userMap[token].roles
       result.userinfo = userMap[token]

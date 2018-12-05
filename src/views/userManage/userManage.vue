@@ -183,7 +183,7 @@ export default {
   },
   methods: {
     getList() {
-      this.litsLoading = true
+      this.listLoading = true
       queryUser(this.listQuery).then(response => {
         if (response.data.result && response.data.result.userlist) {
           this.list = response.data.result.userlist
@@ -192,7 +192,7 @@ export default {
 
         setTimeout(() => {
           this.listLoading = false
-        }, 1 * 1000)
+        }, 0 * 1000)
       })
     },
     handleFilter() {

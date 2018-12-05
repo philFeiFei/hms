@@ -24,6 +24,7 @@ Mock.XHR.prototype.send = function () {
 
 // 登录相关//
 Mock.mock(/\/authen\/getToken/, 'post', loginAPI.loginByUsername)
+Mock.mock(/\/authen\/refreshtoken/, 'post', loginAPI.refreshtoken)
 //Mock.mock(/\/login\/login/, 'post', loginAPI.loginByUsername)
 Mock.mock(/\/login\/logout/, 'post', loginAPI.logout)
 Mock.mock(/\/user\/info\.*/, 'post', loginAPI.getUserInfo)

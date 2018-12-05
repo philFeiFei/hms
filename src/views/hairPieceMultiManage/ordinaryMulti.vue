@@ -10,7 +10,7 @@
     </div>
 
     <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable="custom" align="center" min-width="100">
+      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable="custom" align="center" min-width="185px">
         <template slot-scope="scope">
           <span>{{ scope.row.pcid }}</span>
         </template>
@@ -148,6 +148,10 @@ export default {
   directives: { waves },
   data() {
     return {
+      picModel: {
+        imgUrl: '',
+        pcid: null,
+      },
       uploadURL: process.env.BASE_API + '/hairpieceMultiManage/UploadInVue',
       tableKey: 0,
       list: null,
@@ -171,10 +175,7 @@ export default {
       dialogFormVisible: false,
       dialogQRFormVisible: false,
       dialogPicFormVisible: false,
-      picModel: {
-        imgUrl: '',
-        pcid: null,
-      },
+
       fileList: [],
       dialogStatus: '',
       temp: {
@@ -225,8 +226,10 @@ export default {
       this.listLoading = true
       console.log("this.listQuery", this.listQuery)
       queryHairPici(this.listQuery).then(response => {
-        this.list = response.data.result.jfpclist
-        this.total = this.list.length
+        if (response.data.result && response.data.result.jfpclist) {
+          this.list = response.data.result.jfpclist
+          this.total = this.list.length
+        }
 
         setTimeout(() => {
           this.listLoading = false
@@ -299,9 +302,21 @@ export default {
       this.dialogPicFormVisible = true
       this.picModel.imgUrl = row.tdurl
       this.picModel.pcid = row.pcid
+      this.uploadURL = this.uploadURL + "?pcid=" + row.pcid
+      console.log("this.uploadURL", this.uploadURL)
     },
     onSuccess(response, file, fileList) {
       console.log("response", response);
+      var _success = response._success
+      if (_success === false) {
+        var _message = response._message
+        Message({
+          message: _message,
+          type: 'error',
+          duration: 5 * 1000
+        })
+        return false
+      }
       this.picModel.imgUrl = response.result.tdurl
       this.handleFilter()
     },
