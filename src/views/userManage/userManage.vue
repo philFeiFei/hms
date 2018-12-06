@@ -9,8 +9,8 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.id')" prop="userId" sortable="custom" align="center" width="100">
+    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column label="用户编号" prop="userId" align="center" width="140">
         <template slot-scope="scope">
           <span>{{ scope.row.userId }}</span>
         </template>
@@ -30,7 +30,7 @@
           <span>{{ scope.row.roleId | parseArrCode('role')}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.sfzhm')" width="140px">
+      <el-table-column :label="$t('table.sfzhm')" width="190px">
         <template slot-scope="scope">
           <span>{{ scope.row.sfzhm }}</span>
         </template>
@@ -198,21 +198,6 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
-    },
-
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'userId') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+userId'
-      } else {
-        this.listQuery.sort = '-userId'
-      }
-      this.handleFilter()
     },
     resetTemp() {
       this.temp = {

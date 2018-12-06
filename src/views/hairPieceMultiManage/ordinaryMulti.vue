@@ -9,20 +9,25 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable="custom" align="center" min-width="185px">
+    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column :label="$t('table.pcid')" prop="pcid" align="center" min-width="185px">
         <template slot-scope="scope">
           <span>{{ scope.row.pcid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center">
-        <template slot-scope="scope">
+      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center" prop="ddrq" :formatter='formateTime'>
+        <!-- <template slot-scope="scope">
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column :label="$t('table.ddbh')" min-width="120px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.sh')" min-width="130px" align="center" prop="sh">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.wdks')" min-width="130px" align="center">
@@ -33,11 +38,6 @@
       <el-table-column :label="$t('table.wdcc')" min-width="130px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.sh')" min-width="130px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.fc')" min-width="130px" align="center">
@@ -72,6 +72,11 @@
           <el-input v-model="temp.ddbh" />
         </el-form-item>
 
+        <el-form-item :label="$t('table.sh')" prop="sh">
+          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('table.wdks')" prop="wdks">
           <el-select v-model="temp.wdks" class="filter-item" placeholder="Please select">
             <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
@@ -81,12 +86,6 @@
         <el-form-item :label="$t('table.wdcc')" prop="wdcc">
           <el-select v-model="temp.wdcc" class="filter-item" placeholder="Please select">
             <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item :label="$t('table.sh')" prop="sh">
-          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
@@ -167,7 +166,7 @@ export default {
         sort: '+pcid',
         sftd: 0
       },
-      istd: false,
+      istd: true,
       textMap: {
         update: '修改批量订单',
         create: '新增批量订单'
@@ -212,6 +211,11 @@ export default {
       if (this.list == null || this.list == undefined) {
         return null;
       }
+
+      //排序还是筛选都应该在这里计算。。
+
+
+
       return this.list.filter((item, index) => index < limitC * pageC && index >= limitC * (pageC - 1))
     },
     ...mapGetters([
@@ -241,20 +245,7 @@ export default {
       this.getList()
     },
 
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'pcid') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+pcid'
-      } else {
-        this.listQuery.sort = '-pcid'
-      }
-      this.handleFilter()
-    },
+
     resetTemp() {
       this.temp = {
         pcid: undefined,

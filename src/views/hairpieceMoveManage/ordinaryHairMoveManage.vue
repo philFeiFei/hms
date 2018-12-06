@@ -15,13 +15,13 @@
       <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
     </div>
 
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.jfid')" prop="jfid" sortable="custom" align="center" width="75" fixed v-if="false">
+    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column :label="$t('table.jfid')" prop="jfid" align="center" width="75" fixed v-if="false">
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="序号" prop="xh" sortable="custom" align="center" width="75" fixed>
+      <el-table-column label="序号" prop="xh" align="center" width="75" fixed>
         <template slot-scope="scope">
           <span>{{ scope.row.xh }}</span>
         </template>
@@ -229,54 +229,44 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (this.listQuery.ddqsrq) {
-            var ddqsrq = this.listQuery.ddqsrq;
-            var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
-            this.listQuery.ddqsrq = ddqsrqs;
-          }
-          if (this.listQuery.ddzzrq) {
-            var ddzzrq = this.listQuery.ddzzrq;
-            var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
-            this.listQuery.ddzzrq = ddzzrqs;
-          }
-          this.listLoading = true
-          queryHairpiece(this.listQuery).then(response => {
-            if (response.data.result && response.data.result.jfinfolist) {
-              this.list = response.data.result.jfinfolist
-              this.total = this.list.length
-            }
-
-            setTimeout(() => {
-              this.listLoading = false
-            }, 0 * 1000)
-          })
+          this.queryList()
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消查询'
           });
         });
+      } else {
+        this.queryList()
       }
 
+    },
+    queryList() {
+      if (this.listQuery.ddqsrq) {
+        var ddqsrq = this.listQuery.ddqsrq;
+        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
+        this.listQuery.ddqsrq = ddqsrqs;
+      }
+      if (this.listQuery.ddzzrq) {
+        var ddzzrq = this.listQuery.ddzzrq;
+        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
+        this.listQuery.ddzzrq = ddzzrqs;
+      }
+      this.listLoading = true
+      queryHairpiece(this.listQuery).then(response => {
+        if (response.data.result && response.data.result.jfinfolist) {
+          this.list = response.data.result.jfinfolist
+          this.total = this.list.length
+        }
+
+        setTimeout(() => {
+          this.listLoading = false
+        }, 0 * 1000)
+      })
     },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
-    },
-
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'jfid') {
-        this.sortByID(order)
-      }
-    },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+jfid'
-      } else {
-        this.listQuery.sort = '-jfid'
-      }
-      this.handleFilter()
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj

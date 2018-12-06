@@ -9,16 +9,16 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px" @sort-change="sortChange">
-      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable="custom" align="center" min-width="185px">
+    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable align="center" min-width="185px">
         <template slot-scope="scope">
           <span>{{ scope.row.pcid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center">
-        <template slot-scope="scope">
+      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center" sortable prop="ddrq" :formatter='formateTime'>
+        <!-- <template slot-scope="scope">
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column :label="$t('table.ddbh')" min-width="120px" align="center">
         <template slot-scope="scope">
@@ -148,9 +148,14 @@ export default {
   directives: { waves },
   data() {
     return {
+      picModel: {
+        imgUrl: '',
+        pcid: null,
+      },
       uploadURL: process.env.BASE_API + '/hairpieceMultiManage/UploadInVue',
       tableKey: 0,
       list: null,
+      sortTrue: true,
       total: 0,
       listLoading: false,
       listQuery: {
@@ -171,10 +176,7 @@ export default {
       dialogFormVisible: false,
       dialogQRFormVisible: false,
       dialogPicFormVisible: false,
-      picModel: {
-        imgUrl: '',
-        pcid: null,
-      },
+
       fileList: [],
       dialogStatus: '',
       temp: {
@@ -240,20 +242,28 @@ export default {
       this.getList()
     },
 
-    sortChange(data) {
-      const { prop, order } = data
-      if (prop === 'pcid') {
-        this.sortByID(order)
+    formateTime(row, column) {
+      console.log("row", row, typeof row)
+      console.log("column", column, typeof column)
+      if (row[column.property]) {
+        return parseTime(row[column.property], '{y}-{m}-{d}')
       }
     },
-    sortByID(order) {
-      if (order === 'ascending') {
-        this.listQuery.sort = '+pcid'
-      } else {
-        this.listQuery.sort = '-pcid'
-      }
-      this.handleFilter()
-    },
+
+    /*  sortChange(data) {
+       const { prop, order } = data
+       if (prop === 'pcid') {
+         this.sortByID(order)
+       }
+     },
+     sortByID(order) {
+       if (order === 'ascending') {
+         this.listQuery.sort = '+pcid'
+       } else {
+         this.listQuery.sort = '-pcid'
+       }
+       this.handleFilter()
+     }, */
     resetTemp() {
       this.temp = {
         pcid: undefined,
@@ -444,13 +454,13 @@ canvas {
   padding: 0px 20px;
 }
 .btnheader {
-  text-align: right;
+  /* text-align: right; */
   margin-bottom: 10px;
   padding-right: 10%;
 }
 div#printcontent {
   width: 595.28px;
-  margin-left: 20%;
+  /* margin-left: 20%; */
 }
 #piccontent {
   width: 75%;
