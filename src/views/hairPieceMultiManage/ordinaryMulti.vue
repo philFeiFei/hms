@@ -15,10 +15,10 @@
           <span>{{ scope.row.pcid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center" prop="ddrq" :formatter='formateTime'>
-        <!-- <template slot-scope="scope">
+      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center" prop="ddrq">
+        <template slot-scope="scope">
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
-        </template> -->
+        </template>
       </el-table-column>
       <el-table-column :label="$t('table.ddbh')" min-width="120px" align="center">
         <template slot-scope="scope">
