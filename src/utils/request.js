@@ -148,8 +148,8 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
       }
-      //return Promise.reject('error')//这个能截断前台的请求，终止操作。
-      return response
+      return Promise.reject('error')//这个能截断前台的请求，终止操作。
+      //return response
     } else {
 
       return response

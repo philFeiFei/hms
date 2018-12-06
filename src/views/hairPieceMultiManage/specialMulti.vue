@@ -1,56 +1,56 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
-      <el-date-picker v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-date-picker size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
+      <el-button v-waves class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
+      <el-button class="filter-item" size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
-      <el-table-column :label="$t('table.pcid')" prop="pcid" sortable align="center" min-width="185px">
+    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column :label="$t('table.pcid')" prop="pcid" align="center" width="175px">
         <template slot-scope="scope">
           <span>{{ scope.row.pcid }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddrq')" min-width="150px" align="center" sortable prop="ddrq" :formatter='formateTime'>
-        <!-- <template slot-scope="scope">
+      <el-table-column :label="$t('table.ddrq')" width="100px" align="center" prop="ddrq">
+        <template slot-scope="scope">
           <span>{{ scope.row.ddrq | parseTime('{y}-{m}-{d}') }}</span>
-        </template> -->
+        </template>
       </el-table-column>
-      <el-table-column :label="$t('table.ddbh')" min-width="120px" align="center">
+      <el-table-column :label="$t('table.ddbh')" width="120px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ddbh }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.wdks')" min-width="130px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.wdcc')" min-width="130px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.sh')" min-width="130px" align="center">
+      <el-table-column :label="$t('table.sh')" width="90px" align="center" prop="sh">
         <template slot-scope="scope">
           <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.fc')" min-width="130px" align="center">
+      <el-table-column :label="$t('table.wdks')" width="120px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.wdcc')" width="120px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.fc')" width="65px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.fc | parseCode('FC') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.sl')" min-width="100px" align="center">
+      <el-table-column :label="$t('table.sl')" width="70px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.sl }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" min-width="300" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" min-width="210" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
           </el-button>
@@ -72,6 +72,11 @@
           <el-input v-model="temp.ddbh" />
         </el-form-item>
 
+        <el-form-item :label="$t('table.sh')" prop="sh">
+          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
+            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('table.wdks')" prop="wdks">
           <el-select v-model="temp.wdks" class="filter-item" placeholder="Please select">
             <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
@@ -81,12 +86,6 @@
         <el-form-item :label="$t('table.wdcc')" prop="wdcc">
           <el-select v-model="temp.wdcc" class="filter-item" placeholder="Please select">
             <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item :label="$t('table.sh')" prop="sh">
-          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
@@ -155,7 +154,6 @@ export default {
       uploadURL: process.env.BASE_API + '/hairpieceMultiManage/UploadInVue',
       tableKey: 0,
       list: null,
-      sortTrue: true,
       total: 0,
       listLoading: false,
       listQuery: {
@@ -213,6 +211,11 @@ export default {
       if (this.list == null || this.list == undefined) {
         return null;
       }
+
+      //排序还是筛选都应该在这里计算。。
+
+
+
       return this.list.filter((item, index) => index < limitC * pageC && index >= limitC * (pageC - 1))
     },
     ...mapGetters([
@@ -242,28 +245,7 @@ export default {
       this.getList()
     },
 
-    formateTime(row, column) {
-      console.log("row", row, typeof row)
-      console.log("column", column, typeof column)
-      if (row[column.property]) {
-        return parseTime(row[column.property], '{y}-{m}-{d}')
-      }
-    },
 
-    /*  sortChange(data) {
-       const { prop, order } = data
-       if (prop === 'pcid') {
-         this.sortByID(order)
-       }
-     },
-     sortByID(order) {
-       if (order === 'ascending') {
-         this.listQuery.sort = '+pcid'
-       } else {
-         this.listQuery.sort = '-pcid'
-       }
-       this.handleFilter()
-     }, */
     resetTemp() {
       this.temp = {
         pcid: undefined,

@@ -88,7 +88,7 @@ export default {
     }
     return result
   },
-  querySpecialDetail: config => {
+  /* querySpecialDetail: config => {
     let success = true;
     var jfid = JSON.parse(config.body)
     if (jfid == null || jfid == undefined) {
@@ -99,6 +99,23 @@ export default {
       _message: '没有查询到特单详细信息的图片信息，请检查！',
       src: 'F:\外面项目\德州禹城假发管理系统\QQ图片20181112101901.jpg',
       code: 406,
+    }
+    return result
+  } */
+  delete: config => {
+    const obj = param2Obj(config.url)
+    var jfid = obj.jfid
+    console.log("jfid", jfid);
+    for (const v of List4Move) {
+      if (v.jfid == jfid) {
+        v.yxbz = 0
+        break
+      }
+    }
+    var result = {
+      _success: true,
+      code: 406,
+      _message: '删除假发信息失败，请检查！！！',
     }
     return result
   }

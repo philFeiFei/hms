@@ -1,21 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input :placeholder="$t('table.username')" v-model="listQuery.username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.xb" :placeholder="$t('table.xb')" clearable style="width: 90px" class="filter-item">
+      <el-input size="mini" :placeholder="$t('table.username')" v-model="listQuery.username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input size="mini" :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select size="mini" v-model="listQuery.xb" :placeholder="$t('table.xb')" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in code.XB" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
+      <el-button size="mini" v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
+      <el-button size="mini" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
-    <el-table v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
-      <el-table-column label="用户编号" prop="userId" align="center" width="140">
-        <template slot-scope="scope">
-          <span>{{ scope.row.userId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.username')" width="130px">
+    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+      <el-table-column :label="$t('table.username')" width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
         </template>
@@ -25,22 +20,22 @@
           <span>{{ scope.row.password }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column :label="$t('table.roleId')" width="180px">
+      <el-table-column :label="$t('table.roleId')" width="110px">
         <template slot-scope="scope">
           <span>{{ scope.row.roleId | parseArrCode('role')}}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.sfzhm')" width="190px">
+      <el-table-column :label="$t('table.sfzhm')" width="180px">
         <template slot-scope="scope">
           <span>{{ scope.row.sfzhm }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.xm')" width="150px">
+      <el-table-column :label="$t('table.xm')" width="110px">
         <template slot-scope="scope">
           <span>{{ scope.row.xm }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" width="150px">
+      <el-table-column label="手机号" width="110px">
         <template slot-scope="scope">
           <span>{{ scope.row.sjh }}</span>
         </template>
@@ -50,7 +45,7 @@
           <span>{{ scope.row.csrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.xb')" width="100px">
+      <el-table-column :label="$t('table.xb')" width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.xb | parseCode('XB') }}</span>
         </template>
@@ -60,7 +55,7 @@
           <span>{{ scope.row.jtzz }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" width="155" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row,'deleted')">{{ $t('table.delete') }}
@@ -272,7 +267,10 @@ export default {
         type: 'warning'
       }).then(() => {
         //---------operate start---------
-        deleteUser(row).then(() => {
+        var obj = {
+        }
+        obj.userid = row.userid
+        deleteUser(obj).then(() => {
           this.dialogFormVisible = false
           this.$notify({
             title: '成功',

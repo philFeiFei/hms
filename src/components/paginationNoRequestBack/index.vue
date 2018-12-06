@@ -47,19 +47,19 @@ export default {
   },
   data() {
     return {
-      currentPage: this.page
+      /* currentPage: this.page */
     }
   },
   computed: {
     // 这种改变其实通过watch也可以。请看我对currentPage的watch方法。 pageSize仍然用computed方式。
-    /* currentPage: {
+    currentPage: {
       get() {
         return this.page
       },
       set(val) {
         this.$emit('update:page', val)
       }
-    }, */
+    },
     pageSize: {
       get() {
         return this.limit
@@ -70,9 +70,9 @@ export default {
     }
   },
   watch: {
-    currentPage: function (newPage, oldPage) {
+    /* currentPage: function (newPage, oldPage) {
       this.$emit('update:page', newPage)
-    }
+    } */
   },
   methods: {
     handleSizeChange(val) { // 此时val就是当前分页的选择的一页的个数

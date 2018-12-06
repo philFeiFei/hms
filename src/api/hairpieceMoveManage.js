@@ -16,11 +16,19 @@ export function updateHairpiece(data) {
   })
 }
 
-export function querySpecialDetail(data) {
+/* export function querySpecialDetail(data) {
   return request({
     url: '/hairpieceMove/querySpecialDetail',
     method: 'post',
     data //default update ddbh
+  })
+} */
+
+export function deleteJf(data) {
+  return request({
+    url: '/hairpieceMove/delete',
+    method: 'post',
+    params: data
   })
 }
 

@@ -3,21 +3,25 @@
     padding: 0px 16px !important;
         margin-top: 5px !important;
 }
-.el-table {
-  font-size:13px;
+.el-table--mini {
   td{
-    height:12px;
     padding: 3px 0;
   }
   th{
     padding: 3px 0;
     background-color: snow;
-    font-size: 14px;
-    font-weight: 500;
   }
 }
 .dashboard-editor-container[data-v-4dfc1336] {
     min-height: auto !important;
     background-color: white !important;
 }
+
+.filter-container {
+    padding-bottom: 1px !important;
+}
+.app-container {
+    padding-top: 7px !important;
+}
+
 
