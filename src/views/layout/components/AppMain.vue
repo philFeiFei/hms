@@ -1,10 +1,10 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+   <!--  <transition name="fade-transform" mode="-in-out"> -->
       <keep-alive :include="cachedViews">
-        <router-view :key="key"/>
+        <router-view :key="key" />
       </keep-alive>
-    </transition>
+   <!--  </transition> -->
   </section>
 </template>
 
@@ -12,7 +12,7 @@
 export default {
   name: 'AppMain',
   computed: {
-    cachedViews() {
+    cachedViews() {//这里表示缓存页面
       return this.$store.state.tagsView.cachedViews
     },
     key() {

@@ -142,7 +142,7 @@ import jspdf from 'jspdf'
 import html2canvas from 'html2canvas'
 
 export default {
-  name: 'ComplexTable',
+  name: 'ordinaryHairMultiManage',
   components: { Pagination },
   directives: { waves },
   data() {

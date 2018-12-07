@@ -50,11 +50,11 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.includes('1')) {
+       /*  if (roles.includes('1')) {
           accessedRouters = asyncRouterMap
-        } else {
+        } else { */
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
+       /*  } */
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

@@ -184,7 +184,7 @@ import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack' //这里使用的分页组件，不走后台请求。
 
 export default {
-  name: 'ComplexTable',
+  name: 'ordinaryHairMoveManage',
   components: { Pagination },
   directives: { waves },
   data() {
