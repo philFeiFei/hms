@@ -68,9 +68,6 @@ export const asyncRouterMap = [
   {
     path: '/icon',
     component: Layout,
-    meta: {
-      roles: ['1']
-    },
     children: [
       {
         path: 'index',

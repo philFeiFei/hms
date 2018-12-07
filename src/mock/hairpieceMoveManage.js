@@ -39,8 +39,16 @@ for (let i = 0; i < count; i++) {
 export default {
   // 查询complex table --phil
   getList: config => {
-    const { ddqsrq, ddzzrq, fhr, ddbh, sftd, sh, sort } = param2Obj(config.url)
-
+    console.log("config", config);
+    var obj = JSON.parse(config.body);
+    //const { ddqsrq, ddzzrq, fhr, ddbh, sftd, sh, sort } = param2Obj(config.url)
+    var ddqsrq = obj.ddqsrq
+    var ddzzrq = obj.ddzzrq
+    var fhr = obj.fhr
+    var ddbh = obj.ddbh
+    var sftd = obj.sftd
+    var sh = obj.sh
+    var sort = obj.sort
     let mockList = List4Move.filter(item => {
       if (ddqsrq && item.ddrq < ddqsrq) return false
       if (ddzzrq && item.ddrq > ddzzrq) return false

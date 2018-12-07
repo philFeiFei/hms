@@ -280,6 +280,7 @@ export default {
         this.listQuery.ddzzrq = ddzzrqs;
       }
       this.listLoading = true
+      console.log("this.listQuery", this.listQuery)
       queryHairpiece(this.listQuery).then(response => {
         if (response.data.result && response.data.result.jfinfolist) {
           this.list = response.data.result.jfinfolist

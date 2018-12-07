@@ -37,7 +37,7 @@ export default {
         token: ''
       }
     };
-    obj.result.token = 'admin'
+    obj.result.token = 'admin_newer'
     return obj;
   },
   getUserInfo: config => {

@@ -130,11 +130,11 @@ export default {
         username: undefined,
         xm: '',
         sfzhm: undefined,
-        sort: '+userId',
+        sort: '+userid',
         xb: undefined,
       },
       temp: {
-        userId: undefined,
+        userid: undefined,
         username: '',
         roleId: [],
         xm: '',
@@ -179,6 +179,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      console.log("this.listQuery user ", this.listQuery);
       queryUser(this.listQuery).then(response => {
         if (response.data.result && response.data.result.userlist) {
           this.list = response.data.result.userlist
@@ -196,7 +197,7 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        userId: undefined,
+        userid: undefined,
         username: '',
         roleId: [],
         xm: '',
@@ -233,6 +234,7 @@ export default {
       })
     },
     handleUpdate(row) {
+      console.log("this.temp user row", row);
       this.temp = Object.assign({}, row) // copy obj
       var csrq = this.temp.csrq;
       this.dialogStatus = 'update'
@@ -245,6 +247,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
+          console.log("this.temp user update", tempData);
           //console.log("csrq-saveupdate", tempData.csrq)
           tempData.csrq = +new Date(tempData.csrq) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           updateUser(tempData).then(() => {

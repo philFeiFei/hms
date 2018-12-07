@@ -70,24 +70,6 @@ const user = {
         })
       })
     },
-    /*  RefreshToken({ commit }) {
-       const service = axios.create({
-         baseURL: process.env.BASE_API, // api 的 base_url
-         //timeout: 5000 // request timeout
-         timeout: 50000 // request timeout
-       })
-       service.post({
-         url: '/authen/refreshtoken',
-         config
-       }).then(response => {
-         const data = response.data
-         console.log("newToken", data);
-         commit('SET_TOKEN', data.result.token)
-         commit('SET_TOKENStartTime', new Date().getTime())
-         setToken(data.result.token)
-         return Promise.resolve(response.data)
-       })
-     }, */
 
     // 获取用户信息
     GetUserInfo({ commit, state }) {
@@ -115,26 +97,14 @@ const user = {
       })
     },
 
-    // 第三方验证登录
-    // LoginByThirdparty({ commit, state }, code) {
-    //   return new Promise((resolve, reject) => {
-    //     commit('SET_CODE', code)
-    //     loginByThirdparty(state.status, state.email, state.code).then(response => {
-    //       commit('SET_TOKEN', response.data.token)
-    //       setToken(response.data.token)
-    //       resolve()
-    //     }).catch(error => {
-    //       reject(error)
-    //     })
-    //   })
-    // },
-
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         commit('SET_TOKEN', '')
+        commit('SET_TOKENStartTime', new Date())
         commit('SET_ROLES', [])
         removeToken()
+        setTokenStartTime(new Date())
         resolve()
       })
     },
@@ -143,7 +113,10 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_TOKENStartTime', new Date())
+        commit('SET_ROLES', [])
         removeToken()
+        setTokenStartTime(new Date())
         resolve()
       })
     },

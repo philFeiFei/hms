@@ -4,7 +4,7 @@ export function queryHairpiece(query) {
   return request({
     url: '/hairpieceMove/query',
     method: 'post',
-    params: query //ordinary default sftd:0   ;  special default sftd:1
+    data: query //这样表示传递对象，后台接收通过json解析
   })
 }
 
@@ -12,7 +12,7 @@ export function updateHairpiece(data) {
   return request({
     url: '/hairpieceMove/update',
     method: 'post',
-    params: data //default update ddbh
+    params: data //这样表示在url后放增加参数，后台解析url
   })
 }
 
