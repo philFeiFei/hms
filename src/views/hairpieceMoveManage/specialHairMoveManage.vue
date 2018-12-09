@@ -187,6 +187,11 @@ export default {
   name: 'ordinaryHairMoveManage',
   components: { Pagination },
   directives: { waves },
+  mounted() {
+    var begin = new Date();
+    var ddqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
+    this.listQuery.ddqsrq = ddqsrq1;
+  },
   data() {
     return {
       tableKey: 0,
@@ -248,7 +253,7 @@ export default {
   methods: {
     getList() {
       //check some limit
-      if (this.listQuery.ddqsrq == null && this.listQuery.ddbh == null) {
+      if (!(this.listQuery.ddqsrq) && !(this.listQuery.ddbh)) {
         //this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
         this.$confirm('订单编号与订单起始日期都为空，数据量大，查询耗时较长！, 是否继续?', '提示', {
           confirmButtonText: '确定',

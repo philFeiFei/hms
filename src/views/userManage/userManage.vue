@@ -74,7 +74,7 @@
           <el-input v-model="temp.password" type="password" />
         </el-form-item> -->
         <el-form-item :label="$t('table.roleId')" prop="roleId">
-          <el-select v-model="temp.roleId" class="filter-item" placeholder="Please select" multiple>
+          <el-select v-model="temp.roleId" class="filter-item" placeholder="请选择" multiple>
             <el-option v-for="item in code.role" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -88,10 +88,10 @@
           <el-input v-model="temp.sfzhm" />
         </el-form-item>
         <el-form-item :label="$t('table.csrq')" prop="timestamp">
-          <el-date-picker v-model="temp.csrq" type="date" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.csrq" type="date" placeholder="请选择日期" />
         </el-form-item>
         <el-form-item :label="$t('table.xb')">
-          <el-select v-model="temp.xb" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.xb" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.XB" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>

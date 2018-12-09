@@ -109,6 +109,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     //------与后端统一定制接口 phil 2018年11月19日-----------------
+    console.log("request response", response.data)
     var _success = response.data._success
     if (_success === false) {
       var code = response.data.code

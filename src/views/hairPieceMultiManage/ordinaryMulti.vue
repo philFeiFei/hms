@@ -66,31 +66,31 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
       <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
         <el-form-item :label="$t('table.ddrq')" prop="ddrq">
-          <el-date-picker v-model="temp.ddrq" type="date" placeholder="Please pick a date" />
+          <el-date-picker v-model="temp.ddrq" type="date" placeholder="请选择日期" />
         </el-form-item>
         <el-form-item :label="$t('table.ddbh')" prop="ddbh">
           <el-input v-model="temp.ddbh" />
         </el-form-item>
 
         <el-form-item :label="$t('table.sh')" prop="sh">
-          <el-select v-model="temp.sh" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.sh" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('table.wdks')" prop="wdks">
-          <el-select v-model="temp.wdks" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.wdks" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('table.wdcc')" prop="wdcc">
-          <el-select v-model="temp.wdcc" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.wdcc" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
         <el-form-item :label="$t('table.fc')" prop="fc">
-          <el-select v-model="temp.fc" class="filter-item" placeholder="Please select">
+          <el-select v-model="temp.fc" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
@@ -145,6 +145,11 @@ export default {
   name: 'ordinaryHairMultiManage',
   components: { Pagination },
   directives: { waves },
+  mounted() {
+    var begin = new Date();
+    var ddqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
+    this.listQuery.ddqsrq = ddqsrq1;
+  },
   data() {
     return {
       picModel: {
@@ -228,6 +233,16 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
+      if (this.listQuery.ddqsrq) {
+        var ddqsrq = this.listQuery.ddqsrq;
+        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
+        this.listQuery.ddqsrq = ddqsrqs;
+      }
+      if (this.listQuery.ddzzrq) {
+        var ddzzrq = this.listQuery.ddzzrq;
+        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
+        this.listQuery.ddzzrq = ddzzrqs;
+      }
       console.log("this.listQuery", this.listQuery)
       queryHairPici(this.listQuery).then(response => {
         if (response.data.result && response.data.result.jfpclist) {
