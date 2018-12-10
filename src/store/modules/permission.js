@@ -43,22 +43,22 @@ const permission = {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
-    }
+    },
   },
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-       /*  if (roles.includes('1')) {
-          accessedRouters = asyncRouterMap
-        } else { */
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-       /*  } */
+        /*  if (roles.includes('1')) {
+           accessedRouters = asyncRouterMap
+         } else { */
+        accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        /*  } */
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
-    }
+    },
   }
 }
 

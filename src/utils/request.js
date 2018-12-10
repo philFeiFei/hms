@@ -53,7 +53,7 @@ service.interceptors.request.use(
       let stamp = nDta - oData;
       let minutes = parseInt(stamp / 1000 / 60);
       console.log(nDta, oData, minutes);
-      if (minutes > tokenstartToCheck && minutes < tokenOverTime) {
+      if (minutes > tokenstartToCheck) {//改为只要大于多长时间就进行刷新token，我这里不限制超时，等服务端返回401即可
         var oldToken = store.getters.token
         if (!store.getters.isRefreshingToken) {
           console.log("enter refresh token 在request中")
@@ -125,7 +125,7 @@ service.interceptors.response.use(
             path: "/login"
           })
         })
-
+        return response //这个地方返回response试试，如果返回promise error，前台会报错误提示‘error’
       } else {//其它code类型错误。
         var _message = response.data._message
         Message({
@@ -134,7 +134,7 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
       }
-      return Promise.reject('error')//这个能截断前台的请求，终止操作。
+      return Promise.reject(response.data._message)//这个能截断前台的请求，终止操作。
     } else {
       return response
     }

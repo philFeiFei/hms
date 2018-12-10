@@ -15,22 +15,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import PanThumb from '@/components/PanThumb'
-import GithubCorner from '@/components/GithubCorner'
 
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
   data() {
     return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3',
       lastDays: null,
     }
   },
   computed: {
     ...mapGetters([
       'name',
-      'avatar',
       'roles',
       'jzrq',
       'lastDaysToAlert'
@@ -54,21 +49,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.emptyGif {
-  display: block;
-  width: 45%;
-  margin: 0 auto;
-}
-
 .dashboard-editor-container {
   background-color: #e3e3e3;
   min-height: 100vh;
-  .pan-info-roles {
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
-    display: block;
-  }
   .info-container {
     position: relative;
     margin-left: 15px;

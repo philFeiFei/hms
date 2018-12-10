@@ -4,7 +4,10 @@ import Cookies from 'js-cookie'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
-import Element from 'element-ui'
+import Element from 'element-ui' //这是全部引入
+//------改为部分引入element------
+//import Element from './impElementPart/index'
+
 import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/styles/index.scss' // global css
