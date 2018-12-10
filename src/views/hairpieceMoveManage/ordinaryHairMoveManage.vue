@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 150px;" class="filter-item" />
-      <el-date-picker size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
-      <el-date-picker size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
       <el-select size="mini" v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
@@ -190,7 +190,7 @@ export default {
   mounted() {
     var begin = new Date();
     var ddqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
-    this.listQuery.ddqsrq = ddqsrq1;
+    this.listQuery.ddqsrq = parseTime(ddqsrq1, '{y}-{m}-{d}');
   },
   data() {
     return {
@@ -274,18 +274,7 @@ export default {
     },
     queryList() {
       this.listQuery.page = 1
-      if (this.listQuery.ddqsrq) {
-        var ddqsrq = this.listQuery.ddqsrq;
-        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
-        this.listQuery.ddqsrq = ddqsrqs;
-      }
-      if (this.listQuery.ddzzrq) {
-        var ddzzrq = this.listQuery.ddzzrq;
-        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
-        this.listQuery.ddzzrq = ddzzrqs;
-      }
       this.listLoading = true
-      console.log("this.listQuery", this.listQuery)
       queryHairpiece(this.listQuery).then(response => {
         if (response.data.result && response.data.result.jfinfolist) {
           this.list = response.data.result.jfinfolist

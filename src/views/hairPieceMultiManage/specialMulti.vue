@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 150px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
-      <el-date-picker size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
 
       <el-button v-waves class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button class="filter-item" size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
@@ -148,7 +148,7 @@ export default {
   mounted() {
     var begin = new Date();
     var ddqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
-    this.listQuery.ddqsrq = ddqsrq1;
+    this.listQuery.ddqsrq = parseTime(ddqsrq1, '{y}-{m}-{d}');
   },
   data() {
     return {
@@ -233,17 +233,6 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      if (this.listQuery.ddqsrq) {
-        var ddqsrq = this.listQuery.ddqsrq;
-        var ddqsrqs = parseTime(ddqsrq, '{y}-{m}-{d}')
-        this.listQuery.ddqsrq = ddqsrqs;
-      }
-      if (this.listQuery.ddzzrq) {
-        var ddzzrq = this.listQuery.ddzzrq;
-        var ddzzrqs = parseTime(ddzzrq, '{y}-{m}-{d}')
-        this.listQuery.ddzzrq = ddzzrqs;
-      }
-      console.log("this.listQuery", this.listQuery)
       queryHairPici(this.listQuery).then(response => {
         if (response.data.result && response.data.result.jfpclist) {
           this.list = response.data.result.jfpclist

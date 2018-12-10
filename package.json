@@ -10,7 +10,8 @@
     "build:sit": "cross-env NODE_ENV=production env_config=sit node build/build.js",
     "lint": "eslint --ext .js,.vue src",
     "test": "npm run lint",
-    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
+    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml",
+    "analyze": "cross-env NODE_ENV=production npm_config_report=true npm run build:prod"
   },
   "lint-staged": {
     "src/**/*.{js,vue}": [
@@ -80,8 +81,9 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-stage-2": "6.24.1",
     "chalk": "2.4.1",
+    "compression-webpack-plugin": "^2.0.0",
     "copy-webpack-plugin": "4.5.2",
-    "cross-env": "5.2.0",
+    "cross-env": "^5.2.0",
     "css-loader": "1.0.0",
     "eslint": "4.19.1",
     "eslint-friendly-formatter": "4.0.1",
