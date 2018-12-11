@@ -8,7 +8,6 @@ export function queryHairPici(query) {
 }
 
 export function createHairPici(data) {
-  console.log("data-api multi", data);
   return request({
     url: '/hairpieceMultiManage/create',
     method: 'post',

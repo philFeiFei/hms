@@ -304,10 +304,8 @@ export default {
       this.picModel.imgUrl = row.tdurl
       this.picModel.pcid = row.pcid
       this.uploadURL = this.uploadURL + "?pcid=" + row.pcid
-      console.log("this.uploadURL", this.uploadURL)
     },
     onSuccess(response, file, fileList) {
-      console.log("response", response);
       var _success = response._success
       if (_success === false) {
         var _message = response._message
@@ -331,16 +329,13 @@ export default {
           this.listLoading = false
 
           //一秒之后dom加载完毕，进度关闭，展示二维码.不等一会，canvas qritem.id取不到
-          console.log("itemsOfQR", this.itemsOfQR);
           this.itemsOfQR.forEach(qritem => {
             var canvas = document.getElementById(qritem.jfid);
-            console.log("canvas", canvas)
             QRCode.toCanvas(canvas, qritem.jfid, function (error) {
               if (error) console.error(error)
               var ctx = canvas.getContext("2d");
               ctx.fillText(`${qritem.ddbh}${qritem.sh}-${qritem.xh}`, 20, 112);
               ctx.font = "18px Verdana";
-              console.log(`${qritem}生成成功`);
             })
           });
 
@@ -368,7 +363,6 @@ export default {
         let position = 0
         let imgWidth = 595.28
         let imgHeight = 592.28 / contentWidth * contentHeight
-        console.log("imgHeight", imgHeight)
 
         let pageData = canvas.toDataURL('image/jpeg', 1.0)
 

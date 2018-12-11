@@ -47,7 +47,6 @@ service.interceptors.request.use(
       //每次刷新获取token之后，更新token的起始时间戳  tokenStartTime  存在global中
       var tokenstartToCheck = store.getters.tokenstartToCheck
       var tokenOverTime = store.getters.tokenOverTime
-      console.log("开始计算")
       var oData = new Date(getTokenStartTime()) //token起始时间,也是存在cookie中的，防止用户跳过登录直接进来的情况。
       let nDta = new Date();
       let stamp = nDta - oData;
@@ -56,9 +55,7 @@ service.interceptors.request.use(
       if (minutes > tokenstartToCheck && minutes < tokenOverTime) {//改为只要大于多长时间就进行刷新token，我这里不限制超时，等服务端返回401即可
         var oldToken = store.getters.token
         if (!store.getters.isRefreshingToken) {
-          console.log("enter refresh token 在request中")
           store.commit('SET_RefreshingToken', true);
-          console.log("store commit了SET_RefreshingToken")
 
           refreshToken().then(response => {//refreshToken方法用传统的axios调用。
             store.commit('SET_RefreshingToken', false);

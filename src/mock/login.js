@@ -31,7 +31,6 @@ export default {
   },
   refreshtoken: config => {
     //const { username } = JSON.parse(config.body)
-    console.log("进入refreshtoken mock")
     var obj = {
       result: {
         token: ''
@@ -41,7 +40,6 @@ export default {
     return obj;
   },
   getUserInfo: config => {
-    console.log("jinru getUserinfo mock")
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
       var obj = {
@@ -54,7 +52,6 @@ export default {
       obj.result = result;
       result.roleinfo = userMap[token].roles
       result.userinfo = userMap[token]
-      console.log("mock getuserinfo obj", obj);
       return obj
     } else {
       return false

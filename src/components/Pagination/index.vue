@@ -71,7 +71,6 @@ export default {
   },
   watch: {
     currentPage: function (newPage, oldPage) {
-      console.log('oldPage is %s,newpage is %s', oldPage, newPage)
       this.$emit('update:page', newPage)
     }
   },

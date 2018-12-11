@@ -200,7 +200,6 @@ export default {
     }
   },
   created() {
-    console.log("complex table vue created的时候，执行查询");
     this.getList()
   },
   methods: {

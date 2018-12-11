@@ -5,7 +5,6 @@ export function loginByUsername(username, password) {
     username,
     password
   }
-  console.log("进入loginByUserName api");
   return request({
     //url: '/login/login',
     url: '/authen/getToken',
@@ -14,20 +13,6 @@ export function loginByUsername(username, password) {
     params: data
   })
 }
-/* export function refreshToken() {
-  const data = {
-  }
-  console.log("进入refreshToken() api");
-  return request({
-    //url: '/login/login',
-    url: '/authen/refreshtoken',
-    method: 'post',
-    //data
-    params: data
-  })
-} */
-
-
 
 export function logout() {
   return request({
@@ -37,7 +22,6 @@ export function logout() {
 }
 
 export function getUserInfo(token) {
-  console.log("getUserInfo api");
   return request({
     url: '/user/info',
     method: 'post',

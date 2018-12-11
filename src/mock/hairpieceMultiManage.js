@@ -57,7 +57,6 @@ export default {
   },
 
   create: config => {
-    console.log("config-multi-mock", config);
     var multiOrderObj = JSON.parse(config.body);
     multiOrderObj.pcid = parseInt(Math.random() * 100) + 1024
     List4Multi.unshift(multiOrderObj)
@@ -71,7 +70,6 @@ export default {
 
   delete: config => {
     const { pcid } = param2Obj(config.url)
-    console.log("pcid", pcid);
     for (const v of List4Multi) {
       if (v.pcid == pcid) {
         v.yxbz = 0
