@@ -72,6 +72,7 @@ export const asyncRouterMap = [
       }
     ]
   },
+
   {
     path: '/HairpieceMoveManage',
     component: Layout,
@@ -92,6 +93,30 @@ export const asyncRouterMap = [
         component: () => import('@/views/hairpieceMoveManage/specialHairMoveManage'),
         name: 'specialHairMoveManage',
         meta: { title: 'specialHairMoveManage' }
+      }
+    ]
+  },
+  //---查询统计
+  {
+    path: '/cxtj',
+    component: Layout,
+    redirect: 'noredirect',
+    meta: {
+      title: '查询统计(测试中..)',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'lhhzcx',
+        component: () => import('@/views/cxtj/lhhzcx'),
+        name: 'lhhzcx',
+        meta: { title: '领活汇总查询' }
+      },
+      {
+        path: 'fhhzcx',
+        component: () => import('@/views/cxtj/fhhzcx'),
+        name: 'fhhzcx',
+        meta: { title: '发活汇总查询' }
       }
     ]
   },

@@ -39,6 +39,7 @@ function refreshToken() {
 // request interceptor
 service.interceptors.request.use(
   config => {
+    console.log("request 请求 config:", config)
     // Do something before request is sent
     if (store.getters.token) {
       config.headers['X-Token'] = getToken()
@@ -106,7 +107,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     //------与后端统一定制接口 phil 2018年11月19日-----------------
-    console.log("request response", response.data)
+    console.log("response返回结果：", response.data)
     var _success = response.data._success
     if (_success === false) {
       var code = response.data.code

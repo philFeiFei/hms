@@ -4,6 +4,7 @@ import articleAPI from './article'
 import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
 import hairpieceMoveManageAPI from './hairpieceMoveManage'
+import cxtjAPI from './cxtj'
 import hairpieceMultiManageAPI from './hairpieceMultiManage'
 import userManageAPI from './userManage'
 import globalAPI from './global'
@@ -59,6 +60,8 @@ Mock.mock(/\/userManage\/query/, 'post', userManageAPI.getList)
 Mock.mock(/\/userManage\/create/, 'post', userManageAPI.create)
 Mock.mock(/\/userManage\/update/, 'post', userManageAPI.update)
 Mock.mock(/\/userManage\/delete/, 'post', userManageAPI.delete)
+
+Mock.mock(/\/jfinfo\/hzQuery/, 'post', cxtjAPI.getList)// 汇总查询
 
 //_global configiration获取
 Mock.mock(/\/global\/query/, 'post', globalAPI.query)
