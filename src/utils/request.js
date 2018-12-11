@@ -53,7 +53,7 @@ service.interceptors.request.use(
       let stamp = nDta - oData;
       let minutes = parseInt(stamp / 1000 / 60);
       console.log(nDta, oData, minutes);
-      if (minutes > tokenstartToCheck) {//改为只要大于多长时间就进行刷新token，我这里不限制超时，等服务端返回401即可
+      if (minutes > tokenstartToCheck && minutes < tokenOverTime) {//改为只要大于多长时间就进行刷新token，我这里不限制超时，等服务端返回401即可
         var oldToken = store.getters.token
         if (!store.getters.isRefreshingToken) {
           console.log("enter refresh token 在request中")

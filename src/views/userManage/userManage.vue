@@ -2,14 +2,13 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input size="mini" :placeholder="$t('table.username')" v-model="listQuery.username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-input size="mini" :placeholder="$t('table.xm')" v-model="listQuery.xm" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select size="mini" v-model="listQuery.xb" :placeholder="$t('table.xb')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in code.XB" :key="item.key" :label="item.value" :value="item.key" />
+      <el-select size="mini" v-model="listQuery.roleId" placeholder="角色" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in code.role" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button size="mini" v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button size="mini" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
-    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
       <el-table-column :label="$t('table.username')" width="100px">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
@@ -30,7 +29,7 @@
           <span>{{ scope.row.sfzhm }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.xm')" width="110px">
+      <el-table-column :label="$t('table.xm')" width="170px">
         <template slot-scope="scope">
           <span>{{ scope.row.xm }}</span>
         </template>
@@ -124,14 +123,13 @@ export default {
       list: null,
       total: 0,
       listLoading: false,
+      tableHeight: window.innerHeight - 200,
       listQuery: {
         page: 1,
         limit: 20,
         username: undefined,
-        xm: '',
-        sfzhm: undefined,
+        roleId: '',
         sort: '+userid',
-        xb: undefined,
       },
       temp: {
         userid: undefined,

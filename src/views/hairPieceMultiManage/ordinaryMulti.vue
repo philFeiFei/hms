@@ -9,7 +9,7 @@
       <el-button class="filter-item" size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
     </div>
 
-    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
       <el-table-column :label="$t('table.pcid')" prop="pcid" align="center" width="175px">
         <template slot-scope="scope">
           <span>{{ scope.row.pcid }}</span>
@@ -48,6 +48,11 @@
       <el-table-column :label="$t('table.sl')" width="70px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.sl }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="删除数量" width="70px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.scsl }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" min-width="210" class-name="small-padding fixed-width">
@@ -161,9 +166,10 @@ export default {
       list: null,
       total: 0,
       listLoading: false,
+      tableHeight: window.innerHeight - 200,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 100,
         ddbh: null,
         ddqsrq: null,
         ddzzrq: null,
@@ -413,10 +419,6 @@ export default {
 }
 </script>
 <style scoped>
-.fixed-width .el-button--mini {
-  padding: 7px 7px;
-  width: 75px;
-}
 canvas {
   height: 118.27px !important;
   width: 118.27px !important;

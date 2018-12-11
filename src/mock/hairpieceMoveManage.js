@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List4Move = []
-const count = 11461
+const count = 5000
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
@@ -39,7 +39,7 @@ for (let i = 0; i < count; i++) {
 export default {
   // 查询complex table --phil
   getList: config => {
-    console.log("config", config);
+    console.log("List4Move", List4Move);
     var obj = JSON.parse(config.body);
     //const { ddqsrq, ddzzrq, fhr, ddbh, sftd, sh, sort } = param2Obj(config.url)
     var ddqsrq = obj.ddqsrq
@@ -47,6 +47,7 @@ export default {
     var fhr = obj.fhr
     var ddbh = obj.ddbh
     var sftd = obj.sftd
+    console.log("sftd", sftd);
     var sh = obj.sh
     var sort = obj.sort
     let mockList = List4Move.filter(item => {
@@ -55,7 +56,10 @@ export default {
       if (fhr && item.fhr != fhr) return false
       if (ddbh && item.ddbh.indexOf(ddbh) < 0) return false
       if (sh && item.sh != sh) return false
-      if (sftd && item.sftd != sftd) return false
+      if (sftd != null && item.sftd != sftd) {//js中数字0会转换为false
+        console.log("item.sftd", item.sftd, item.sftd != sftd);
+        return false
+      }
       if (item.yxbz != 1) return false
       return true
     })
@@ -63,7 +67,7 @@ export default {
     if (sort === '-jfid') {
       mockList = mockList.reverse()
     }
-
+    console.log("mockList", mockList);
     //const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))//这种只把请求页返给前台
     const pageList = mockList //这种全部返回前台，前台处理分页请求
 

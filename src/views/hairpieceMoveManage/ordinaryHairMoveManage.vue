@@ -1,41 +1,51 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 150px;" class="filter-item" />
       <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
       <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
-      <el-select size="mini" v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 90px" class="filter-item">
+      <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 80px;" class="filter-item" />
+      <el-select size="mini" v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 85px" class="filter-item">
         <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
+      <el-select size="mini" v-model="listQuery.wdks" :placeholder="$t('table.wdks')" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select size="mini" v-model="listQuery.wdcc" :placeholder="$t('table.wdcc')" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select size="mini" v-model="listQuery.fc" :placeholder="$t('table.fc')" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
 
-      <br />
-      <el-select size="mini" v-model="listQuery.lhr" :placeholder="$t('table.lhr')" clearable style="width: 90px" class="filter-item">
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.lhsj" type="date" placeholder="领活日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.fhsj" type="date" placeholder="发货日期" class="filter-item" />
+
+      <el-select size="mini" v-model="listQuery.lhr" :placeholder="$t('table.lhr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.gzr" :placeholder="$t('table.gzr')" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.gzr" :placeholder="$t('table.gzr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.zjr" :placeholder="$t('table.zjr')" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.zjr" :placeholder="$t('table.zjr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.djr" :placeholder="$t('table.djr')" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.djr" :placeholder="$t('table.djr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.zxr" :placeholder="$t('table.zxr')" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.zxr" :placeholder="$t('table.zxr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.cpzjr" :placeholder="$t('table.cpzjr')" clearable style="width: 110px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.cpzjr" placeholder="质检人" clearable style="width: 85px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
-      <el-select size="mini" v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
-      <el-checkbox size="mini" v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">显示操作人员</el-checkbox>
 
     </div>
 
-    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" height="600px">
+    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
       <el-table-column :label="$t('table.jfid')" prop="jfid" align="center" width="75" fixed v-if="false">
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
@@ -82,7 +92,7 @@
           <span>{{ scope.row.lhsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.lhr')" width="70px">
+      <el-table-column :label="$t('table.lhr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.lhr | parseCode('user') }}</span>
         </template>
@@ -93,7 +103,7 @@
           <span>{{ scope.row.gzsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.gzr')" width="70px">
+      <el-table-column :label="$t('table.gzr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.gzr | parseCode('user') }}</span>
         </template>
@@ -104,7 +114,7 @@
           <span>{{ scope.row.zjsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.zjr')" width="70px">
+      <el-table-column :label="$t('table.zjr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.zjr | parseCode('user') }}</span>
         </template>
@@ -115,7 +125,7 @@
           <span>{{ scope.row.djsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.djr')" width="70px">
+      <el-table-column :label="$t('table.djr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.djr | parseCode('user') }}</span>
         </template>
@@ -126,7 +136,7 @@
           <span>{{ scope.row.zxsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.zxr')" width="70px">
+      <el-table-column :label="$t('table.zxr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.zxr | parseCode('user') }}</span>
         </template>
@@ -137,7 +147,7 @@
           <span>{{ scope.row.cpzjsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.cpzjr')" width="90px">
+      <el-table-column :label="$t('table.cpzjr')" width="90px">
         <template slot-scope="scope">
           <span>{{ scope.row.cpzjr | parseCode('user') }}</span>
         </template>
@@ -147,12 +157,12 @@
           <span>{{ scope.row.fhsj | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showReviewer" :label="$t('table.fhr')" width="70px">
+      <el-table-column :label="$t('table.fhr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" min-width="155" class-name="small-padding fixed-width" fixed='right'>
+      <el-table-column :label="$t('table.actions')" align="center" min-width="110" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}</el-button>
@@ -195,13 +205,13 @@ export default {
   data() {
     return {
       tableKey: 0,
-      showReviewer: false,
       list: null,
       total: 0,
       listLoading: false,
+      tableHeight: window.innerHeight - 200,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 100,
         lhr: undefined,
         gzr: undefined,
         zjr: undefined,
@@ -211,8 +221,14 @@ export default {
         fhr: undefined,
         ddqsrq: null,
         ddzzrq: null,
+        lhsj: null,
+        fhsj: null,
         ddbh: undefined,
         sh: undefined,
+        sh: undefined,
+        wdcc: undefined,
+        wdks: undefined,
+        fc: undefined,
         sort: '+jfid',
         sftd: 0
       },
@@ -351,3 +367,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.fixed-width .el-button--mini {
+  width: 40px !important;
+}
+</style>
+

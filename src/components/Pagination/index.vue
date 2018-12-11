@@ -1,6 +1,6 @@
 <template>
   <div :class="{'hidden':hidden}" class="pagination-container">
-    <el-pagination :background="background" :current-page.sync="currentPage" :page-size.sync="pageSize" :layout="layout" :total="total" v-bind="$attrs" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination :background="background" :page-sizes="pageSizes" :current-page.sync="currentPage" :page-size.sync="pageSize" :layout="layout" :total="total" v-bind="$attrs" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
+        return [10, 20, 30, 50, 100, 200]
       }
     },
     layout: {
@@ -70,7 +70,7 @@ export default {
     }
   },
   watch: {
-    currentPage: function(newPage, oldPage) {
+    currentPage: function (newPage, oldPage) {
       console.log('oldPage is %s,newpage is %s', oldPage, newPage)
       this.$emit('update:page', newPage)
     }

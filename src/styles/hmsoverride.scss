@@ -24,4 +24,23 @@
     padding-top: 7px !important;
 }
 
+/*-----table----*/
+/* .el-table{
+  height:750px !important;
+} */
+.el-table--mini td {
+    padding: 0px 0;
+}
+.fixed-width .el-button--mini {
+    padding: 3px 2px !important;
+    width: 65px !important;
+}
+.el-input__inner {
+  padding: 0 2px;
+}
+.el-date-editor.el-input{
+    width: 135px;
+}
+
+
 
