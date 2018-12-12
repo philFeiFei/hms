@@ -19,7 +19,7 @@
 
       <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.lhsj" type="date" placeholder="领活日期" class="filter-item" />
 
-      <el-select size="mini" v-model="listQuery.lhr" :placeholder="$t('table.lhr')" clearable style="width: 80px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
 

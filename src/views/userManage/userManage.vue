@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input size="mini" :placeholder="$t('table.username')" v-model="listQuery.username" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select size="mini" v-model="listQuery.roleId" placeholder="角色" clearable style="width: 90px" class="filter-item">
+      <el-select size="mini" v-model="listQuery.roleids" placeholder="角色" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in code.role" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button size="mini" v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
@@ -128,7 +128,7 @@ export default {
         page: 1,
         limit: 20,
         username: undefined,
-        roleId: '',
+        roleids: undefined,
         sort: '+userid',
       },
       temp: {

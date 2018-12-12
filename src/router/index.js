@@ -102,7 +102,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     meta: {
-      title: '查询统计(测试中..)',
+      title: '查询统计',
       icon: 'list'
     },
     children: [
