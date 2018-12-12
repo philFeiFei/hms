@@ -103,7 +103,7 @@ export const asyncRouterMap = [
     redirect: 'noredirect',
     meta: {
       title: '查询统计',
-      icon: 'list'
+      icon: 'tree'
     },
     children: [
       {
@@ -113,10 +113,16 @@ export const asyncRouterMap = [
         meta: { title: '领活汇总查询' }
       },
       {
+        path: 'zjhzcx',
+        component: () => import('@/views/cxtj/zjhzcx'),
+        name: 'zjhzcx',
+        meta: { title: '质检汇总查询' }
+      },
+      {
         path: 'fhhzcx',
         component: () => import('@/views/cxtj/fhhzcx'),
         name: 'fhhzcx',
-        meta: { title: '发活汇总查询' }
+        meta: { title: '发货汇总查询', roles: ['1'] }
       }
     ]
   },

@@ -86,7 +86,7 @@
         <el-form-item :label="$t('table.sfzhm')" prop="sfzhm">
           <el-input v-model="temp.sfzhm" />
         </el-form-item>
-        <el-form-item :label="$t('table.csrq')" prop="timestamp">
+        <el-form-item value-format="yyyy-MM-dd" :label="$t('table.csrq')" prop="csrq">
           <el-date-picker v-model="temp.csrq" type="date" placeholder="请选择日期" />
         </el-form-item>
         <el-form-item :label="$t('table.xb')">

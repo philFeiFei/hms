@@ -15,8 +15,10 @@ for (let i = 0; i < count; i++) {
 
     fhr: r.natural(0, 5),
     lhr: r.natural(0, 5),
+    zjr: r.natural(0, 5),
     fhsj: r.datetime(),
     lhsj: r.datetime(),
+    zjsj: r.datetime(),
     sl: r.natural(0, 500),
     querytype: r.natural(1, 7)
   }))
@@ -34,6 +36,7 @@ export default {
     var wdcc = obj.wdcc
     var wdks = obj.wdks
     var lhr = obj.lhr
+    var zjr = obj.zjr
     var querytype = obj.querytype
     let mockList = List4Move.filter(item => {
       if (ddqsrq && item.ddrq < ddqsrq) return false
@@ -44,6 +47,7 @@ export default {
       if (wdks && item.wdks != wdks) return false
       if (wdcc && item.wdcc != wdcc) return false
       if (lhr && item.lhr != lhr) return false
+      if (zjr && item.zjr != zjr) return false
       if (querytype && item.querytype != querytype) return false
       return true
     })
