@@ -22,5 +22,6 @@ const getters = {
   tokenOverTime: state => state.global.tokenOverTime,
   tokenStartTime: state => state.user.tokenStartTime,
   isRefreshingToken: state => state.user.isRefreshingToken,
+  systemName: state => state.global.systemName,
 }
 export default getters

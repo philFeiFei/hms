@@ -113,17 +113,47 @@ export const asyncRouterMap = [
         meta: { title: '领活汇总查询' }
       },
       {
+        path: 'gzhzcx',
+        component: () => import('@/views/cxtj/gzhzcx'),
+        name: 'gzhzcx',
+        meta: { title: '钩针汇总查询' }
+      },
+      {
         path: 'zjhzcx',
         component: () => import('@/views/cxtj/zjhzcx'),
         name: 'zjhzcx',
         meta: { title: '质检汇总查询' }
       },
       {
+        path: 'djhzcx',
+        component: () => import('@/views/cxtj/djhzcx'),
+        name: 'djhzcx',
+        meta: { title: '底胶汇总查询' }
+      },
+      {
+        path: 'zxhzcx',
+        component: () => import('@/views/cxtj/zxhzcx'),
+        name: 'zxhzcx',
+        meta: { title: '整形汇总查询' }
+      },
+      {
+        path: 'cpzjhzcx',
+        component: () => import('@/views/cxtj/cpzjhzcx'),
+        name: 'cpzjhzcx',
+        meta: { title: '成品质检汇总查询' }
+      },
+      {
         path: 'fhhzcx',
         component: () => import('@/views/cxtj/fhhzcx'),
         name: 'fhhzcx',
-        meta: { title: '发货汇总查询', roles: ['1'] }
-      }
+        meta: { title: '发货汇总查询' }
+      },
+      {
+        path: 'tqcx',
+        component: () => import('@/views/cxtj/tqcx'),
+        name: 'tqcx',
+        meta: { title: '拖期查询' }
+      },
     ]
   },
 

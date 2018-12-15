@@ -11,7 +11,7 @@ export function updateHairpiece(data) {
   return request({
     url: '/hairpieceMove/update',
     method: 'post',
-    params: data //这样表示在url后放增加参数，后台解析url
+    data: data
   })
 }
 

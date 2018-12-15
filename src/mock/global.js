@@ -7,6 +7,10 @@ export default {
         { key: 1, value: '女' },
         { key: 9, value: '不正常' },
       ],
+      SF: [
+        { key: '0', value: '否' },
+        { key: '1', value: '是' },
+      ],
       role: [
         { key: '1', value: '超级管理员' },
         { key: '0', value: '领活' },

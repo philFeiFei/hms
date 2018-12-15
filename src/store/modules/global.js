@@ -6,7 +6,7 @@ const global = {
     lastDaysToAlert: 30,   //还剩多少天提示用户阿里云到期
     tokenstartToCheck: 25,  //判断token请求起始时间为
     tokenOverTime: 30,//token超时时间
-    systemName: '禹城市睿绣发制品',
+    systemName: '禹城市睿绣发制品（测试）',
 
   },
   mutations: {

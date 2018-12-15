@@ -62,6 +62,7 @@ Mock.mock(/\/userManage\/update/, 'post', userManageAPI.update)
 Mock.mock(/\/userManage\/delete/, 'post', userManageAPI.delete)
 
 Mock.mock(/\/jfinfo\/hzQuery/, 'post', cxtjAPI.getList)// 汇总查询
+Mock.mock(/\/cxtj\/tqcx/, 'post', cxtjAPI.queryTqjf)// 汇总查询
 
 //_global configiration获取
 Mock.mock(/\/global\/query/, 'post', globalAPI.query)

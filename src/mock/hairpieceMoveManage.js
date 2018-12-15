@@ -32,7 +32,9 @@ for (let i = 0; i < count; i++) {
     fhsj: r.datetime(),
     fhr: r.natural(0, 5),
 
+    'sfzf|1': [0, 1],
     'sftd|1': [0, 1],
+    bz: '订单编号为K3434的变为K2222，作废了这条信息，发货人某某某作废',
     yxbz: 1
   }))
 }
@@ -81,13 +83,15 @@ export default {
   },
 
   update: config => {
-    const { jfid, ddbh } = param2Obj(config.url)
+    var temp = JSON.parse(config.body)
     for (const v of List4Move) {
-      if (v.jfid == jfid) {
-        v.ddbh = ddbh
+      if (v.jfid === temp.jfid) {
+        const index = List4Move.indexOf(v)
+        List4Move.splice(index, 1, temp)
         break
       }
     }
+
     var result = {
       _success: true,
       code: 406,

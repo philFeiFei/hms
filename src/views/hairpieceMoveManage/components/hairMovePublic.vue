@@ -41,6 +41,9 @@
       <el-select size="mini" v-model="listQuery.fhr" :placeholder="$t('table.fhr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
+      <el-select size="mini" v-model="listQuery.sfzf" placeholder="是否作废" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.SF" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
       <el-button v-waves class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
 
     </div>
@@ -162,6 +165,18 @@
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="是否作废" width="70px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sfzf | parseCode('SF') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" width="70px" align="center">
+        <template slot-scope="scope">
+          <el-tooltip v-if="showBz(scope.row.bz)" :content="scope.row.bz" placement="left" effect="light">
+            <el-button size="mini">备注</el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" min-width="110" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
@@ -171,18 +186,123 @@
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
-      <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.ddbh')" prop="ddbh">
-          <el-input v-model="temp.ddbh" />
-        </el-form-item>
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="100px">
+
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.ddbh')" prop="ddbh">
+            <el-input v-model="temp.ddbh" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item label="是否作废" prop="fhr">
+            <el-select v-model="temp.sfzf" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.SF" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.lhsj')" prop="lhsj">
+            <el-date-picker v-model="temp.lhsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.lhr')" prop="lhr">
+            <el-select v-model="temp.lhr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.gzsj')" prop="gzsj">
+            <el-date-picker v-model="temp.gzsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.gzr')" prop="gzr">
+            <el-select v-model="temp.gzr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.zjsj')" prop="zjsj">
+            <el-date-picker v-model="temp.zjsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.zjr')" prop="zjr">
+            <el-select v-model="temp.zjr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.djsj')" prop="djsj">
+            <el-date-picker v-model="temp.djsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.djr')" prop="djr">
+            <el-select v-model="temp.djr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.zxsj')" prop="zxsj">
+            <el-date-picker v-model="temp.zxsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.zxr')" prop="zxr">
+            <el-select v-model="temp.zxr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.cpzjsj')" prop="cpzjsj">
+            <el-date-picker v-model="temp.cpzjsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.cpzjr')" prop="cpzjr">
+            <el-select v-model="temp.cpzjr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+
+          <el-form-item :label="$t('table.fhsj')" prop="fhsj">
+            <el-date-picker v-model="temp.fhsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item :label="$t('table.fhr')" prop="fhr">
+            <el-select v-model="temp.fhr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span='22'>
+          <el-form-item label="备注" prop="bz">
+            <el-input type="textarea" :rows="2" width="400px" v-model="temp.bz" />
+          </el-form-item>
+        </el-col>
+        <div style="clear:both"></div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -236,7 +356,8 @@ export default {
         wdks: undefined,
         fc: undefined,
         sort: '+jfid',
-        sftd: this.sftdp
+        sftd: this.sftdp,
+        sfzf: undefined,
       },
       textMap: {
         update: '修改假发信息',
@@ -273,6 +394,13 @@ export default {
     //this.getList()//此查询结果集可能过多，不易直接查询。
   },
   methods: {
+    showBz(bz) {
+      if (bz) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     getList() {
       //check some limit
       if (!(this.listQuery.ddqsrq) && !(this.listQuery.ddbh)) {
@@ -322,13 +450,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          var jfid = this.temp.jfid
-          var ddbh = this.temp.ddbh
-          var obj = {
-            jfid: jfid,
-            ddbh: ddbh
-          }
-          updateHairpiece(obj).then(() => {
+          updateHairpiece(this.temp).then(() => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -376,6 +498,9 @@ export default {
 <style scoped>
 .fixed-width .el-button--mini {
   width: 40px !important;
+}
+button.el-button.el-tooltip.el-button--default.el-button--mini {
+  padding: 2px 8px;
 }
 </style>
 

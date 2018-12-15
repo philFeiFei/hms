@@ -4,7 +4,8 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">盛凯发制品(测试)</h3>
+        <h2 class="title">{{$store.state.global.systemName}}</h2>
+        <h3 class="title">信息管理系统</h3>
         <!-- <lang-select class="set-language" /> -->
       </div>
 

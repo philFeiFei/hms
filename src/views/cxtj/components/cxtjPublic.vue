@@ -27,8 +27,28 @@
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
 
+      <el-date-picker v-if='isGz' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.gzsj" type="date" placeholder="钩针日期" class="filter-item" />
+      <el-select v-if='isGz' size="mini" v-model="listQuery.gzr" :placeholder="$t('table.gzr')" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
       <el-date-picker v-if='isZj' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.zjsj" type="date" placeholder="质检日期" class="filter-item" />
       <el-select v-if='isZj' size="mini" v-model="listQuery.zjr" :placeholder="$t('table.zjr')" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
+      <el-date-picker v-if='isDj' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.djsj" type="date" placeholder="底胶日期" class="filter-item" />
+      <el-select v-if='isDj' size="mini" v-model="listQuery.djr" :placeholder="$t('table.djr')" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
+      <el-date-picker v-if='isCpzj' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.cpzjsj" type="date" placeholder="成品质检日期" class="filter-item" />
+      <el-select v-if='isCpzj' size="mini" v-model="listQuery.cpzjr" :placeholder="$t('table.cpzjr')" clearable style="width: 120px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
+      <el-date-picker v-if='isZx' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.zxsj" type="date" placeholder="整形日期" class="filter-item" />
+      <el-select v-if='isZx' size="mini" v-model="listQuery.zxr" :placeholder="$t('table.zxr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
 
@@ -100,6 +120,50 @@
         </template>
       </el-table-column>
 
+      <el-table-column v-if='isGz' :label="$t('table.gzsj')" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gzsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if='isGz' :label="$t('table.gzr')" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.gzr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if='isDj' :label="$t('table.djsj')" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if='isDj' :label="$t('table.djr')" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if='isZx' :label="$t('table.zxsj')" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.zxsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if='isZx' :label="$t('table.zxr')" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.zxr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column v-if='isCpzj' :label="$t('table.cpzjsj')" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cpzjsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if='isCpzj' :label="$t('table.cpzjr')" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cpzjr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="数量" min-width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.sl}}</span>
@@ -137,6 +201,22 @@ export default {
       default: false
     },
     isZj: {
+      type: Boolean,
+      default: false
+    },
+    isDj: {
+      type: Boolean,
+      default: false
+    },
+    isZx: {
+      type: Boolean,
+      default: false
+    },
+    isGz: {
+      type: Boolean,
+      default: false
+    },
+    isCpzj: {
       type: Boolean,
       default: false
     },
@@ -219,22 +299,68 @@ export default {
       }
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['订单日期', '订单编号', '色号', '网底款式', '网底尺寸', '发长', '发货时间', '发货人', '数量']
-        const filterVal = ['ddrq', 'ddbh', 'sh', 'wdks', 'wdcc', 'fc', 'fhsj', 'fhr', 'sl']
+        if (this.isLh) {
+          var header1 = '领活时间'
+          var header2 = '领活人'
+          var filter1 = 'lhsj'
+          var filter2 = 'lhr'
+          var fileName = `领活汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isGz) {
+          var header1 = '钩针时间'
+          var header2 = '钩针人'
+          var filter1 = 'gzsj'
+          var filter2 = 'gzr'
+          var fileName = `钩针汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isZj) {
+          var header1 = '质检时间'
+          var header2 = '质检人'
+          var filter1 = 'zjsj'
+          var filter2 = 'zjr'
+          var fileName = `质检汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isDj) {
+          var header1 = '底胶时间'
+          var header2 = '底胶人'
+          var filter1 = 'djsj'
+          var filter2 = 'djr'
+          var fileName = `底胶汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isZx) {
+          var header1 = '整形时间'
+          var header2 = '整形人'
+          var filter1 = 'zxsj'
+          var filter2 = 'zxr'
+          var fileName = `整形汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isCpzj) {
+          var header1 = '成品质检时间'
+          var header2 = '成品质检人'
+          var filter1 = 'cpzjsj'
+          var filter2 = 'cpzjr'
+          var fileName = `成品质检汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isFh) {
+          var header1 = '发货时间'
+          var header2 = '发货人'
+          var filter1 = 'fhsj'
+          var filter2 = 'fhr'
+          var fileName = `发货汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        }
+        const tHeader = ['订单日期', '订单编号', '色号', '网底款式', '网底尺寸', '发长', header1, header2, '数量']
+        const filterVal = ['ddrq', 'ddbh', 'sh', 'wdks', 'wdcc', 'fc', filter1, filter2, 'sl']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: fileName
         })
         this.downloadLoading = false
       })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'fhr') {
+        if (j === 'lhr' || j === 'gzr' || j === 'djr' || j === 'zjr' || j === 'zxr' || j === 'cpzjr' || j === 'fhr') {
           return parseCode(v[j], 'user')
-        } else if (j === 'ddrq' || j === 'fhsj') {
+        }
+        else if (j === 'lhsj' || j === 'gzsj' || j === 'zjsj' || j === 'djsj' || j === 'zxsj' || j === 'cpzjsj' || j === 'fhsj') {
+          return parseTime(v[j], '{y}-{m}-{d}')
+        } else if (j === 'ddrq') {
           return parseTime(v[j], '{y}-{m}-{d}')
         } else if (j === 'sh') {
           return parseCode(v[j], 'SH')
