@@ -169,6 +169,41 @@ export const asyncRouterMap = [
       },
     ]
   },
+  {
+    path: '/csgl',
+    component: Layout,
+    redirect: 'noredirect',
+    meta: {
+      title: '参数管理',
+      icon: 'xtcs'
+    },
+    children: [
+      {
+        path: 'sh',
+        component: () => import('@/views/csgl/sh'),
+        name: 'sh',
+        meta: { title: '色号管理' }
+      },
+      {
+        path: 'wdcc',
+        component: () => import('@/views/csgl/wdcc'),
+        name: 'wdcc',
+        meta: { title: '网底尺寸' }
+      },
+      {
+        path: 'wdks',
+        component: () => import('@/views/csgl/wdks'),
+        name: 'wdks',
+        meta: { title: '网底款式' }
+      },
+      {
+        path: 'fc',
+        component: () => import('@/views/csgl/fc'),
+        name: 'fc',
+        meta: { title: '发长' }
+      },
+    ]
+  },
 
 
 

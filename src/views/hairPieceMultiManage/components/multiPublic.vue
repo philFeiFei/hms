@@ -7,7 +7,7 @@
 
       <el-button v-waves class="filter-item" type="primary" size="mini" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button class="filter-item" size="mini" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
-      <span style="color:red;font-size:14px;">注意事项：每一批次最大为300，数量超过300时，建议拆分为多个批次，便于二维码排版</span>
+      <span style="color:red;font-size:13px;">注意：数量超过300时，建议分两次增加，便于二维码排版</span>
     </div>
 
     <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
@@ -449,7 +449,7 @@ canvas {
   width: 135.315px !important;
   margin-right: 9px;
   margin-top: 0px;
-  border: 1px solid blue;
+  border: 0px solid blue;
 }
 .desc {
   position: relative;

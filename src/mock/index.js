@@ -8,6 +8,7 @@ import cxtjAPI from './cxtj'
 import hairpieceMultiManageAPI from './hairpieceMultiManage'
 import userManageAPI from './userManage'
 import globalAPI from './global'
+import csglAPI from './csgl'
 
 // 修复在使用 MockJS 情况下，设置 withCredentials = true，且未被拦截的跨域请求丢失 Cookies 的问题
 // https://github.com/nuysoft/Mock/issues/300
@@ -66,5 +67,6 @@ Mock.mock(/\/cxtj\/tqcx/, 'post', cxtjAPI.queryTqjf)// 汇总查询
 
 //_global configiration获取
 Mock.mock(/\/global\/query/, 'post', globalAPI.query)
+Mock.mock(/\/syscode\/add/, 'post', csglAPI.addParams)
 
 export default Mock
