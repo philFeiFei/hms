@@ -56,7 +56,12 @@
           <span>{{ scope.row.scsl }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" min-width="240" class-name="small-padding fixed-width">
+      <el-table-column label="备注" min-width="200px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.bz }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" min-width="140" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
           </el-button>
@@ -103,6 +108,9 @@
 
         <el-form-item :label="$t('table.sl')" prop="sl">
           <el-input-number v-model="temp.sl" label="数量"></el-input-number>
+        </el-form-item>
+        <el-form-item label="备注" prop="bz">
+          <el-input type="textarea" :rows="2" width="400px" v-model="temp.bz" />
         </el-form-item>
 
       </el-form>
@@ -212,15 +220,16 @@ export default {
         sl: 4,
         yxbz: 1,
         sftd: this.sftdp,
-        tdurl: null
+        tdurl: null,
+        bz: null
       },
       rules: {
         ddrq: [{ required: true, message: '订单日期必须填写', trigger: 'change' }],
         ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
-        wdks: [{ required: true, message: '网底款式必须填写', trigger: 'change' }],
+        /* wdks: [{ required: true, message: '网底款式必须填写', trigger: 'change' }],
         wdcc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
         sh: [{ required: true, message: '色号必须选择', trigger: 'change' }],
-        fc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
+        fc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }], */
         sl: [{ required: true, message: '数量必须选择', trigger: 'change' }],
       },
       itemsOfQR: []
@@ -281,7 +290,8 @@ export default {
         sl: 4,
         yxbz: 1,
         sftd: this.sftdp,
-        tdurl: null
+        tdurl: null,
+        bz: null
       }
     },
     handleCreate() {

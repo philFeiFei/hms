@@ -92,7 +92,7 @@ export default {
     }
     //随机构造二维码数量
     var itemsOfQR = [];
-    for (let i = 0; i < 400; i++) {
+    for (let i = 0; i < 600; i++) {
       itemsOfQR.push(Mock.mock({
         jfid: 'K@increment',
         ddbh: `k${r.natural(12900, 62900)}`,
