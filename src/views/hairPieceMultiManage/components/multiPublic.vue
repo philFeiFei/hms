@@ -463,11 +463,11 @@ canvas {
 }
 .desc {
   position: relative;
-  top: -22px;
+  top: -21px;
   left: 7px;
-  font-size: 12px;
+  font-size: 9px;
   color: black;
-  font-weight: 600;
+  font-weight: 400;
 }
 .btnheader {
   /* text-align: right; */
