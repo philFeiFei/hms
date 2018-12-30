@@ -456,16 +456,16 @@ canvas {
   display: inline-block;
   border-bottom: 0px solid #dcdcdc;
   height: 141.2px !important; /*这个高度决定了一页有几行，并且正好分页完美，不会切割二维码*/
-  width: 107.315px !important;
+  width: 108.315px !important;
   margin-right: 9px;
   margin-top: 0px;
   border: 0px solid blue;
 }
 .desc {
   position: relative;
-  top: -20px;
+  top: -22px;
   left: 7px;
-  font-size: 13px;
+  font-size: 12px;
   color: black;
   font-weight: 600;
 }
