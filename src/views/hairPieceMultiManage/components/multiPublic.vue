@@ -61,7 +61,7 @@
           <span>{{ scope.row.bz }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" min-width="140" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" min-width="160" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
           </el-button>
@@ -414,7 +414,7 @@ export default {
           }
         }
         this.downloadLoading = false
-        PDF.save(`二维码.pdf`)
+        PDF.save(`二维码_${parseTime(new Date(), '{y}-{m}-{d}')}.pdf`)
       });
     },
     handleDelete(row) {
@@ -448,24 +448,24 @@ export default {
 </script>
 <style scoped>
 canvas {
-  height: 120.315px !important;
-  width: 120.315px !important;
+  height: 110.315px !important; /*这个高度跳转二维码高度，随意设置大小*/
+  width: 110.315px !important; /*这个高度跳转二维码宽度，随意设置大小*/
   border: 0px solid red;
 }
 .itemdiv {
   display: inline-block;
   border-bottom: 0px solid #dcdcdc;
-  height: 141.2px !important;
-  width: 135.315px !important;
+  height: 141.2px !important; /*这个高度决定了一页有几行，并且正好分页完美，不会切割二维码*/
+  width: 107.315px !important;
   margin-right: 9px;
   margin-top: 0px;
   border: 0px solid blue;
 }
 .desc {
   position: relative;
-  top: -21px;
+  top: -20px;
   left: 7px;
-  font-size: 14px;
+  font-size: 13px;
   color: black;
   font-weight: 600;
 }
