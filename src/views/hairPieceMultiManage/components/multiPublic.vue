@@ -61,11 +61,13 @@
           <span>{{ scope.row.bz }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" min-width="160" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" min-width="320" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{ $t('table.delete') }}
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
-          <el-button size="mini" type="primary" @click="generateQRCode(scope.row)">{{ $t('table.scewm') }}
+          <el-button size="mini" type="primary" @click="generateQRCode(scope.row)">批次二维码
+          </el-button>
+          <el-button size="mini" type="primary" @click="generateQRCodeByDdbh(scope.row.ddbh)">订单二维码
           </el-button>
           <el-button v-if="istd" size="mini" type="primary" @click="orderPicDetail(scope.row)">附加信息
           </el-button>
@@ -125,8 +127,10 @@
       </div>
       <div id="printcontent">
         <div v-for="item in itemsOfQR" :key="item.jfid" class="itemdiv">
+          <span class="descks">{{`${item.wdks}`}}</span>
           <canvas :id="item.jfid"></canvas>
-          <span class="desc">{{`${item.ddbh}${item.sh}-${item.xh}`}}</span>
+          <span class="desc">{{`${item.ddbh}${item.sh}-${item.xh}`}}</span><br />
+          <span class="desc">{{`${item.wdcc}_${item.fc}`}}</span>
           <div style="clear:both" />
         </div>
       </div>
@@ -147,7 +151,7 @@
 </template>
 
 <script>
-import { queryHairPici, deleteHairPici, getDetail4QRCode, createHairPici } from '@/api/hairpieceMultiManage'
+import { queryHairPici, deleteHairPici, getDetail4QRCode, getDetail4QRCodeByDdbh, createHairPici } from '@/api/hairpieceMultiManage'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
@@ -377,6 +381,45 @@ export default {
 
       })
     },
+    //根据订单编号获取二维码所需信息
+    generateQRCodeByDdbh(ddbhR) {
+      this.$message({
+        message: '该操作将产生该批次对应的订单的所有二维码！！！',
+        type: 'warning'
+      });
+      this.dialogQRFormVisible = true
+      this.listLoading = true
+      var params = {
+        ddbh: ddbhR
+      }
+      getDetail4QRCodeByDdbh(params).then((response) => {
+        //---------生成二维码------------start
+        this.itemsOfQR = response.data.result.jfinfolist
+        setTimeout(() => {
+          this.listLoading = false
+
+          //一秒之后dom加载完毕，进度关闭，展示二维码.不等一会，canvas qritem.id取不到
+          this.itemsOfQR.forEach(qritem => {
+            var canvas = document.getElementById(qritem.jfid);
+            QRCode.toCanvas(canvas, qritem.jfid, function (error) {
+              if (error) console.error(error)
+              /*    var ctx = canvas.getContext("2d");
+               ctx.fillText(`${qritem.ddbh}${qritem.sh}-${qritem.xh}`, 20, 112);
+                ctx.font = "18px Verdana"; */
+            })
+          });
+
+          this.$notify({
+            title: '成功',
+            message: '二维码生成成功',
+            type: 'success',
+            duration: 2000
+          })
+        }, 1 * 1000)
+        //---------生成二维码------------end
+
+      })
+    },
     printQRCode() {
       this.downloadLoading = true
       let _this = this
@@ -455,7 +498,7 @@ canvas {
 .itemdiv {
   display: inline-block;
   border-bottom: 0px solid #dcdcdc;
-  height: 141.2px !important; /*这个高度决定了一页有几行，并且正好分页完美，不会切割二维码*/
+  height: 169.4px !important; /*这个高度决定了一页有几行，并且正好分页完美，不会切割二维码*/
   width: 108.315px !important;
   margin-right: 9px;
   margin-top: 0px;
@@ -465,6 +508,14 @@ canvas {
   position: relative;
   top: -21px;
   left: 7px;
+  font-size: 9px;
+  color: black;
+  font-weight: 400;
+}
+.descks {
+  position: relative;
+  top: 15px;
+  left: 16px;
   font-size: 9px;
   color: black;
   font-weight: 400;

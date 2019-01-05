@@ -92,17 +92,46 @@ export default {
     }
     //随机构造二维码数量
     var itemsOfQR = [];
-    for (let i = 0; i < 600; i++) {
+    for (let i = 0; i < 300; i++) {
       itemsOfQR.push(Mock.mock({
         jfid: 'K@increment',
         ddbh: `k${r.natural(12900, 62900)}`,
-        sh: r.natural(129, 629),
-        xh: r.natural(1, 100)
-
+        'sh|1': ['#1B10', '#1B80Y', '#210', '#365Y', '#1765Y', '60RY', '#2020'],
+        xh: r.natural(1, 100),
+        'wdks|1': ['THIN SKIN', 'VERSALITE', 'HOLLYWOOD', 'GERMANLACE', 'TP11', 'Fully Lace', 'DEBORAHAIR'],
+        'wdcc|1': ['15×20cm', '7"×10"', '8"×10"', '5"×7"'],
+        'fc|1': ['6"', '24"', '30"'],
       }))
     }
     var result = {
       jfpcdetail: itemsOfQR
+    }
+
+    obj.result = result
+    return obj
+  },
+  getDetail4QRCodeByDdbh: config => {
+    var obj = {
+      _success: true,
+      code: 406,
+      _message: '获取二维码信息失败，请检查！',
+
+    }
+    //随机构造二维码数量
+    var itemsOfQR = [];
+    for (let i = 0; i < 300; i++) {
+      itemsOfQR.push(Mock.mock({
+        jfid: 'K@increment',
+        ddbh: `k${r.natural(12900, 62900)}`,
+        'sh|1': ['#1B10', '#1B80Y', '#210', '#365Y', '#1765Y', '60RY', '#2020'],
+        xh: r.natural(1, 100),
+        'wdks|1': ['THIN SKIN', 'VERSALITE', 'HOLLYWOOD', 'GERMANLACE', 'TP11', 'Fully Lace', 'DEBORAHAIR'],
+        'wdcc|1': ['15×20cm', '7"×10"', '8"×10"', '5"×7"'],
+        'fc|1': ['6"', '24"', '30"'],
+      }))
+    }
+    var result = {
+      jfinfolist: itemsOfQR
     }
 
     obj.result = result
