@@ -431,13 +431,13 @@ export default {
         let contentHeight = canvas.height
         //let pageHeight = contentWidth / 592.28 * 841.89 - 26.89
         let pageHeight = contentWidth / 592.28 * 841.89
-        console.log("pageHeight", pageHeight);
+        //console.log("pageHeight", pageHeight);
         let leftHeight = contentHeight
         let position = 0
         //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
         let imgWidth = 595.28
         let imgHeight = 592.28 / contentWidth * contentHeight
-        console.log("imgHeight", imgHeight)
+        //console.log("imgHeight", imgHeight)
 
         let pageData = canvas.toDataURL('image/jpeg', 1.0)
 

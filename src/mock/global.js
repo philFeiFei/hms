@@ -20,6 +20,9 @@ export default {
         { key: 5, value: '整形' },
         { key: 6, value: '成品质检' },
         { key: 7, value: '发货' },
+        { key: 8, value: '头皮缝线' },
+        { key: 9, value: '头皮附网' },
+        { key: 10, value: '头皮入库' },
       ],
       WDKS: [
         { key: 1, value: 'SKIN' },
@@ -57,7 +60,33 @@ export default {
         { key: 3, value: '王飞虎' },
         { key: 4, value: '杜十娘' },
         { key: 5, value: '武大郎' },
-      ]
+      ],
+      TPLX: [
+        { key: 1, value: '头皮入库' },
+        { key: 2, value: '头皮缝线' },
+        { key: 3, value: '头皮附网' },
+      ],
+      PRLX: [
+        { key: 4, value: '头皮入库' },
+      ],
+      SFLX: [
+        { key: 5, value: '拉发' },
+        { key: 6, value: '卷烫' },
+        { key: 7, value: '合白发' },
+        { key: 8, value: '合发' },
+        { key: 9, value: '枇杷' },
+      ],
+      CZLX: [
+        { key: 1, value: '头皮入库' },
+        { key: 2, value: '头皮缝线' },
+        { key: 3, value: '头皮附网' },
+        { key: 4, value: '漂染' },
+        { key: 5, value: '拉发' },
+        { key: 6, value: '卷烫' },
+        { key: 7, value: '合白发' },
+        { key: 8, value: '合发' },
+        { key: 9, value: '枇杷' },
+      ],
     }
     var result = {
       codelist: code,

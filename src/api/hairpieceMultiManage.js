@@ -24,7 +24,6 @@ export function deleteHairPici(data) {
 }
 
 export function getDetail4QRCode(data) {
-  console.log("getDetail4QRCode data", data)
   return request({
     url: '/hairpieceMultiManage/getDetail4QRCode',
     method: 'post',
@@ -33,7 +32,6 @@ export function getDetail4QRCode(data) {
 }
 
 export function getDetail4QRCodeByDdbh(data) {
-  console.log("getDetail4QRCodeByDdbh data", data)
   return request({
     url: '/jfinfo/queryJfInfoByDdbh',
     method: 'post',

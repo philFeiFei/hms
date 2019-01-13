@@ -15,12 +15,12 @@ const service = axios.create({
 let refreshSubscribers = []
 /*push所有请求到数组中*/
 function subscribeTokenRefresh(cb) {
-  console.log("1、先把请求放到数组 cb is config:", cb)
+  //console.log("1、先把请求放到数组 cb is config:", cb)
   refreshSubscribers.push(cb)
 }
 /*刷新请求（refreshSubscribers数组中的请求得到新的token之后会自执行，用新的token去请求数据）*/
 function onRrefreshed(token) {
-  console.log("2，onRefresh中token,cb得不到？", token)
+  //console.log("2，onRefresh中token,cb得不到？", token)
   refreshSubscribers.map(cb => cb(token))//这个表示执行cb的时候，token作为cb的参数。
 }
 function refreshToken() {
@@ -39,7 +39,7 @@ function refreshToken() {
 // request interceptor
 service.interceptors.request.use(
   config => {
-    console.log("request 请求 config:", config)
+    // console.log("request 请求 config:", config)
     // Do something before request is sent
     if (store.getters.token) {
       config.headers['X-Token'] = getToken()
@@ -52,7 +52,7 @@ service.interceptors.request.use(
       let nDta = new Date();
       let stamp = nDta - oData;
       let minutes = parseInt(stamp / 1000 / 60);
-      console.log(nDta, oData, minutes);
+      // console.log(nDta, oData, minutes);
       if (minutes > tokenstartToCheck && minutes < tokenOverTime) {//改为只要大于多长时间就进行刷新token，我这里不限制超时，等服务端返回401即可
         var oldToken = store.getters.token
         if (!store.getters.isRefreshingToken) {
@@ -86,7 +86,7 @@ service.interceptors.request.use(
           /*(token) => {...}这个函数就是回调函数*/
           //执行此回调的时候，refreshtoken已经完成了。其实。
           subscribeTokenRefresh((token) => {
-            console.log("3,最后执行这里 回调执行请求 用新得到的token:")
+            //console.log("3,最后执行这里 回调执行请求 用新得到的token:")
             config.headers['X-Token'] = token
             /*将请求挂起*/
             resolve(config)

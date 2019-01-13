@@ -96,6 +96,30 @@ export const asyncRouterMap = [
       }
     ]
   },
+
+  {
+    path: '/TpManage',
+    component: Layout,
+    redirect: 'noredirect',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
+    meta: {
+      title: '头皮管理',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'tpgl',
+        component: () => import('@/views/tpgl/tpgl'),
+        name: 'tpglManage',
+        meta: { title: '头皮登记管理' }
+      },
+      {
+        path: 'tpkccx',
+        component: () => import('@/views/tpgl/tpkccx'),
+        name: 'tpkccx',
+        meta: { title: '库存查询' }
+      },
+    ]
+  },
   //---查询统计
   {
     path: '/cxtj',
@@ -178,6 +202,12 @@ export const asyncRouterMap = [
       icon: 'xtcs'
     },
     children: [
+      {
+        path: 'djgl',
+        component: () => import('@/views/djgl/djgl'),
+        name: 'djgl',
+        meta: { title: '单价管理' }
+      },
       {
         path: 'sh',
         component: () => import('@/views/csgl/sh'),

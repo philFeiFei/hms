@@ -9,6 +9,8 @@ import hairpieceMultiManageAPI from './hairpieceMultiManage'
 import userManageAPI from './userManage'
 import globalAPI from './global'
 import csglAPI from './csgl'
+import tpglAPI from './tpgl'
+import djglAPI from './djgl'
 
 // 修复在使用 MockJS 情况下，设置 withCredentials = true，且未被拦截的跨域请求丢失 Cookies 的问题
 // https://github.com/nuysoft/Mock/issues/300
@@ -62,6 +64,15 @@ Mock.mock(/\/userManage\/query/, 'post', userManageAPI.getList)
 Mock.mock(/\/userManage\/create/, 'post', userManageAPI.create)
 Mock.mock(/\/userManage\/update/, 'post', userManageAPI.update)
 Mock.mock(/\/userManage\/delete/, 'post', userManageAPI.delete)
+
+Mock.mock(/\/tpgl\/tpcx/, 'post', tpglAPI.getList)
+Mock.mock(/\/tpgl\/tpxz/, 'post', tpglAPI.create)
+Mock.mock(/\/tpgl\/tpsc/, 'post', tpglAPI.delete)
+Mock.mock(/\/cxtj\/kccx/, 'post', tpglAPI.kcQuery)
+
+Mock.mock(/\/djgl\/djcx/, 'post', djglAPI.getList)
+Mock.mock(/\/djgl\/djxz/, 'post', djglAPI.create)
+Mock.mock(/\/djgl\/djsc/, 'post', djglAPI.delete)
 
 Mock.mock(/\/jfinfo\/hzQuery/, 'post', cxtjAPI.getList)// 汇总查询
 Mock.mock(/\/cxtj\/tqcx/, 'post', cxtjAPI.queryTqjf)// 汇总查询
