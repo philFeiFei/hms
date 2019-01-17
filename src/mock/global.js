@@ -22,7 +22,11 @@ export default {
         { key: 7, value: '发货' },
         { key: 8, value: '头皮缝线' },
         { key: 9, value: '头皮附网' },
-        { key: 10, value: '头皮入库' },
+        { key: 10, value: '漂染' },
+        { key: 11, value: '头皮入库' },
+        { key: 12, value: '拉发' },
+        { key: 13, value: '合白发' },
+        { key: 14, value: '枇杷' },
       ],
       WDKS: [
         { key: 1, value: 'SKIN' },
@@ -54,7 +58,7 @@ export default {
         { key: 5, value: '18"' },
       ],
       user: [
-        { key: 0, value: '刘飞鸿' },
+        { key: 6, value: '刘飞鸿' },
         { key: 1, value: '张三丰' },
         { key: 2, value: '李逵' },
         { key: 3, value: '王飞虎' },
@@ -67,7 +71,7 @@ export default {
         { key: 3, value: '头皮附网' },
       ],
       PRLX: [
-        { key: 4, value: '头皮入库' },
+        { key: 4, value: '漂染' },
       ],
       SFLX: [
         { key: 5, value: '拉发' },
@@ -75,6 +79,11 @@ export default {
         { key: 7, value: '合白发' },
         { key: 8, value: '合发' },
         { key: 9, value: '枇杷' },
+      ],
+      SFZL: [
+        { key: 3, value: '印度发' },
+        { key: 1, value: '阿富汗发' },
+        { key: 2, value: '中国发' },
       ],
       CZLX: [
         { key: 1, value: '头皮入库' },

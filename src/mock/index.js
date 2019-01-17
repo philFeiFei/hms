@@ -11,6 +11,9 @@ import globalAPI from './global'
 import csglAPI from './csgl'
 import tpglAPI from './tpgl'
 import djglAPI from './djgl'
+import prglAPI from './prgl'
+import sfrkglAPI from './sfrkgl'
+import sfckglAPI from './sfckgl'
 
 // 修复在使用 MockJS 情况下，设置 withCredentials = true，且未被拦截的跨域请求丢失 Cookies 的问题
 // https://github.com/nuysoft/Mock/issues/300
@@ -73,6 +76,18 @@ Mock.mock(/\/cxtj\/kccx/, 'post', tpglAPI.kcQuery)
 Mock.mock(/\/djgl\/djcx/, 'post', djglAPI.getList)
 Mock.mock(/\/djgl\/djxz/, 'post', djglAPI.create)
 Mock.mock(/\/djgl\/djsc/, 'post', djglAPI.delete)
+
+Mock.mock(/\/prgl\/prcx/, 'post', prglAPI.getList)
+Mock.mock(/\/prgl\/prxz/, 'post', prglAPI.create)
+Mock.mock(/\/prgl\/prsc/, 'post', prglAPI.delete)
+
+Mock.mock(/\/sfrkgl\/sfrkcx/, 'post', sfrkglAPI.getList)
+Mock.mock(/\/sfrkgl\/sfrkxz/, 'post', sfrkglAPI.create)
+Mock.mock(/\/sfrkgl\/sfrksc/, 'post', sfrkglAPI.delete)
+
+Mock.mock(/\/sfckgl\/sfckcx/, 'post', sfckglAPI.getList)
+Mock.mock(/\/sfckgl\/sfckxz/, 'post', sfckglAPI.create)
+Mock.mock(/\/sfckgl\/sfcksc/, 'post', sfckglAPI.delete)
 
 Mock.mock(/\/jfinfo\/hzQuery/, 'post', cxtjAPI.getList)// 汇总查询
 Mock.mock(/\/cxtj\/tqcx/, 'post', cxtjAPI.queryTqjf)// 汇总查询

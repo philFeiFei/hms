@@ -1,21 +1,21 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.djqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
-      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.djzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.prqsrq" type="date" placeholder="起始日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.przzrq" type="date" placeholder="终止日期" class="filter-item" />
 
-      <el-select size="mini" v-model="listQuery.tplx" placeholder="头皮类型" clearable style="width: 85px" class="filter-item">
-        <el-option v-for="item in code.TPLX" :key="item.key" :label="item.value" :value="item.key" />
+      <el-select size="mini" v-model="listQuery.sfzl" placeholder="色发种类" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.SFZL" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+      <el-select size="mini" v-model="listQuery.fc" :placeholder="$t('table.fc')" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
+      <el-select size="mini" v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 85px" class="filter-item">
+        <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-select size="mini" v-model="listQuery.jgry" placeholder="加工人员" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
-      </el-select>
-      <el-select size="mini" v-model="listQuery.wdks" :placeholder="$t('table.wdks')" clearable style="width: 85px" class="filter-item">
-        <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
-      </el-select>
-
-      <el-select size="mini" v-model="listQuery.wdcc" :placeholder="$t('table.wdcc')" clearable style="width: 85px" class="filter-item">
-        <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button size="mini" v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
       <el-button size="mini" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">{{ $t('table.add') }}</el-button>
@@ -24,12 +24,22 @@
     <el-table show-summary :summary-method="getSummaries" size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
       <el-table-column label="登记日期" width="120px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.djrq | parseTime('{y}-{m}-{d}') }}</span>
+          <span>{{ scope.row.prdjrq | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="头皮类型" width="80px">
+      <el-table-column label="色发种类" width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.tplx | parseCode('TPLX') }}</span>
+          <span>{{ scope.row.sfzl | parseCode('SFZL') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.fc')" width="120px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.fc | parseCode('FC') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.sh')" width="100px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sh | parseCode('SH') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="加工人员" width="116px">
@@ -37,20 +47,20 @@
           <span>{{ scope.row.jgry | parseCode('user') }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.wdks')" width="120px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.wdks | parseCode('WDKS') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.wdcc')" width="100px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.wdcc | parseCode('WDCC') }}</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column label="数量" width="100px" prop="sl">
+      <el-table-column label="原发重量" width="100px" prop="yfweight">
         <template slot-scope="scope">
-          <span>{{ scope.row.sl }}</span>
+          <span>{{ scope.row.yfweight }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="色发重量" width="100px" prop="sfweight">
+        <template slot-scope="scope">
+          <span>{{ scope.row.sfweight }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="出成率" width="100px" prop="ccl">
+        <template slot-scope="scope">
+          <span>{{ scope.row.ccl }}</span>
         </template>
       </el-table-column>
       <el-table-column label="单价" width="100px">
@@ -81,12 +91,22 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
       <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
 
-        <el-form-item value-format="yyyy-MM-dd" label="登记日期" prop="djrq">
-          <el-date-picker v-model="temp.djrq" type="date" placeholder="请选择日期" />
+        <el-form-item value-format="yyyy-MM-dd" label="登记日期" prop="prdjrq">
+          <el-date-picker v-model="temp.prdjrq" type="date" placeholder="请选择日期" />
         </el-form-item>
-        <el-form-item label="头皮类型">
-          <el-select v-model="temp.tplx" class="filter-item" placeholder="请选择">
-            <el-option v-for="item in code.TPLX" :key="item.key" :label="item.value" :value="item.key" />
+        <el-form-item label="色发种类">
+          <el-select v-model="temp.sfzl" class="filter-item" placeholder="请选择">
+            <el-option v-for="item in code.SFZL" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('table.fc')" prop="fc">
+          <el-select v-model="temp.fc" class="filter-item" placeholder="请选择">
+            <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('table.sh')" prop="sh">
+          <el-select v-model="temp.sh" class="filter-item" placeholder="请选择">
+            <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item label="加工人员" prop="jgry">
@@ -94,18 +114,11 @@
             <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('table.wdks')" prop="wdks">
-          <el-select v-model="temp.wdks" class="filter-item" placeholder="请选择">
-            <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
-          </el-select>
+        <el-form-item label="原发重量" prop="yfweight">
+          <el-input-number v-model="temp.yfweight" :precision="3" :step="0.1"></el-input-number>
         </el-form-item>
-        <el-form-item :label="$t('table.wdcc')" prop="wdcc">
-          <el-select v-model="temp.wdcc" class="filter-item" placeholder="请选择">
-            <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="数量" prop="sl">
-          <el-input-number v-model="temp.sl" :step="1"></el-input-number>
+        <el-form-item label="色发重量" prop="sfweight">
+          <el-input-number v-model="temp.sfweight" :precision="3" :step="0.1"></el-input-number>
         </el-form-item>
         <el-form-item label="备注" prop="bz">
           <el-input v-model="temp.bz" />
@@ -121,26 +134,25 @@
 </template>
 
 <script>
-import { queryTpdjinfo, addTpdjinfo, deleteTpdjinfo } from '@/api/tpgl'
+import { queryDjinfo, addDjinfo, deleteDjinfo } from '@/api/prgl'
 import waves from '@/directive/waves'
 import { parseTime, parseCode } from '@/utils'
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/paginationNoRequestBack'
 
 export default {
-  name: 'tpglManage',
+  name: 'prglManage',
   components: { Pagination },
   directives: { waves },
   mounted() {
     var begin = new Date();
-    var djqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
-    this.listQuery.djqsrq = parseTime(djqsrq1, '{y}-{m}-{d}');
+    var prqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
+    this.listQuery.prqsrq = parseTime(prqsrq1, '{y}-{m}-{d}');
   },
   data() {
     return {
       tableKey: 0,
       list: null,
-      zsl: 0,
       hjzje: 0,
       total: 0,
       listLoading: false,
@@ -149,37 +161,35 @@ export default {
       listQuery: {
         page: 1,
         limit: 100,
-        djqsrq: null,
-        djzzrq: null,
-        tplx: undefined,
-        wdcc: undefined,
-        wdks: undefined,
+        prqsrq: null,
+        przzrq: null,
+        sfzl: undefined,
+        sh: undefined,
+        fc: undefined,
         jgry: undefined,
-        sl: undefined,
-        dj: undefined,
         zje: undefined,
       },
       temp: {
-        tpdjid: undefined,
-        tplx: '',
+        prdjid: undefined,
+        sfzl: '',
         jgry: '',
-        wdks: '',
-        wdcc: '',
-        djrq: '',
-        sl: undefined,
+        fc: '',
+        sh: '',
+        prdjrq: '',
+        yfweight: undefined,
+        sfweight: undefined,
         bz: '',
-        yxbz: 1,
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        create: '新增头皮登记信息'
+        create: '新增漂染登记信息'
       },
       rules: {
-        djrq: [{ required: true, message: '登记日期必须选择', trigger: 'blur' }],
-        tplx: [{ required: true, message: '头皮类型必须选择', trigger: 'change' }],
-        wdks: [{ required: true, message: '网底款式必须选择', trigger: 'change' }],
-        wdcc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }]
+        prdjrq: [{ required: true, message: '登记日期必须选择', trigger: 'blur' }],
+        sfzl: [{ required: true, message: '色发种类必须选择', trigger: 'change' }],
+        fc: [{ required: true, message: '发长必须选择', trigger: 'change' }],
+        sh: [{ required: true, message: '色号必须选择', trigger: 'change' }]
       },
 
     }
@@ -201,9 +211,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      queryTpdjinfo(this.listQuery).then(response => {
-        if (response.data.result && response.data.result.tpdjinfoList) {
-          this.list = response.data.result.tpdjinfoList
+      queryDjinfo(this.listQuery).then(response => {
+        if (response.data.result && response.data.result.prInfoList) {
+          this.list = response.data.result.prInfoList
           this.total = this.list.length
         }
 
@@ -218,15 +228,15 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        tpdjid: undefined,
-        tplx: '',
+        prdjid: undefined,
+        sfzl: '',
         jgry: '',
-        wdks: '',
-        wdcc: '',
-        djrq: '',
-        sl: undefined,
+        fc: '',
+        sh: '',
+        prdjrq: '',
+        yfweight: undefined,
+        sfweight: undefined,
         bz: '',
-        yxbz: 1,
       }
     },
     handleCreate() {
@@ -240,7 +250,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          addTpdjinfo(this.temp).then((response) => {
+          addDjinfo(this.temp).then((response) => {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -262,8 +272,8 @@ export default {
         //---------operate start---------
         var obj = {
         }
-        obj.tpdjid = row.tpdjid
-        deleteTpdjinfo(obj).then(() => {
+        obj.prdjid = row.prdjid
+        deleteDjinfo(obj).then(() => {
           this.dialogFormVisible = false
           this.$notify({
             title: '成功',
@@ -287,17 +297,18 @@ export default {
         this.$message('查询结果为空，没有导出数据');
         return false;
       }
-      var obj = {        tpdjid: undefined,
-        tplx: '',
+      var obj = {        prdjid: undefined,
+        sfzl: '',
         jgry: '',
-        wdks: '',
-        wdcc: '',
-        djrq: '合计',
-        sl: this.zsl,
+        fc: '',
+        sh: '',
+        prdjrq: '合计',
+        yfweight: '',
+        sfweight: '',
+        ccl: '',
         dj: '',
         zje: this.hjzje,
-        bz: '',
-        yxbz: 1,      }
+        bz: '',      }
 
       var newArr = new Array();
       this.list.forEach(obj => newArr.push(obj));
@@ -306,30 +317,30 @@ export default {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
 
-        const tHeader = ['登记日期', '头皮类型', '加工人员', '网底款式', '网底尺寸', '数量', '单价', '总金额', '备注']
-        const filterVal = ['djrq', 'tplx', 'jgry', 'wdks', 'wdcc', 'sl', 'dj', 'zje', 'bz']
+        const tHeader = ['登记日期', '色发种类', '发长', '色号', '加工人员', '原发重量', '色发重量', '出成率', '单价', '总金额', '备注']
+        const filterVal = ['prdjrq', 'sfzl', 'fc', 'sh', 'jgry', 'yfweight', 'sfweight', 'ccl', 'dj', 'zje', 'bz']
         const data = this.formatJson(filterVal, newArr)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: `头皮登记信息_${parseTime(new Date(), '{y}-{m}-{d}')}`
+          filename: `漂染登记信息_${parseTime(new Date(), '{y}-{m}-{d}')}`
         })
         this.downloadLoading = false
       })
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'djrq') {
+        if (j === 'prdjrq') {
           if (v[j] == '合计') {
             return v[j]
           }
           return parseTime(v[j], '{y}-{m}-{d}')
-        } else if (j === 'tplx') {
-          return parseCode(v[j], 'TPLX')
-        } else if (j === 'wdks') {
-          return parseCode(v[j], 'WDKS')
-        } else if (j === 'wdcc') {
-          return parseCode(v[j], 'WDCC')
+        } else if (j === 'sfzl') {
+          return parseCode(v[j], 'SFZL')
+        } else if (j === 'fc') {
+          return parseCode(v[j], 'FC')
+        } else if (j === 'sh') {
+          return parseCode(v[j], 'SH')
         } else if (j === 'jgry') {
           return parseCode(v[j], 'user')
         } else {
@@ -341,22 +352,16 @@ export default {
     getSummaries(param) {
       const sums = [];
       sums[0] = '合计';
-      sums[5] = 0;
-      sums[7] = 0;
+      sums[9] = 0;
       if (this.list == null || this.list.length == 0) {
         return false;
       }
       this.list.forEach(obj => {
-        if (!isNaN(obj.sl)) {
-          sums[5] = (sums[5] * 1000 + parseFloat(obj.sl) * 1000) / 1000;
-        }
         if (obj.zje && !isNaN(obj.zje)) {
-
-          sums[7] = (sums[7] * 1000 + parseFloat(obj.zje) * 1000) / 1000;
+          sums[9] = (sums[9] * 1000 + parseFloat(obj.zje) * 1000) / 1000;
         }
       })
-      this.zsl = sums[5];
-      this.hjzje = sums[7];
+      this.hjzje = sums[9];
       return sums;
     }
 

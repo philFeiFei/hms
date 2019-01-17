@@ -98,6 +98,48 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/PrManage',
+    component: Layout,
+    redirect: 'noredirect',
+    meta: {
+      title: '漂染管理',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'prgl',
+        component: () => import('@/views/prgl/prgl'),
+        name: 'prglManage',
+        meta: { title: '漂染管理' }
+      },
+    ]
+  },
+
+  {
+    path: '/SfManage',
+    component: Layout,
+    redirect: 'noredirect',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
+    meta: {
+      title: '色发管理',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'sfrkgl',
+        component: () => import('@/views/sfgl/sfrkgl'),
+        name: 'sfrkglManage',//这里的name需要与vue中的name一致，才会keeplive。。
+        meta: { title: '色发入库管理' }
+      },
+      {
+        path: 'sfckgl',
+        component: () => import('@/views/sfgl/sfckgl'),
+        name: 'sfckglManage',
+        meta: { title: '色发出库管理' }
+      },
+    ]
+  },
+
+  {
     path: '/TpManage',
     component: Layout,
     redirect: 'noredirect',//表示访问/hairpieceMove时可自动跳转到'/hairpieceMove/index'
@@ -211,26 +253,44 @@ export const asyncRouterMap = [
       {
         path: 'sh',
         component: () => import('@/views/csgl/sh'),
-        name: 'sh',
+        name: 'shgl',
         meta: { title: '色号管理' }
       },
       {
         path: 'wdcc',
         component: () => import('@/views/csgl/wdcc'),
-        name: 'wdcc',
+        name: 'wdccgl',
         meta: { title: '网底尺寸' }
       },
       {
         path: 'wdks',
         component: () => import('@/views/csgl/wdks'),
-        name: 'wdks',
+        name: 'wdksgl',
         meta: { title: '网底款式' }
       },
       {
         path: 'fc',
         component: () => import('@/views/csgl/fc'),
-        name: 'fc',
+        name: 'fcgl',
         meta: { title: '发长' }
+      },
+      {
+        path: 'tplx',
+        component: () => import('@/views/csgl/tplx'),
+        name: 'tplxgl',
+        meta: { title: '头皮工序类型' }
+      },
+      {
+        path: 'sflx',
+        component: () => import('@/views/csgl/sflx'),
+        name: 'sflxgl',
+        meta: { title: '色发工序类型' }
+      },
+      {
+        path: 'sfzl',
+        component: () => import('@/views/csgl/sfzl'),
+        name: 'sfzlgl',
+        meta: { title: '色发种类' }
       },
     ]
   },

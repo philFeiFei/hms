@@ -23,12 +23,13 @@ for (let i = 0; i < count; i++) {
 export default {
   // 查询complex table --phil
   getList: config => {
-    const { djqsrq, djzzrq, wdks, wdcc, jgry, sort } = JSON.parse(config.body);
+    const { djqsrq, djzzrq, wdks, tplx, wdcc, jgry, sort } = JSON.parse(config.body);
 
     let mockList = List4Multi.filter(item => {
       // if (importance && item.importance !== +importance) return false
       if (djqsrq && item.djrq < djqsrq) return false
       if (djzzrq && item.djrq > djzzrq) return false
+      if (tplx && item.tplx != tplx) return false
       if (jgry && item.jgry != jgry) return false
       if (wdcc && item.wdcc != wdcc) return false
       if (wdks && item.wdks != wdks) return false
