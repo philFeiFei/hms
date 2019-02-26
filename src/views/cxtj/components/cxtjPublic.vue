@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddqsrq" type="date" placeholder="订单起始日期" class="filter-item" />
-      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.ddzzrq" type="date" placeholder="订单终止日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.smqsrq" type="date" placeholder="扫码起始日期" class="filter-item" />
+      <el-date-picker value-format="yyyy-MM-dd" size="mini" v-model="listQuery.smzzrq" type="date" placeholder="扫码终止日期" class="filter-item" />
       <el-input size="mini" :placeholder="$t('table.ddbh')" v-model="listQuery.ddbh" style="width: 80px;" class="filter-item" />
       <el-select size="mini" v-model="listQuery.sh" :placeholder="$t('table.sh')" clearable style="width: 85px" class="filter-item">
         <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
@@ -39,6 +39,11 @@
 
       <el-date-picker v-if='isDj' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.djsj" type="date" placeholder="底胶日期" class="filter-item" />
       <el-select v-if='isDj' size="mini" v-model="listQuery.djr" :placeholder="$t('table.djr')" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
+
+      <el-date-picker v-if='isDjzc' value-format="yyyy-MM-dd" size="mini" v-model="listQuery.djzcsj" type="date" placeholder="底胶转出日期" class="filter-item" />
+      <el-select v-if='isDjzc' size="mini" v-model="listQuery.djzcr" placeholder="底胶转出人" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
 
@@ -142,6 +147,17 @@
         </template>
       </el-table-column>
 
+      <el-table-column v-if='isDjzc' label="底胶转出时间" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djzcsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if='isDjzc' label="底胶转出人" min-width="70px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djzcr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column v-if='isZx' :label="$t('table.zxsj')" min-width="90px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.zxsj | parseTime('{y}-{m}-{d}') }}</span>
@@ -208,6 +224,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isDjzc: {
+      type: Boolean,
+      default: false
+    },
     isZx: {
       type: Boolean,
       default: false
@@ -223,8 +243,8 @@ export default {
   },
   mounted() {
     var begin = new Date();
-    var ddqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
-    this.listQuery.ddqsrq = parseTime(ddqsrq1, '{y}-{m}-{d}');
+    var smqsrq1 = new Date(begin.setMonth((new Date().getMonth() - 1)));
+    this.listQuery.smqsrq = parseTime(smqsrq1, '{y}-{m}-{d}');
   },
   data() {
     return {
@@ -256,9 +276,9 @@ export default {
   methods: {
     getList() {
       //check some limit
-      if (!(this.listQuery.ddqsrq) && !(this.listQuery.ddbh)) {
-        //this.$message("订单编号与订单起始日期都为空，数据量容易过大！！！");
-        this.$confirm('订单编号与订单起始日期都为空，数据量大，查询耗时较长！, 是否继续?', '提示', {
+      if (!(this.listQuery.smqsrq) && !(this.listQuery.ddbh)) {
+        //this.$message("订单编号与扫码起始日期都为空，数据量容易过大！！！");
+        this.$confirm('订单编号与扫码起始日期都为空，数据量大，查询耗时较长！, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -323,6 +343,12 @@ export default {
           var filter1 = 'djsj'
           var filter2 = 'djr'
           var fileName = `底胶汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
+        } else if (this.isDjzc) {
+          var header1 = '底胶转出时间'
+          var header2 = '底胶转出人'
+          var filter1 = 'djzcsj'
+          var filter2 = 'djzcr'
+          var fileName = `底胶转出汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
         } else if (this.isZx) {
           var header1 = '整形时间'
           var header2 = '整形人'
@@ -342,7 +368,7 @@ export default {
           var filter2 = 'fhr'
           var fileName = `发货汇总_${parseTime(new Date(), '{y}-{m}-{d}')}`
         }
-        const tHeader = ['订单日期', '订单编号', '色号', '网底款式', '网底尺寸', '发长', header1, header2, '数量']
+        const tHeader = ['扫码日期', '订单编号', '色号', '网底款式', '网底尺寸', '发长', header1, header2, '数量']
         const filterVal = ['ddrq', 'ddbh', 'sh', 'wdks', 'wdcc', 'fc', filter1, filter2, 'sl']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel({
@@ -355,10 +381,10 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'lhr' || j === 'gzr' || j === 'djr' || j === 'zjr' || j === 'zxr' || j === 'cpzjr' || j === 'fhr') {
+        if (j === 'lhr' || j === 'gzr' || j === 'djr' || j === 'djzcr' || j === 'zjr' || j === 'zxr' || j === 'cpzjr' || j === 'fhr') {
           return parseCode(v[j], 'user')
         }
-        else if (j === 'lhsj' || j === 'gzsj' || j === 'zjsj' || j === 'djsj' || j === 'zxsj' || j === 'cpzjsj' || j === 'fhsj') {
+        else if (j === 'lhsj' || j === 'gzsj' || j === 'zjsj' || j === 'djsj' || j === 'djzcsj' || j === 'zxsj' || j === 'cpzjsj' || j === 'fhsj') {
           return parseTime(v[j], '{y}-{m}-{d}')
         } else if (j === 'ddrq') {
           return parseTime(v[j], '{y}-{m}-{d}')

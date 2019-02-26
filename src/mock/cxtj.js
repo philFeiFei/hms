@@ -8,6 +8,7 @@ var r = Mock.Random
 for (let i = 0; i < count; i++) {
   List4Move.push(Mock.mock({
     ddrq: r.datetime(),
+    smrq: r.datetime(),
     ddbh: 'K' + r.natural(629001, 629003),
     wdks: r.natural(1, 6),
     wdcc: r.natural(1, 5),
@@ -18,6 +19,7 @@ for (let i = 0; i < count; i++) {
     lhr: r.natural(0, 5),
     zjr: r.natural(0, 5),
     djr: r.natural(0, 5),
+    djzcr: r.natural(0, 5),
     zxr: r.natural(0, 5),
     cpzjr: r.natural(0, 5),
     gzr: r.natural(0, 5),
@@ -25,6 +27,7 @@ for (let i = 0; i < count; i++) {
     lhsj: r.datetime(),
     zjsj: r.datetime(),
     djsj: r.datetime(),
+    djzcsj: r.datetime(),
     zxsj: r.datetime(),
     cpzjsj: r.datetime(),
     gzsj: r.datetime(),
@@ -37,6 +40,7 @@ for (let i = 0; i < count; i++) {
     jfid: '@increment',
     xh: '@increment',
     ddrq: r.datetime(),
+    smrq: r.datetime(),
     ddbh: 'K' + r.natural(629001, 629003),
     wdks: r.natural(1, 6),
     wdcc: r.natural(1, 5),
@@ -52,6 +56,8 @@ for (let i = 0; i < count; i++) {
     zjr: r.natural(0, 5),
     djsj: r.datetime(),
     djr: r.natural(0, 5),
+    djzcsj: r.datetime(),
+    djzcr: r.natural(0, 5),
     zxsj: r.datetime(),
     zxr: r.natural(0, 5),
     cpzjsj: r.datetime(),
@@ -70,8 +76,8 @@ export default {
   getList: config => {
     var obj = JSON.parse(config.body);
     //const { ddqsrq, ddzzrq, fhr, ddbh, sftd, sh, sort } = param2Obj(config.url)
-    var ddqsrq = obj.ddqsrq
-    var ddzzrq = obj.ddzzrq
+    var smqsrq = obj.smqsrq
+    var smzzrq = obj.smzzrq
     var fhr = obj.fhr
     var ddbh = obj.ddbh
     var sh = obj.sh
@@ -81,8 +87,8 @@ export default {
     var zjr = obj.zjr
     var querytype = obj.querytype
     let mockList = List4Move.filter(item => {
-      if (ddqsrq && item.ddrq < ddqsrq) return false
-      if (ddzzrq && item.ddrq > ddzzrq) return false
+      if (smqsrq && item.smrq < smqsrq) return false
+      if (smzzrq && item.smrq > smzzrq) return false
       if (fhr && item.fhr != fhr) return false
       if (ddbh && item.ddbh.indexOf(ddbh) < 0) return false
       if (sh && item.sh != sh) return false

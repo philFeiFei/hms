@@ -197,6 +197,12 @@ export const asyncRouterMap = [
         meta: { title: '底胶汇总查询' }
       },
       {
+        path: 'djzchzcx',
+        component: () => import('@/views/cxtj/djzchzcx'),
+        name: 'djzchzcx',
+        meta: { title: '底胶转出汇总查询' }
+      },
+      {
         path: 'zxhzcx',
         component: () => import('@/views/cxtj/zxhzcx'),
         name: 'zxhzcx',

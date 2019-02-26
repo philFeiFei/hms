@@ -25,6 +25,8 @@ for (let i = 0; i < count; i++) {
     zjr: r.natural(0, 5),
     djsj: r.datetime(),
     djr: r.natural(0, 5),
+    djzcsj: r.datetime(),
+    djzcr: r.natural(0, 5),
     zxsj: r.datetime(),
     zxr: r.natural(0, 5),
     cpzjsj: r.datetime(),

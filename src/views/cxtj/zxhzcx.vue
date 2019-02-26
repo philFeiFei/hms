@@ -9,8 +9,8 @@ export default {
   data() {
     return {
       listQuery: {
-        ddqsrq: null,
-        ddzzrq: null,
+        smqsrq: null,
+        smzzrq: null,
         lhsj: null,
         ddbh: null,
         sh: null,

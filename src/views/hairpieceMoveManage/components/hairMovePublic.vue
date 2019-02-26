@@ -32,6 +32,9 @@
       <el-select size="mini" v-model="listQuery.djr" :placeholder="$t('table.djr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
+      <el-select size="mini" v-model="listQuery.djzcr" placeholder="底胶转出人" clearable style="width: 80px" class="filter-item">
+        <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+      </el-select>
       <el-select size="mini" v-model="listQuery.zxr" :placeholder="$t('table.zxr')" clearable style="width: 80px" class="filter-item">
         <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
@@ -131,6 +134,17 @@
       <el-table-column :label="$t('table.djr')" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.djr | parseCode('user') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="底胶转出时间" width="100px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djzcsj | parseTime('{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="底胶转出人" width="90px">
+        <template slot-scope="scope">
+          <span>{{ scope.row.djzcr | parseCode('user') }}</span>
         </template>
       </el-table-column>
 
@@ -239,8 +253,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span='12'>
 
+        <el-col :span='12'>
           <el-form-item :label="$t('table.djsj')" prop="djsj">
             <el-date-picker v-model="temp.djsj" type="date" placeholder="请选择日期" />
           </el-form-item>
@@ -252,8 +266,21 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span='12'>
 
+        <el-col :span='12'>
+          <el-form-item label="底胶转出日期" prop="djzcsj">
+            <el-date-picker v-model="temp.djzcsj" type="date" placeholder="请选择日期" />
+          </el-form-item>
+        </el-col>
+        <el-col :span='12'>
+          <el-form-item label="底胶转出人" prop="djzcr">
+            <el-select v-model="temp.djzcr" class="filter-item" placeholder="请选择">
+              <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span='12'>
           <el-form-item :label="$t('table.zxsj')" prop="zxsj">
             <el-date-picker v-model="temp.zxsj" type="date" placeholder="请选择日期" />
           </el-form-item>
@@ -342,6 +369,7 @@ export default {
         gzr: undefined,
         zjr: undefined,
         djr: undefined,
+        djzcr: undefined,
         zxr: undefined,
         cpzjr: undefined,
         fhr: undefined,

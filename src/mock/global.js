@@ -17,6 +17,7 @@ export default {
         { key: 2, value: '钩针' },
         { key: 3, value: '质检' },
         { key: 4, value: '底胶' },
+        { key: 15, value: '底胶转出' },
         { key: 5, value: '整形' },
         { key: 6, value: '成品质检' },
         { key: 7, value: '发货' },

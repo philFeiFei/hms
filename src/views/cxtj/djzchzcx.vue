@@ -1,10 +1,10 @@
 <template>
-  <cxtjPublic :listQueryp='listQuery' :isDj='isDj'></cxtjPublic>
+  <cxtjPublic :listQueryp='listQuery' :isDjzc='isDjzc'></cxtjPublic>
 </template>
 <script>
 import cxtjPublic from './components/cxtjPublic'
 export default {
-  name: 'djhzcx',
+  name: 'djzchzcx',
   components: { cxtjPublic },
   data() {
     return {
@@ -18,9 +18,9 @@ export default {
         wdks: null,
         fc: null,
         lhr: null,
-        querytype: 5,
+        querytype: 7,
       },
-      isDj: true,
+      isDjzc: true,
     }
   }
 }
