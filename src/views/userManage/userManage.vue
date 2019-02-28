@@ -19,7 +19,7 @@
           <span>{{ scope.row.password }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column :label="$t('table.roleId')" width="200px">
+      <el-table-column :label="$t('table.roleId')" width="300px">
         <template slot-scope="scope">
           <span>{{ scope.row.roleId | parseArrCode('role')}}</span>
         </template>

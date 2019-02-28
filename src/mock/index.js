@@ -52,6 +52,7 @@ Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 // hairpieceMove相关
 Mock.mock(/\/hairpieceMove\/query/, 'post', hairpieceMoveManageAPI.getList)// 假发流转查询
 Mock.mock(/\/hairpieceMove\/update/, 'post', hairpieceMoveManageAPI.update)// 假发流转修改
+Mock.mock(/\/hairpieceMove\/multiUpdate/, 'post', hairpieceMoveManageAPI.multiUpdate)// 假发流转修改
 Mock.mock(/\/hairpieceMove\/delete/, 'post', hairpieceMoveManageAPI.delete)// 假发流转修改
 //Mock.mock(/\/hairpieceMove\/querySpecialDetail/, 'post', hairpieceMoveManageAPI.querySpecialDetail)//查询特单详细信息
 

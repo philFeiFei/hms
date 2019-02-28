@@ -18,7 +18,7 @@ export default {
         wdks: null,
         fc: null,
         lhr: null,
-        querytype: 7,
+        querytype: 8,
       },
       isDjzc: true,
     }

@@ -8,6 +8,7 @@ var r = Mock.Random
 for (let i = 0; i < count; i++) {
   List4Move.push(Mock.mock({
     jfid: '@increment',
+    pcid: r.natural(10, 50),
     xh: '@increment',
     ddrq: r.datetime(),
     ddbh: 'K' + r.natural(629001, 629003),
@@ -91,6 +92,27 @@ export default {
         const index = List4Move.indexOf(v)
         List4Move.splice(index, 1, temp)
         break
+      }
+    }
+
+    var result = {
+      _success: true,
+      code: 406,
+      _message: '修改假发信息传入不准确，请检查！！！',
+    }
+    return result
+  },
+  multiUpdate: config => {
+    var temp = JSON.parse(config.body)
+    console.log("multiTemp in mock:", temp)
+    for (const v of List4Move) {
+      for (const jfinfo of temp.jfList) {
+        var jfid1 = jfinfo.jfid
+        if (v.jfid == jfid1) {
+          v.ddbh = temp.newDdbh
+          v.bz = temp.bz
+          break
+        }
       }
     }
 

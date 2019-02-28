@@ -14,6 +14,13 @@ export function updateHairpiece(data) {
     data: data
   })
 }
+export function updateMultiHairpiece(data) {
+  return request({
+    url: '/hairpieceMove/multiUpdate',
+    method: 'post',
+    data: data
+  })
+}
 
 /* export function querySpecialDetail(data) {
   return request({

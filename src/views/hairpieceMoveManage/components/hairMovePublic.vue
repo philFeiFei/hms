@@ -48,10 +48,12 @@
         <el-option v-for="item in code.SF" :key="item.key" :label="item.value" :value="item.key" />
       </el-select>
       <el-button v-waves class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.query') }}</el-button>
+      <el-button v-waves class="filter-item" size="mini" type="primary" icon="el-icon-search" @click="enterMultiModify">批量修改</el-button>
 
     </div>
 
-    <el-table size="mini" v-loading="listLoading" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
+    <el-table size="mini" v-loading="listLoading" @selection-change="handleSelectionChange" :key="tableKey" :data="currentPageList" border fit highlight-current-row style="width: 100%;" :height="tableHeight">
+      <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column :label="$t('table.jfid')" prop="jfid" align="center" width="75" fixed v-if="false">
         <template slot-scope="scope">
           <span>{{ scope.row.jfid }}</span>
@@ -330,11 +332,27 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="批量修改订单" :visible.sync="dialogMultiFormVisible">
+      <el-form ref="dataMultiForm" :rules="multiRules" label-position="right" :model="multiTemp" class="demo-form-inline" label-width="100px" style="width: 500px; margin-left:50px;">
+        <div class="desc"><span>当前要修改的订单编号是【{{multiTemp.ddbh}}】，并且选中了【{{multiTemp.length}}】条数据。</span></div>
+        <el-form-item label="新订单编号" prop="newDdbh">
+          <el-input width="150px" size="mini" placeholder="订单编号" v-model="multiTemp.newDdbh" />
+        </el-form-item>
+        <el-form-item label="备注" prop="bz">
+          <el-input type="textarea" :rows="2" width="400px" v-model="multiTemp.bz" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogMultiFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="saveMultiModify()">{{ $t('table.confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { updateHairpiece, queryHairpiece, deleteJf } from '@/api/hairpieceMoveManage'
+import { updateHairpiece, queryHairpiece, updateMultiHairpiece, deleteJf } from '@/api/hairpieceMoveManage'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import { mapGetters } from 'vuex'
@@ -392,6 +410,8 @@ export default {
         create: '新增假发信息'
       },
       dialogFormVisible: false,
+      dialogMultiFormVisible: false,
+      multipleSelection: [],
       dialogStatus: '',
       temp: {
         jfid: undefined,
@@ -399,8 +419,17 @@ export default {
         sftd: this.sftdp,
         yxbz: 1,
       },
+      multiTemp: {
+        jfList: [],
+        newDdbh: '',
+        bz: '',
+      },
       rules: {
         ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
+      },
+      multiRules: {
+        newDdbh: [{ required: true, message: '新的订单编号必须填写', trigger: 'blur' }],
+        bz: [{ required: true, message: '备注必须填写', trigger: 'blur' }],
       },
     }
   },
@@ -428,6 +457,9 @@ export default {
       } else {
         return false;
       }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
     getList() {
       //check some limit
@@ -491,6 +523,97 @@ export default {
         }
       })
     },
+    enterMultiModify() {
+      let val = this.multipleSelection;
+      console.log("val", val);
+      this.dialogMultiFormVisible = false;
+      var hasManyPc = false;
+      var hasManyDdbh = false;
+      if (!val || val.length == 0) {
+        this.$message({
+          type: 'info',
+          message: '请批量选择要修改的假发！'
+        });
+        return false;
+      }
+      var selectDdbh = val[0].ddbh;
+      var selectdPcid = val[0].pcid;
+      var length = val.length;
+      this.multiTemp = {
+        jfList: [],
+        length: 0,
+        newDdbh: '',
+        bz: '',
+      }
+      this.multiTemp.jfList = val;
+      this.multiTemp.length = val.length;
+      this.multiTemp.ddbh = val[0].ddbh;
+      for (var i = 0; i < length; i++) {
+        var ddbh = val[i].ddbh;
+        if (selectDdbh != ddbh) {
+          this.$message({
+            type: 'warning',
+            message: '选择了多个订单编号，请检查！'
+          });
+          hasManyDdbh = true;
+          break;
+        }
+        if (selectdPcid != val[i].pcid) {
+          hasManyPc = true;
+          break;
+        }
+      }
+      if (hasManyDdbh) {
+        return false;
+      }
+      if (hasManyPc && !hasManyDdbh) {
+        this.$confirm('选择的订单不属于同一批次, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$notify.info({
+            title: '消息',
+            message: '您选择了继续！'
+          });
+
+          this.dialogMultiFormVisible = true
+          this.$nextTick(() => {
+            this.$refs['dataMultiForm'].clearValidate()
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+      } else if (!hasManyPc && !hasManyDdbh) {
+        this.dialogMultiFormVisible = true
+        this.$nextTick(() => {
+          this.$refs['dataMultiForm'].clearValidate()
+        })
+      } else {
+        return false;
+      }
+
+    },
+    saveMultiModify() {
+      this.$refs['dataMultiForm'].validate((valid) => {
+        if (valid) {
+          updateMultiHairpiece(this.multiTemp).then(() => {
+            this.dialogMultiFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '批量修改成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.handleFilter()
+          })
+        }
+      })
+    },
     handleDelete(row) {
       this.$confirm('确定要删除该条假发吗?', '提示', {
         confirmButtonText: '确定',
@@ -529,6 +652,12 @@ export default {
 }
 button.el-button.el-tooltip.el-button--default.el-button--mini {
   padding: 2px 8px;
+}
+.desc {
+  color: red;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  font-size: 15px;
 }
 </style>
 
