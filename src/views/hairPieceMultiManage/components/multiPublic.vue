@@ -78,40 +78,43 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width='600'>
       <el-form ref="dataForm" :rules="rules" label-position="right" :model="temp" class="demo-form-inline" label-width="90px" style="width: 400px; margin-left:50px;">
-        <el-form-item :label="$t('table.ddrq')" prop="ddrq">
+        <el-form-item :label="$t('table.ddrq')" prop="ddrq" label-width='110px'>
           <el-date-picker v-model="temp.ddrq" type="date" placeholder="请选择日期" />
         </el-form-item>
-        <el-form-item :label="$t('table.ddbh')" prop="ddbh">
+        <el-form-item :label="$t('table.ddbh')" prop="ddbh" label-width='110px'>
           <el-input v-model="temp.ddbh" />
         </el-form-item>
 
-        <el-form-item :label="$t('table.sh')" prop="sh">
+        <el-form-item :label="$t('table.sh')" prop="sh" label-width='110px'>
           <el-select v-model="temp.sh" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.SH" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('table.wdks')" prop="wdks">
+        <el-form-item :label="$t('table.wdks')" prop="wdks" label-width='110px'>
           <el-select v-model="temp.wdks" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.WDKS" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="$t('table.wdcc')" prop="wdcc">
+        <el-form-item :label="$t('table.wdcc')" prop="wdcc" label-width='110px'>
           <el-select v-model="temp.wdcc" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.WDCC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="$t('table.fc')" prop="fc">
+        <el-form-item :label="$t('table.fc')" prop="fc" label-width='110px'>
           <el-select v-model="temp.fc" class="filter-item" placeholder="请选择">
             <el-option v-for="item in code.FC" :key="item.key" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="$t('table.sl')" prop="sl">
+        <el-form-item :label="$t('table.sl')" prop="sl" label-width='110px'>
           <el-input-number v-model="temp.sl" label="数量"></el-input-number>
         </el-form-item>
-        <el-form-item label="备注" prop="bz">
+        <el-form-item label="发货起始编号" prop="fhqsbh" label-width='110px'>
+          <el-input v-model="temp.fhqsbh" />
+        </el-form-item>
+        <el-form-item label="备注" prop="bz" label-width='110px'>
           <el-input type="textarea" :rows="2" width="400px" v-model="temp.bz" />
         </el-form-item>
 
@@ -222,6 +225,7 @@ export default {
         sh: null,
         fc: null,
         sl: 4,
+        fhqsbh: undefined,
         yxbz: 1,
         sftd: this.sftdp,
         tdurl: null,
@@ -230,6 +234,7 @@ export default {
       rules: {
         ddrq: [{ required: true, message: '订单日期必须填写', trigger: 'change' }],
         ddbh: [{ required: true, message: '订单编号必须填写', trigger: 'change' }],
+        fhqsbh: [{ required: true, message: '发货起始编号必须填写', trigger: 'change' }],
         /* wdks: [{ required: true, message: '网底款式必须填写', trigger: 'change' }],
         wdcc: [{ required: true, message: '网底尺寸必须选择', trigger: 'change' }],
         sh: [{ required: true, message: '色号必须选择', trigger: 'change' }],
@@ -292,6 +297,7 @@ export default {
         sh: null,
         fc: null,
         sl: 4,
+        fhqsbh: undefined,
         yxbz: 1,
         sftd: this.sftdp,
         tdurl: null,

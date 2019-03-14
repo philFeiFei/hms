@@ -126,10 +126,9 @@ export default {
       tableHeight: window.innerHeight - 200,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 50,
         username: undefined,
         roleids: undefined,
-        sort: '+userid',
       },
       temp: {
         userid: undefined,

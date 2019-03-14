@@ -34,7 +34,7 @@ for (let i = 0; i < count; i++) {
     cpzjr: r.natural(0, 5),
     fhsj: r.datetime(),
     fhr: r.natural(0, 5),
-
+    fhbh: r.natural(3, 335),
     'sfzf|1': [0, 1],
     'sftd|1': [0, 1],
     bz: '订单编号为K3434的变为K2222，作废了这条信息，发货人某某某作废',
@@ -110,6 +110,8 @@ export default {
         var jfid1 = jfinfo.jfid
         if (v.jfid == jfid1) {
           v.ddbh = temp.newDdbh
+          v.fhr = temp.fhr
+          v.fhsj = temp.fhsj
           v.bz = temp.bz
           break
         }

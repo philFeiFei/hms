@@ -181,6 +181,11 @@
           <span>{{ scope.row.fhr | parseCode('user') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="发货编号" prop="fhbh" align="center" min-width="90">
+        <template slot-scope="scope">
+          <span>{{ scope.row.fhbh }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="是否作废" width="70px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.sfzf | parseCode('SF') }}</span>
@@ -339,6 +344,14 @@
         <el-form-item label="新订单编号" prop="newDdbh">
           <el-input width="150px" size="mini" placeholder="订单编号" v-model="multiTemp.newDdbh" />
         </el-form-item>
+        <el-form-item :label="$t('table.fhsj')" prop="fhsj">
+          <el-date-picker v-model="multiTemp.fhsj" type="date" placeholder="请选择日期" />
+        </el-form-item>
+        <el-form-item :label="$t('table.fhr')" prop="fhr">
+          <el-select v-model="multiTemp.fhr" class="filter-item" placeholder="请选择">
+            <el-option v-for="item in code.user" :key="item.key" :label="item.value" :value="item.key" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="bz">
           <el-input type="textarea" :rows="2" width="400px" v-model="multiTemp.bz" />
         </el-form-item>
@@ -422,6 +435,8 @@ export default {
       multiTemp: {
         jfList: [],
         newDdbh: '',
+        fhr: '',
+        fhsj: '',
         bz: '',
       },
       rules: {
@@ -429,6 +444,8 @@ export default {
       },
       multiRules: {
         newDdbh: [{ required: true, message: '新的订单编号必须填写', trigger: 'blur' }],
+        fhr: [{ required: true, message: '发货人必须选择', trigger: 'blur' }],
+        fhsj: [{ required: true, message: '发货时间必须填写', trigger: 'blur' }],
         bz: [{ required: true, message: '备注必须填写', trigger: 'blur' }],
       },
     }
@@ -543,6 +560,8 @@ export default {
         jfList: [],
         length: 0,
         newDdbh: '',
+        fhr: '',
+        fhsj: '',
         bz: '',
       }
       this.multiTemp.jfList = val;

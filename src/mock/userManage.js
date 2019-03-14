@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List4User = []
-const count = 20
+const count = 30
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
@@ -23,7 +23,7 @@ for (let i = 0; i < count; i++) {
 export default {
   getList: config => {
     //const { username, xm, xb, page = 1, limit = 10, sort } = JSON.parse(config.body)
-    const { username, xm, xb, page = 1, limit = 10, sort } = param2Obj(config.url)//如果以对象传入的话，就用config.body接收即可。
+    const { username, xm, xb } = param2Obj(config.url)//如果以对象传入的话，就用config.body接收即可。
 
     let mockList = List4User.filter(item => {
       if (username && item.username.indexOf(username) < 0) return false
@@ -32,11 +32,6 @@ export default {
       if (item.yxbz != 1) return false
       return true
     })
-
-    if (sort === '-userid') {
-      mockList = mockList.reverse()
-    }
-
     const pageList = mockList
     var obj = {
       _success: true,
