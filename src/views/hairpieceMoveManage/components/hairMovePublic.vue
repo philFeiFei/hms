@@ -325,6 +325,11 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span='12'>
+          <el-form-item label="发货编号" prop="fhbh">
+            <el-input v-model="temp.fhbh" />
+          </el-form-item>
+        </el-col>
         <el-col :span='22'>
           <el-form-item label="备注" prop="bz">
             <el-input type="textarea" :rows="2" width="400px" v-model="temp.bz" />
