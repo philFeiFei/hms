@@ -307,6 +307,7 @@ export function parseCode(codeKey, codeName) {//如果通过页面filter过来�
   }
 }
 
+//如果codekey是数组，才用此方法，
 export function parseArrCode(codeKey, codeName) {//如果通过页面filter过来的话，当前的值作为第一个参数自动传过来。
   const code = store.getters && store.getters.code && store.getters.code[codeName]
   if (code == null || code == undefined) {

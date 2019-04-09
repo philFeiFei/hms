@@ -32,10 +32,21 @@ router.beforeEach((to, from, next) => {
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info
           //const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
           const roles = res.data.result.roleinfo // note: roles must be a array! such as: ['editor','develop']
-          store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+
+          store.dispatch('GetConfigurations').then(res => {
+
+            const configuration = res.data.result.configuration //获取用户信息之后，获取系统参数obj
+            store.dispatch('GenerateRoutes', { roles, configuration }).then(() => { // 根据roles权限生成可访问的路由表
+              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
+            })
+          }).catch((err) => {
+            store.dispatch('FedLogOut').then(() => {
+              next({ path: '/login' })
+            })
           })
+
+
         }).catch((err) => {
           store.dispatch('FedLogOut').then(() => {
             next({ path: '/login' })
@@ -53,7 +64,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     /* has no token*/
-    if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
+    if (whiteList.indexOf(to.path) !== -1) { // 可以注释了，只用else部分。
       next()
     } else {
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页

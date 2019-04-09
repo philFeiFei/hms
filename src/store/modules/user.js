@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo, refreshToken } from '@/api/login'
+import { loginByUsername, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getTokenStartTime, setTokenStartTime } from '@/utils/auth'
 import axios from 'axios'
 

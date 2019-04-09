@@ -4,8 +4,9 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h2 class="title">{{$store.state.global.systemName}}</h2>
-        <h3 class="title">信息管理系统</h3>
+        <img src="static/images/login.png" class="loginpic">
+        <!-- <h2 class="title">{{$store.state.global.systemName}}</h2> -->
+        <h3 class="title">假发管理信息系统</h3>
         <!-- <lang-select class="set-language" /> -->
       </div>
 
@@ -216,6 +217,7 @@ $light_gray: #eee;
   }
   .title-container {
     position: relative;
+    text-align: center;
     .title {
       font-size: 26px;
       color: $light_gray;

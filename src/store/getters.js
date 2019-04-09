@@ -16,12 +16,14 @@ const getters = {
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs,
   code: state => state.global.code,
-  jzrq: state => state.global.jzrq,
+  jzrq: state => state.permission.jzrq,
+  serverInfo: state => state.permission.serverInfo,
   lastDaysToAlert: state => state.global.lastDaysToAlert,
   tokenstartToCheck: state => state.global.tokenstartToCheck,
   tokenOverTime: state => state.global.tokenOverTime,
   tokenStartTime: state => state.user.tokenStartTime,
   isRefreshingToken: state => state.user.isRefreshingToken,
   systemName: state => state.global.systemName,
+  qybh: state => state.permission.qybh,
 }
 export default getters

@@ -12,8 +12,8 @@ export default {
         { key: '1', value: '是' },
       ],
       role: [
-        { key: '1', value: '超级管理员' },
-        { key: '0', value: '领活' },
+        { key: 1, value: '超级管理员' },
+        { key: 0, value: '领活' },
         { key: 2, value: '钩针' },
         { key: 3, value: '质检' },
         { key: 4, value: '底胶' },
@@ -86,6 +86,7 @@ export default {
         { key: 1, value: '阿富汗发' },
         { key: 2, value: '中国发' },
       ],
+      //由非扫码的工序对应的code组合起来的。
       CZLX: [
         { key: 1, value: '头皮入库' },
         { key: 2, value: '头皮缝线' },
@@ -106,6 +107,36 @@ export default {
     }
     obj.result = result;
     return obj
+  },
+
+  getConfigurations: () => {
+    const paraObj = [
+      {
+        config_code: 'QYBH',
+        config_value: '001',
+        config_desc: '禹城睿绣企业编号'
+      },
+      {
+        config_code: 'showA',
+        config_value: true,
+        config_desc: '测试参数是否显示A'
+      },
+      {
+        config_code: 'JZRQ',
+        config_value: '2019-11-27',
+        config_desc: '阿里云服务器:2vCPU 4GB 计算网络增强型'
+      },
+    ]
+
+    var result = {
+      configuration: paraObj,
+    }
+    var obj = {
+      _success: true,
+    }
+    obj.result = result;
+    return obj
+
   }
 
 }

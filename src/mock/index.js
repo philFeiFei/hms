@@ -95,6 +95,7 @@ Mock.mock(/\/cxtj\/tqcx/, 'post', cxtjAPI.queryTqjf)// 汇总查询
 
 //_global configiration获取
 Mock.mock(/\/global\/query/, 'post', globalAPI.query)
+Mock.mock(/\/configurations\/getConfigurations/, 'post', globalAPI.getConfigurations)
 Mock.mock(/\/syscode\/add/, 'post', csglAPI.addParams)
 
 export default Mock

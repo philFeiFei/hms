@@ -5,5 +5,11 @@ export function getConfigFromServer() {
     method: 'post',
   })
 }
+export function getConfiguration() {
+  return request({
+    url: '/configurations/getConfigurations',
+    method: 'post',
+  })
+}
 
 
