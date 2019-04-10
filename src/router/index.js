@@ -351,13 +351,6 @@ export const asyncRouterMap = [
     },
     children: [
       {
-        path: 'djgl',
-        component: () => import('@/views/djgl/djgl'),
-        name: 'djgl',
-        meta: { title: '单价管理' },
-        qybharr: ['001']
-      },
-      {
         path: 'sh',
         component: () => import('@/views/csgl/sh'),
         name: 'shgl',
