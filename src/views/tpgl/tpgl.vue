@@ -347,7 +347,7 @@ export default {
         return false;
       }
       this.list.forEach(obj => {
-        if (!isNaN(obj.sl)) {
+        if (obj.sl && !isNaN(obj.sl)) {
           sums[5] = (sums[5] * 1000 + parseFloat(obj.sl) * 1000) / 1000;
         }
         if (obj.zje && !isNaN(obj.zje)) {

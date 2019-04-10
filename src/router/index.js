@@ -261,6 +261,87 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/danjiaManage',
+    component: Layout,
+    redirect: 'noredirect',
+    meta: {
+      title: '单价管理',
+      icon: 'xtcs'
+    },
+    children: [
+      {
+        path: 'DanjiaManage',
+        component: () => import('@/views/djgl/djgl'),
+        name: 'danjiaManage',
+        meta: { title: '单价管理' },
+        qybharr: [''] //如果没有这个参数qybharr则是公共显示；如果有参数，但是value是空数组，或者不匹配，则不显示该菜单。
+      },
+      {
+        path: 'tprkManage',
+        component: () => import('@/views/djgl/tprkdjgl'),
+        name: 'tprkdjgl',
+        meta: { title: '头皮入库单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'TouPiFengXianManage',
+        component: () => import('@/views/djgl/tpfxdjgl'),
+        name: 'tpfxdjgl',
+        meta: { title: '头皮缝线单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'tpfwManage',
+        component: () => import('@/views/djgl/tpfwdjgl'),
+        name: 'tpfwdjgl',
+        meta: { title: '头皮附网单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'prdjManage',
+        component: () => import('@/views/djgl/prdjgl'),
+        name: 'prdjgl',
+        meta: { title: '漂染单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'lfdjManage',
+        component: () => import('@/views/djgl/lfdjgl'),
+        name: 'lfdjgl',
+        meta: { title: '拉发单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'jtdjManage',
+        component: () => import('@/views/djgl/jtdjgl'),
+        name: 'jtdjgl',
+        meta: { title: '卷烫单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'hbfdjManage',
+        component: () => import('@/views/djgl/hbfdjgl'),
+        name: 'hbfdjgl',
+        meta: { title: '合白发单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'hfdjManage',
+        component: () => import('@/views/djgl/hfdjgl'),
+        name: 'hfdjgl',
+        meta: { title: '合发单价' },
+        qybharr: ['001']
+      },
+      {
+        path: 'ppdjManage',
+        component: () => import('@/views/djgl/ppdjgl'),
+        name: 'ppdjgl',
+        meta: { title: '枇杷单价' },
+        qybharr: ['001']
+      },
+    ]
+  },
+  {
     path: '/csgl',
     component: Layout,
     redirect: 'noredirect',

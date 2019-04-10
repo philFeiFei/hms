@@ -67,19 +67,19 @@ export default {
         { key: 5, value: '武大郎' },
       ],
       TPLX: [
-        { key: 1, value: '头皮入库' },
-        { key: 2, value: '头皮缝线' },
-        { key: 3, value: '头皮附网' },
+        { key: 'TPRK', value: '头皮入库' },
+        { key: 'TPFX', value: '头皮缝线' },
+        { key: 'TPFW', value: '头皮附网' },
       ],
       PRLX: [
-        { key: 4, value: '漂染' },
+        { key: 'PR', value: '漂染' },
       ],
       SFLX: [
-        { key: 5, value: '拉发' },
-        { key: 6, value: '卷烫' },
-        { key: 7, value: '合白发' },
-        { key: 8, value: '合发' },
-        { key: 9, value: '枇杷' },
+        { key: 'LF', value: '拉发' },
+        { key: 'JT', value: '卷烫' },
+        { key: 'HBF', value: '合白发' },
+        { key: 'HF', value: '合发' },
+        { key: 'PP', value: '枇杷' },
       ],
       SFZL: [
         { key: 3, value: '印度发' },
@@ -88,15 +88,15 @@ export default {
       ],
       //由非扫码的工序对应的code组合起来的。
       CZLX: [
-        { key: 1, value: '头皮入库' },
-        { key: 2, value: '头皮缝线' },
-        { key: 3, value: '头皮附网' },
-        { key: 4, value: '漂染' },
-        { key: 5, value: '拉发' },
-        { key: 6, value: '卷烫' },
-        { key: 7, value: '合白发' },
-        { key: 8, value: '合发' },
-        { key: 9, value: '枇杷' },
+        { key: 'TPRK', value: '头皮入库' },
+        { key: 'TPFX', value: '头皮缝线' },
+        { key: 'TPFW', value: '头皮附网' },
+        { key: 'PR', value: '漂染' },
+        { key: 'LF', value: '拉发' },
+        { key: 'JT', value: '卷烫' },
+        { key: 'HBF', value: '合白发' },
+        { key: 'HF', value: '合发' },
+        { key: 'PP', value: '枇杷' },
       ],
     }
     var result = {
@@ -113,7 +113,7 @@ export default {
     const paraObj = [
       {
         config_code: 'QYBH',
-        config_value: '001',
+        config_value: '001', //企业编号，这里配置多少，前台展示的功能就是哪个企业的。
         config_desc: '禹城睿绣企业编号'
       },
       {

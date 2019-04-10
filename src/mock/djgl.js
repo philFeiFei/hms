@@ -2,13 +2,13 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List4Multi = []
-const count = 38
+const count = 100
 
 var r = Mock.Random
 for (let i = 0; i < count; i++) {
   List4Multi.push(Mock.mock({
     djid: '@increment',
-    czlx: r.natural(1, 3),
+    'czlx|1': ['TPRK', 'TPFX', 'TPFW', 'PR', 'LF', 'JT', 'HF', 'HBF', 'PP'],
     dj: r.natural(0, 5),
     bz: '',
     yxbz: 1
